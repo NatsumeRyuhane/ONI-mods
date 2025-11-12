@@ -3,3 +3,10 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+# IDE folders and files
+.idea/
+.vscode/
+.vs/
+*.suo
+*.user
