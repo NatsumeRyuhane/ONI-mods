@@ -14,25 +14,39 @@ namespace HeatReducer
             Debug.Log("[HeatReducer] " + msg);
         }
         
-        // Buildings whose purpose is to heat, cool or move heat. Their heat output is the point of the building, so it is left alone.
-        // Grouped by the game's tech tree: Temperature Modulation, HVAC and Liquid Temperature. The Anti Entropy Thermo-Nullifier and
-        // Liquid Heatquilizer have no tech.
-        private static readonly HashSet<Type> ThermalRegulationConfigTypes = new HashSet<Type>
+        // Buildings the mod leaves alone, because their heat is part of what they do.
+        private static readonly HashSet<Type> UntouchedConfigTypes = new HashSet<Type>
         {
-            // Temperature Modulation
+            // Temperature regulation: heaters, coolers, heat pumps, ice and temperature-held storage
             typeof(SpaceHeaterConfig),
+            typeof(LiquidHeaterConfig),
             typeof(LiquidCooledFanConfig),
             typeof(IceCooledFanConfig),
+            typeof(AirConditionerConfig),
+            typeof(LiquidConditionerConfig),
+            typeof(MassiveHeatSinkConfig),
+            typeof(HeatCompressorConfig),
             typeof(IceMachineConfig),
             typeof(IceKettleConfig),
-            // HVAC
-            typeof(AirConditionerConfig),
-            // Liquid Temperature
-            typeof(LiquidHeaterConfig),
-            typeof(LiquidConditionerConfig),
-            // No tech
-            typeof(MassiveHeatSinkConfig),
-            typeof(HeatCompressorConfig)
+            typeof(RefrigeratorConfig),
+            typeof(MiniFridgeConfig),
+            typeof(EggIncubatorConfig),
+            // Heat to power
+            typeof(SteamTurbineConfig),
+            typeof(SteamTurbineConfig2),
+            // Industrial machines with 8 kW or more of total heat (self + exhaust). Metal Refinery also has a coolant module.
+            typeof(MetalRefineryConfig),
+            typeof(GlassForgeConfig),
+            typeof(KilnConfig),
+            typeof(SupermaterialRefineryConfig),
+            typeof(RubberMakerConfig),
+            typeof(DiamondPressConfig),
+            typeof(PolymerizerConfig),
+            typeof(OilRefineryConfig),
+            typeof(OxyliteRefineryConfig),
+            typeof(RockCrusherConfig),
+            typeof(MissileFabricatorConfig),
+            typeof(DesalinatorConfig)
         };
 
         public static List<Type> GetBuildingConfigTypes()
@@ -42,7 +56,7 @@ namespace HeatReducer
             foreach (var type in typeof(BuildingConfigManager).Assembly.GetTypes())
             {
                 if (typeof(IBuildingConfig).IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface &&
-                    !ThermalRegulationConfigTypes.Contains(type))
+                    !UntouchedConfigTypes.Contains(type))
                 {
                     targetBuildingConfigTypes.Add(type);
                 }
