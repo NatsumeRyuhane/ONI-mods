@@ -8,7 +8,6 @@ namespace NoPhaseTransitionDamage
         public override void OnLoad(Harmony harmony)
         {
             base.OnLoad(harmony);
-            harmony.PatchAll();
         }
         
         [HarmonyPatch(typeof(Conduit))]
