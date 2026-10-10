@@ -69,13 +69,6 @@
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
-      <Content Include="libs\0Harmony.dll" />
-      <Content Include="libs\Assembly-CSharp-firstpass.dll" />
-      <Content Include="libs\Assembly-CSharp.dll" />
-      <Content Include="libs\UnityEngine.CoreModule.dll" />
-      <Content Include="libs\UnityEngine.dll" />
-    </ItemGroup>
-    <ItemGroup>
       <None Include="App.config" />
       <None Include="packages.config" />
     </ItemGroup>
