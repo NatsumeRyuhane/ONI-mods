@@ -3,24 +3,41 @@ using PeterHan.PLib.Options;
 
 namespace IrradiationSterilization
 {
-    // Options shown in the game's mod menu and saved to config.json in the mod folder.
+    // Options shown in the game's mod menu and saved to config.json in the mod folder. Each germ's D50 is the radiation
+    // that kills half of it per cycle; twice that kills three quarters. Defaults keep vanilla's ratio between germs:
+    // Zombie Spores' vanilla kill rate is 1 against 2.5 for Food Poisoning and Slimelung, so its D50 is 2.5 times
+    // theirs.
     [JsonObject]
     [ConfigFile("config.json", true, false)]
     [RestartRequired]
     public class Config
     {
-        [Option("Half-Kill Radiation", "At this radiation, half the germs die each cycle. Twice as much kills three quarters, three times as much kills seven eighths.", Format = "F0")]
-        [Limit(1.0, 100000.0)]
-        [JsonProperty]
-        public float HalfKillRads { get; set; } = 100.0f;
+        private const string HalfKillTooltip =
+            "Radiation that kills half of these germs each cycle. Twice as much kills three quarters. 0 keeps vanilla behavior.";
 
-        [Option("Instant-Kill Radiation", "At or above this radiation, all germs die at once.", Format = "F0")]
-        [Limit(1.0, 100000.0)]
+        [Option("Food Poisoning D50", HalfKillTooltip, Format = "F0")]
+        [Limit(0.0, 100000.0)]
         [JsonProperty]
-        public float InstantKillRads { get; set; } = 10000.0f;
+        public float FoodPoisoningHalfKillRads { get; set; } = 50.0f;
 
-        [Option("Affect Floral Scent", "Floral Scent is immune to radiation in vanilla. When on, it dies to radiation like the other germs.")]
+        [Option("Slimelung D50", HalfKillTooltip, Format = "F0")]
+        [Limit(0.0, 100000.0)]
         [JsonProperty]
-        public bool AffectFloralScent { get; set; } = false;
+        public float SlimelungHalfKillRads { get; set; } = 50.0f;
+
+        [Option("Zombie Spores D50", HalfKillTooltip, Format = "F0")]
+        [Limit(0.0, 100000.0)]
+        [JsonProperty]
+        public float ZombieSporesHalfKillRads { get; set; } = 125.0f;
+
+        [Option("Floral Scent D50", HalfKillTooltip + " Floral Scent is immune to radiation in vanilla.", Format = "F0")]
+        [Limit(0.0, 100000.0)]
+        [JsonProperty]
+        public float FloralScentHalfKillRads { get; set; } = 0.0f;
+
+        [Option("Instant-Kill Radiation", "At or above this radiation, all germs with a D50 die at once. 0 turns it off.", Format = "F0")]
+        [Limit(0.0, 100000.0)]
+        [JsonProperty]
+        public float InstantKillRads { get; set; } = 0.0f;
     }
 }

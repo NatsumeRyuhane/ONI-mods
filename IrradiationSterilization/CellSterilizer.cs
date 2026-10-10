@@ -43,7 +43,7 @@ namespace IrradiationSterilization
                 else
                 {
                     float vanillaKill = disease.radiationKillRate * rads * dt;
-                    kill = Sterilization.RoundRandomly(Sterilization.ProportionalKill(count, rads, dt) - vanillaKill);
+                    kill = Sterilization.RoundRandomly(Sterilization.ProportionalKill(disease, count, rads, dt) - vanillaKill);
                 }
                 if (kill > 0)
                 {

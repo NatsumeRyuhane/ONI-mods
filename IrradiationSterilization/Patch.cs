@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace IrradiationSterilization
 {
-    // Makes radiation kill a share of the germs each cycle instead of a fixed count (see Sterilization). Vanilla kill
-    // rates (TUNING.DISEASE.RADIATION_KILL_RATE, germs per rad per second): Food Poisoning and Slimelung 2.5, Zombie
-    // Spores 1, Floral Scent 0 (immune). Vanilla radiation never touches germs in pipes. Radiation only exists with
-    // Spaced Out.
+    // Makes radiation kill a share of the germs each cycle, set by each germ's D50 (see Sterilization), with vanilla's
+    // fixed-count kill as a floor. Vanilla kill rates (TUNING.DISEASE.RADIATION_KILL_RATE, germs per rad per second):
+    // Food Poisoning and Slimelung 2.5, Zombie Spores 1, Floral Scent 0 (immune). Vanilla radiation never touches germs
+    // in pipes. Radiation only exists with Spaced Out.
     public static class Patch
     {
         // Germs on items and buildings. Vanilla subtracts rads * radiationKillRate on every call, not scaled by dt, so
@@ -35,7 +35,7 @@ namespace IrradiationSterilization
                 float vanillaKill = rads * disease.radiationKillRate;
                 float kill = Sterilization.IsInstant(rads)
                     ? disease_count
-                    : Math.Max(vanillaKill, Sterilization.ProportionalKill(disease_count, rads, dt));
+                    : Math.Max(vanillaKill, Sterilization.ProportionalKill(disease, disease_count, rads, dt));
                 __result += vanillaKill - kill;
             }
         }
@@ -101,7 +101,7 @@ namespace IrradiationSterilization
                     {
                         // Same floor as in cells, although vanilla itself kills nothing in pipes.
                         float vanillaKill = disease.radiationKillRate * rads * dt;
-                        float proportional = Sterilization.ProportionalKill(data.diseaseCount, rads, dt);
+                        float proportional = Sterilization.ProportionalKill(disease, data.diseaseCount, rads, dt);
                         kill = Sterilization.RoundRandomly(Math.Max(vanillaKill, proportional));
                     }
                     if (kill > 0)
@@ -145,7 +145,7 @@ namespace IrradiationSterilization
                 {
                     return;
                 }
-                float halfLife = Sterilization.HalfLife(diseaseCount, rads, disease.radiationKillRate);
+                float halfLife = Sterilization.HalfLife(disease, diseaseCount, rads);
                 targetPanel.SetLabel("radiation",
                     string.Format(UI.DETAILTABS.DISEASE.DETAILS.GROWTH_FACTORS.RADIATION.TITLE, Mathf.RoundToInt(rads),
                         GetFormattedHalfLife(halfLife)),
