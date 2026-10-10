@@ -102,21 +102,24 @@ namespace HeatReducer
 
         public static void MatchBuildingHeatGenerationToPowerConsumption(BuildingDef __result)
         {
-            if (__result.SelfHeatKilowattsWhenActive > 0 &&
-                __result.SelfHeatKilowattsWhenActive * 1000 > __result.EnergyConsumptionWhenActive)
-            {
-                HeatReducer.Log("Reducing {" + __result.Name + "} heat generation: " +
-                                __result.SelfHeatKilowattsWhenActive * 1000 + " W -> " +
-                                __result.EnergyConsumptionWhenActive + " W");
-                __result.SelfHeatKilowattsWhenActive = __result.EnergyConsumptionWhenActive / 1000;
-            }
+            // Buildings with no power draw keep their vanilla heat.
+            var powerKw = __result.EnergyConsumptionWhenActive / 1000f;
+            if (powerKw <= 0) return;
 
-            // Negative exhaust is cooling, so only positive exhaust is removed.
-            if (__result.ExhaustKilowattsWhenActive > 0)
-            {
-                HeatReducer.Log("Reducing {" + __result.Name + "} exhaust heat generation to 0");
-                __result.ExhaustKilowattsWhenActive = 0;
-            }
+            // Negative values are cooling, not heat to cap.
+            var selfKw = __result.SelfHeatKilowattsWhenActive;
+            var exhaustKw = __result.ExhaustKilowattsWhenActive;
+            if (selfKw < 0 || exhaustKw < 0) return;
+
+            var totalKw = selfKw + exhaustKw;
+            if (totalKw <= powerKw) return;
+
+            // Cap the total at the power draw and keep the vanilla self and exhaust split.
+            var scale = powerKw / totalKw;
+            HeatReducer.Log("Reducing {" + __result.Name + "} heat generation: " + totalKw * 1000 + " W -> " +
+                            powerKw * 1000 + " W");
+            __result.SelfHeatKilowattsWhenActive = selfKw * scale;
+            __result.ExhaustKilowattsWhenActive = exhaustKw * scale;
         }
     }
 }
