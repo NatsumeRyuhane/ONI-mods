@@ -44,12 +44,12 @@
          Description="Wheezewort emits configurable radiation (default 0 rads), cools its surroundings by a configurable delta (default -5 deg C), and consumes Phosphorite as fertilizer." />
     <Mod Include="CheapWiresAndPipes" Folder="CheapWiresAndPipes" Title="Cheap Wires And Pipes" StaticId="CheapWiresAndPipes" MinimumSupportedBuild="468097"
          Description="Wires, wire bridges, gas, liquid and solid conduits, radiant pipes and logic wires cost only 1 kg of construction material." />
+    <Mod Include="ConservationOfMass" Folder="ConservationOfMass" Title="Conservation of Mass" StaticId="ConservationOfMass"
+         Description="Every tile that is dug out or destroyed drops all of its mass instead of half, so no mass is lost when tiles break." />
     <Mod Include="ElectrolyzerNoOverPressure" Folder="ElectrolyzerNoOverPressure" Title="Electrolyzer No Overpressure" StaticId="ElectrolyzerNoOverpressure"
          Description="Electrolyzers never stop because of overpressure." />
     <Mod Include="FastTempShiftPlateBuild" Folder="FastTempShiftPlateBuild" Title="Fast Temp Shift Plate Build" StaticId="FastTempShiftPlateBuild"
          Description="Temperature Shift Plates build in 6 seconds, deconstruct in 3 seconds, and use 500 kg of material." />
-    <Mod Include="FullMassDigging" Folder="FullMassDigging" Title="Full Mass Digging" StaticId="FullMassDigging"
-         Description="Tiles dug out by duplicant dig orders drop all of their mass instead of half. Comets, rockets and Robo-Miners are not changed." />
     <Mod Include="HeatReducer" Folder="HeatReducer" Title="Heat Reducer" StaticId="HeatReducer"
          Description="Caps the total heat of powered buildings at their power draw, keeping each building's own self and exhaust split. Buildings without a power draw, heaters, coolers, refrigerators, steam turbines and heavy industry such as refineries, forges and kilns are not changed." />
     <Mod Include="LowPowerFilters" Folder="LowPowerFilters" Title="Low Power Filters" StaticId="LowPowerFilters"
