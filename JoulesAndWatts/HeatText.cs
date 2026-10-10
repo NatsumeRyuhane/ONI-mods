@@ -41,14 +41,13 @@ namespace JoulesAndWatts
                 "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_SPECIFIC_HEAT_CAPACITY",
                 ReplaceDtu(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_SPECIFIC_HEAT_CAPACITY));
 
-            // Material picker tooltips. Vanilla says the lower conductivity always decides and reads
-            // "{1} W per degree K difference (Oxygen: 0.024 W)". {1} is the raw value, which is always per kelvin.
+            // Material picker tooltips.
             ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY = Set(
                 "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY",
-                FixConductivityModifier(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY));
+                FixConductionRule(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY));
             ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY = Set(
                 "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY",
-                FixConductivityModifier(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY));
+                FixConductionRule(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY));
 
             // Vanilla's DTU tutorial says "1 DTU = 1055.06 J" (a BTU), which the simulation doesn't follow. The game
             // never shows it; ThermalUnitsCodex gives it a page under Tutorials > Tips. Its title is kept and its body
@@ -133,44 +132,36 @@ namespace JoulesAndWatts
             return template.Contains(perSecond) ? template.Replace(perSecond, replacement) : null;
         }
 
-        // Details panel tooltip, vanilla "{SPECIFIC_HEAT_CAPACITY} is required to heat 1 g of the selected object by
-        // 1 {TEMPERATURE_UNIT}". The sentence already spells out "per gram per degree", so only joules go with the value.
+        // The details panel tooltips are vanilla's templates, filled with the bare value. Vanilla fills them with the
+        // whole label plus the unit ("Specific Heat Capacity: 0.790 (DTU/g)/ K is required to heat 1 g ..."), but the
+        // sentences already spell the unit out. The temperature suffix is trimmed, since vanilla's reads "by 1  K".
         public static string ShcTooltip(string displayValue)
         {
-            return displayValue + UI.UNITSUFFIXES.ELECTRICAL.JOULE + " is required to heat 1 g of the selected object by 1 "
-                + Symbol(GameUtil.GetTemperatureUnitSuffix());
+            return ((string)UI.ELEMENTAL.SHC.TOOLTIP)
+                .Replace("{SPECIFIC_HEAT_CAPACITY}", displayValue + UI.UNITSUFFIXES.ELECTRICAL.JOULE)
+                .Replace("{TEMPERATURE_UNIT}", Symbol(GameUtil.GetTemperatureUnitSuffix()));
         }
 
-        // Details panel tooltip. Spells out what W/(m*K) means, why the meters don't matter on the grid, and how the
-        // sim combines two conductivities.
+        // "This object can conduct heat to other materials at a rate of {THERMAL_CONDUCTIVITY} W for each degree
+        // {TEMPERATURE_UNIT} difference", then the conduction rule.
         public static string ThermalConductivityTooltip(string displayValue)
         {
-            string degree = Symbol(GameUtil.GetTemperatureUnitSuffix());
-            return "This object conducts " + displayValue + UI.UNITSUFFIXES.ELECTRICAL.WATT
-                + " of heat through each square meter of a 1 m thick layer, for every 1 " + degree
-                + " of temperature difference across it\n\n"
-                + "Every tile is the same size, so the meters cancel out, and the number only matters compared "
-                + "with other materials' Thermal Conductivity\n\n"
-                + ConductionRules;
+            return FixConductionRule(((string)UI.ELEMENTAL.THERMALCONDUCTIVITY.TOOLTIP)
+                .Replace("{THERMAL_CONDUCTIVITY}", displayValue)
+                .Replace("{TEMPERATURE_UNIT}", Symbol(GameUtil.GetTemperatureUnitSuffix())));
         }
 
-        // Replaces vanilla's "determined by the object with the lowest Thermal Conductivity", which is only true for
-        // some pairs. Deliberately vague: tile to tile uses the geometric mean (sqrt(k1 * k2)) with extra factors for
-        // solid-gas and liquid-liquid pairs, creatures and debris use the lower value (SimUtil.CalculateEnergyFlow),
-        // and buildings use the product with the tile they occupy. See README for sources.
-        private const string ConductionRules =
-            "Between two objects, the rate of heat transfer is usually an average of both objects' Thermal Conductivity";
-
-        // Changes only the wrong parts of vanilla's text, keeping its wording and keyword styling: "Between two
-        // objects, the rate of Heat transfer will be determined by the object with the <i>lowest</i> Thermal
-        // Conductivity" and "{1} W per degree K difference (Oxygen: 0.024 W)".
-        private static string FixConductivityModifier(string text)
+        // Vanilla says "Between two objects, the rate of heat transfer will be determined by the object with the lowest
+        // Thermal Conductivity", which is only true for some pairs. Only that phrase changes, to something deliberately
+        // vague: tile to tile uses the geometric mean (sqrt(k1 * k2)) with extra factors for solid-gas and
+        // liquid-liquid pairs, creatures and debris use the lower value (SimUtil.CalculateEnergyFlow), and buildings
+        // use the product with the tile they occupy. See README for sources. The material tooltips put the word in
+        // italics ("<i>lowest</i>"); their keyword styling is kept.
+        private static string FixConductionRule(string text)
         {
-            string watts = Symbol(UI.UNITSUFFIXES.ELECTRICAL.WATT);
             return text
-                .Replace("will be determined by the object with the <i>lowest</i> ", "is usually an average of both objects' ")
-                .Replace("{1} W per degree K difference (Oxygen: 0.024 W)",
-                    "{1} " + watts + "/(m*K) (Oxygen: 0.024 " + watts + "/(m*K))");
+                .Replace("will be determined by the object with the lowest ", "is usually an average of both objects' ")
+                .Replace("will be determined by the object with the <i>lowest</i> ", "is usually an average of both objects' ");
         }
 
         private static string ReplaceDtu(string text)

@@ -18,15 +18,15 @@ The game already measures heat in joules. `Constants.J2DTU` and `Constants.W2DTU
 | Specific heat capacity | `4.179 (DTU/g)/ ºC` | `4.179 J/(g*ºC)` |
 | Thermal conductivity | `0.609 (DTU/(m*s))/ ºC` | `0.609 W/(m*ºC)` |
 | Material tooltip, heat capacity | `{1} DTU to raise 1g by 1K` | `{1} J to raise 1 g by 1 K` |
-| Material tooltip, conductivity | `the object with the lowest Thermal Conductivity`, `{1} W per degree K difference` | `usually an average of both objects' Thermal Conductivity`, `{1} W/(m*K)` |
+| Material tooltip, conductivity | `will be determined by the object with the lowest Thermal Conductivity` | `is usually an average of both objects' Thermal Conductivity` |
 | Details panel, heat capacity tooltip | `Specific Heat Capacity: 0.790(DTU/g)/ K is required to heat 1 g ... by 1  K` | `0.790 J is required to heat 1 g ... by 1 K` |
-| Details panel, conductivity tooltip | `... at a rate of Thermal Conductivity: 3.390(DTU/(m*s))/ K W for each degree  K difference`, plus the lowest-conductivity rule | What W/(m*K) means, why the meters don't matter on the grid, and the "usually an average" rule |
+| Details panel, conductivity tooltip | `... at a rate of Thermal Conductivity: 3.390(DTU/(m*s))/ K W for each degree  K difference`, plus the lowest-conductivity rule | `... at a rate of 3.390 W for each degree K difference`, plus the "usually an average" rule |
 | Tutorial: Duplicant Thermal Units | Never shown; says "1 DTU = 1055.06 J" | A page under Database > Tutorials > Tips saying the DTU is deprecated, linking to Heat |
 | Database > Tutorials > Systems > Heat | | A new Thermal Units section after Thermal Energy, linking to the DTU tutorial |
 
 Heat rates now use the power formatter, so they're rounded to two decimals like power.
 
-Vanilla says heat transfer between two objects is set by the lower Thermal Conductivity. That's only true for some pairs. The new conductivity tooltips say it's "usually an average of both objects' Thermal Conductivity", and are deliberately vague about which average and when. What the sim does:
+Vanilla says heat transfer between two objects is set by the lower Thermal Conductivity. That's only true for some pairs. The tooltips keep vanilla's wording and change only that phrase. They now say it's "usually an average of both objects' Thermal Conductivity", and are deliberately vague about which average and when. What the sim does:
 
 - Tile to tile: the geometric mean, sqrt(k1 * k2), with extra factors for solid-gas and liquid-liquid pairs.
 - Debris, critters and Duplicants with a tile: the lower of the two. For creatures this is `SimUtil.CalculateEnergyFlow` (`Math.Min`).
@@ -63,9 +63,9 @@ If the current language's templates don't have the English per-second wording, t
 - `AirConditioner` also calls `GetFormattedHeatEnergy`, but for the energy to cool one batch of gas or liquid, so it keeps the energy formatter: `Heat: +X kJ (Approximate Value)`.
 - The DTU tutorial page is added when the Tutorials categories are built, before the codex fills in each category's list of pages, so it appears in the Tips list. Its ID is `MISCELLANEOUSTIPSDTU`.
 - The Thermal Units section is English only. It's inserted after the Thermal Energy text on the Heat page, or at the end of the page if that text isn't found. Its 120 W and 1.25 kW are the Electrolyzer's vanilla values, written into the text.
-- The conductivity tooltip keeps the meters in the unit, because the values are real-world W/(m*K) figures (water is 0.609). Every tile is the same size, so the meters only scale every conductivity by the same amount. The tooltip says so instead of claiming a per-tile wattage, which the native sim's constants decide.
+- Tooltips keep vanilla's sentences and change only the parts that are wrong. Both details panel tooltips are built from vanilla's own templates (`UI.ELEMENTAL.SHC.TOOLTIP`, `UI.ELEMENTAL.THERMALCONDUCTIVITY.TOOLTIP`), filled with the bare value instead of the whole label plus unit. The conductivity tooltips keep vanilla's "W for each degree K difference", which leaves out the meters of W/(m*K). Every tile is the same size, so the meters only scale every conductivity by the same amount.
 - `RefreshDetailsPanel` is private and named by string. The postfix calls `SetLabel` again with the same label IDs (`shc`, `tc`), which updates the labels vanilla just created.
-- The compound units use `*` instead of `·` because the game's strings never use a middle dot, so the font may not have one. For the same reason the tooltip says "square meter" instead of using a superscript two.
+- The compound units use `*` instead of `·` because the game's strings never use a middle dot, so the font may not have one.
 - Vanilla shows the Hydrofan's cooling as `-80 DTU/s` from a field named `coolingKilowatts`. The mod shows the same number as `-80 W` and doesn't try to fix that.
 - Other mods that format heat themselves, with their own "DTU" text, aren't changed.
 - Patch targets were checked against game build 744825.
