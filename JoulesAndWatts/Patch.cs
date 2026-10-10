@@ -6,6 +6,7 @@ using System.Reflection.Emit;
 using System.Text;
 using HarmonyLib;
 using STRINGS;
+using UnityEngine;
 
 namespace JoulesAndWatts
 {
@@ -18,6 +19,51 @@ namespace JoulesAndWatts
             public static void Postfix()
             {
                 HeatText.Apply();
+            }
+        }
+
+        // Vanilla builds the Specific Heat Capacity and Thermal Conductivity tooltips by pasting the whole label
+        // ("Specific Heat Capacity: 0.790") plus the unit into a sentence, giving "Specific Heat Capacity: 0.790 (DTU/g)/ K
+        // is required to heat 1 g ... by 1  K". This sets both labels again with the same text and new tooltips; SetLabel
+        // updates a label that already exists. The element and conductivity are resolved the same way as vanilla.
+        // RefreshDetailsPanel is private, so it's named by string.
+        [HarmonyPatch(typeof(AdditionalDetailsPanel), "RefreshDetailsPanel")]
+        public static class AdditionalDetailsPanel_RefreshDetailsPanel_Patch
+        {
+            public static void Postfix(CollapsibleDetailContentPanel targetPanel, GameObject targetEntity)
+            {
+                Element element = SelectedElement(targetEntity);
+                if (element == null || element.id == SimHashes.Vacuum || element.id == SimHashes.Void)
+                {
+                    return;
+                }
+                float conductivity = element.thermalConductivity;
+                Building building = targetEntity.GetComponent<Building>();
+                if (building != null)
+                {
+                    conductivity *= building.Def.ThermalConductivity;
+                }
+                string shc = GameUtil.GetDisplaySHC(element.specificHeatCapacity).ToString("0.000");
+                string tc = GameUtil.GetDisplayThermalConductivity(conductivity).ToString("0.000");
+                targetPanel.SetLabel("shc", string.Format(UI.ELEMENTAL.SHC.NAME, shc), HeatText.ShcTooltip(shc));
+                targetPanel.SetLabel("tc", string.Format(UI.ELEMENTAL.THERMALCONDUCTIVITY.NAME, tc),
+                    HeatText.ThermalConductivityTooltip(tc));
+            }
+
+            private static Element SelectedElement(GameObject target)
+            {
+                PrimaryElement primaryElement = target.GetComponent<PrimaryElement>();
+                if (primaryElement != null)
+                {
+                    return primaryElement.Element;
+                }
+                CellSelectionObject cell = target.GetComponent<CellSelectionObject>();
+                if (cell != null)
+                {
+                    return cell.element;
+                }
+                BackwallSelectionObject backwall = target.GetComponent<BackwallSelectionObject>();
+                return backwall != null ? backwall.element : null;
             }
         }
 

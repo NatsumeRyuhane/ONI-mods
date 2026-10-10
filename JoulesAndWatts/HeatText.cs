@@ -41,6 +41,15 @@ namespace JoulesAndWatts
                 "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_SPECIFIC_HEAT_CAPACITY",
                 ReplaceDtu(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_SPECIFIC_HEAT_CAPACITY));
 
+            // Material picker tooltips. Vanilla says the lower conductivity always decides and reads
+            // "{1} W per degree K difference (Oxygen: 0.024 W)". {1} is the raw value, which is always per kelvin.
+            ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY = Set(
+                "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY",
+                FixConductivityModifier(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY));
+            ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY = Set(
+                "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY",
+                FixConductivityModifier(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY));
+
             // Vanilla's DTU tutorial says "1 DTU = 1055.06 J" (a BTU), which the simulation doesn't follow. The game
             // never shows it; ThermalUnitsCodex gives it a page under Tutorials > Tips. Its title is kept and its body
             // retires the unit. Only the English text is replaced; a translation keeps its own wording.
@@ -124,9 +133,52 @@ namespace JoulesAndWatts
             return template.Contains(perSecond) ? template.Replace(perSecond, replacement) : null;
         }
 
+        // Details panel tooltip, vanilla "{SPECIFIC_HEAT_CAPACITY} is required to heat 1 g of the selected object by
+        // 1 {TEMPERATURE_UNIT}". The sentence already spells out "per gram per degree", so only joules go with the value.
+        public static string ShcTooltip(string displayValue)
+        {
+            return displayValue + UI.UNITSUFFIXES.ELECTRICAL.JOULE + " is required to heat 1 g of the selected object by 1 "
+                + Symbol(GameUtil.GetTemperatureUnitSuffix());
+        }
+
+        // Details panel tooltip. Spells out what W/(m*K) means, why the meters don't matter on the grid, and how the
+        // sim combines two conductivities.
+        public static string ThermalConductivityTooltip(string displayValue)
+        {
+            string degree = Symbol(GameUtil.GetTemperatureUnitSuffix());
+            return "This object conducts " + displayValue + UI.UNITSUFFIXES.ELECTRICAL.WATT
+                + " of heat through each square meter of a 1 m thick layer, for every 1 " + degree
+                + " of temperature difference across it\n\n"
+                + "Every tile is the same size, so in game the meters cancel out, and the number only matters compared "
+                + "with other materials' Thermal Conductivity\n\n"
+                + ConductionRules;
+        }
+
+        // How the sim combines two conductivities. Tile to tile uses the geometric mean (sqrt(k1 * k2)), with extra
+        // factors for solid-gas and liquid-liquid pairs. Creatures use the lower one (SimUtil.CalculateEnergyFlow), as
+        // does debris on a tile. Buildings use the product with the tile they occupy. See README for sources.
+        private const string ConductionRules =
+            "Between two tiles, the rate of heat transfer depends on the geometric mean of both Thermal Conductivities. " +
+            "Debris, critters and Duplicants use the lower of their own and the tile's, and buildings use their own " +
+            "multiplied by the tile's";
+
+        private static string FixConductivityModifier(string text)
+        {
+            const string lowestRule = "Between two objects, the rate of ";
+            int rule = text.IndexOf(lowestRule, System.StringComparison.Ordinal);
+            int value = text.IndexOf("Thermal Conductivity: {1} W per degree K difference", System.StringComparison.Ordinal);
+            if (rule < 0 || value < rule)
+            {
+                return text;
+            }
+            string watts = Symbol(UI.UNITSUFFIXES.ELECTRICAL.WATT);
+            return text.Substring(0, rule) + ConductionRules + "\n\n"
+                + "Thermal Conductivity: {1} " + watts + "/(m*K) (Oxygen: 0.024 " + watts + "/(m*K))";
+        }
+
         private static string ReplaceDtu(string text)
         {
-            return text.Replace("{1} DTU", "{1}" + UI.UNITSUFFIXES.ELECTRICAL.JOULE);
+            return text.Replace("{1} DTU", "{1}" + UI.UNITSUFFIXES.ELECTRICAL.JOULE).Replace("1g by 1K", "1 g by 1 K");
         }
 
         // Unit suffixes start with a space (" J", " ºC"); inside a compound unit they don't.
