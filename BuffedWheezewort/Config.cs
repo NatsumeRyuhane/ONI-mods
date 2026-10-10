@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using PeterHan.PLib.Options;
 
 namespace BuffedWheezewort
 {
+    // Options shown in the game's mod menu and saved to config.json in the mod folder.
     [JsonObject]
     [ConfigFile("config.json", true, false)]
     [RestartRequired]
@@ -17,11 +18,10 @@ namespace BuffedWheezewort
         [Limit(0.0, 100.0)]
         [JsonProperty]
         public float PhosphorusConsumptionRate { get; set; } = 0.01f;
-        
+
         [Option("Emission Temperature Delta", null, Format = "F0")]
         [Limit(-100.0, -5.0)]
         [JsonProperty]
         public float EmissionTemperatureDelta { get; set; } = -5.0f;
-        
     }
 }
