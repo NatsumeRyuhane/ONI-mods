@@ -29,7 +29,7 @@
   -->
   <ItemGroup>
     <Mod Include="AbyssaliteToTungsten" Folder="AbyssaliteToTungsten" Title="Abyssalite to Tungsten" StaticId="AbyssaliteToTungsten"
-         Description="Adds an Abyssalite to Tungsten recipe to the Molecular Forge. It takes 100 kg of Abyssalite and makes 100 kg of Tungsten. The Metal Refinery is unchanged, so Wolframite still refines into Tungsten there." />
+         Description="Adds an Abyssalite to Tungsten recipe to the Metal Refinery and the Molecular Forge. Each takes 100 kg of Abyssalite and makes 100 kg of Tungsten. The Metal Refinery takes 40 s but needs coolant to absorb the heat. The Molecular Forge takes 80 s and needs no coolant." />
     <Mod Include="AdjustbaleCoolersPlus" Folder="AdjustableCoolersPlus" Title="Adjustable Coolers+" StaticId="AdjustableCoolersPlus"
          Description="Adds a temperature target slider to Air Conditioners and Thermo Aquatuners. The slider range defaults to -20 to +20 deg C, and cooling power per degree is configurable." />
     <Mod Include="BatteryNoPowerLoss" Folder="BatteryNoPowerLoss" Title="Battery No Power Loss" StaticId="BatteryNoPowerLoss"
