@@ -108,7 +108,7 @@ namespace RadiationFieldLamp
         public override void DoPostConfigureComplete(GameObject go)
         {
             float rads = DefaultRads;
-            for (int i = 0; i < RadiationFieldLamp.MaxFieldCells; i++)
+            for (int i = 0; i < RadiationFieldLamp.FieldCells; i++)
             {
                 RadiationEmitter emitter = go.AddComponent<RadiationEmitter>();
                 emitter.emitType = RadiationEmitter.RadiationEmitterType.Constant;
