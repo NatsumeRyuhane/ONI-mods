@@ -2,7 +2,7 @@ using PeterHan.PLib.Options;
 using TUNING;
 using UnityEngine;
 
-namespace BetterRadiationLamp
+namespace RadiationFieldLamp
 {
     public class RadiationFieldLampConfig : IBuildingConfig
     {

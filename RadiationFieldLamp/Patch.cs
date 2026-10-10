@@ -3,7 +3,7 @@ using PeterHan.PLib.Options;
 using STRINGS;
 using UnityEngine;
 
-namespace BetterRadiationLamp
+namespace RadiationFieldLamp
 {
     public class Patch
     {
