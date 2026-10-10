@@ -65,9 +65,11 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="CellSterilizer.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="ModLoad.cs" />
         <Compile Include="Patch.cs" />
+        <Compile Include="Sterilization.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>

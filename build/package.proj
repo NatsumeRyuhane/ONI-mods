@@ -53,7 +53,7 @@
     <Mod Include="DTUNotIncluded" Folder="DTUNotIncluded" Title="DTU Not Included" StaticId="DTUNotIncluded" MinimumSupportedBuild="744825"
          Description="Shows heat in joules and watts instead of DTU and DTU/s, the units the simulation already uses, so no values change. Heat rates read like power (Heat: +20 kW), specific heat capacity reads J/(g*C) and thermal conductivity reads W/(m*C)." />
     <Mod Include="IrradiationSterilization" Folder="IrradiationSterilization" Title="Irradiation Sterilization" StaticId="IrradiationSterilization"
-         Description="Radiation kills germs faster. A configurable multiplier (default 10x) scales how many germs each rad kills per second, for germs in tiles, pipes, items and buildings. Floral Scent stays immune, as in vanilla. Needs Spaced Out, the only mode with radiation." />
+         Description="Radiation kills a share of the germs every cycle instead of a fixed number, in tiles, pipes, items and buildings. At the default 100 rads half the germs die each cycle, at 200 rads three quarters, and at 10000 rads or more all of them at once. Both thresholds are configurable. The vanilla kill rate stays as a minimum, and Floral Scent stays immune unless an option is turned on. Needs Spaced Out, the only mode with radiation." />
     <Mod Include="LowPowerFilters" Folder="LowPowerFilters" Title="Low Power Filters" StaticId="LowPowerFilters"
          Description="Gas, liquid and solid filters use a configurable power draw (default 10 W each)." />
     <Mod Include="NoPhaseTransitionDamage" Folder="NoPhaseTransitionDamage" Title="No Phase Transition Damage" StaticId="NoPhaseTransitionDamage"
