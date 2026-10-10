@@ -14,7 +14,7 @@ namespace BuffedWheezewort
         [JsonProperty]
         public float Radiation { get; set; } = 0.0f;
 
-        [Option("Phosphorus Consumption Rate", "kg/cycle")]
+        [Option("Phosphorus Consumption Rate", "Phosphorite used, in kg/s. 0.01 is 6 kg per cycle. Vanilla uses about 0.0067 (4 kg per cycle).")]
         [Limit(0.0, 100.0)]
         [JsonProperty]
         public float PhosphorusConsumptionRate { get; set; } = 0.01f;
