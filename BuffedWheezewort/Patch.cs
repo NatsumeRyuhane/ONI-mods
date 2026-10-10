@@ -15,7 +15,13 @@ namespace BuffedWheezewort
             public static void Postfix(GameObject __result)
             {
                 var config = SingletonOptions<Config>.Instance;
-                __result.GetComponent<RadiationEmitter>().emitRads = config.Radiation;
+
+                // The emitter only exists when radiation is enabled (Spaced Out).
+                var emitter = __result.GetComponent<RadiationEmitter>();
+                if (emitter != null)
+                {
+                    emitter.emitRads = config.Radiation;
+                }
 
                 // The vanilla prefab is already fertilizable; this call adds a second Phosphorite delivery and replaces
                 // the fertilizer list the plant consumes from.
