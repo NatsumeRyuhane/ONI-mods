@@ -21,6 +21,16 @@ namespace JoulesAndWatts
             }
         }
 
+        // The codex builds its entries here, from the YAML in StreamingAssets/codex and from generated pages.
+        [HarmonyPatch(typeof(CodexCache), nameof(CodexCache.CodexCacheInit))]
+        public static class CodexCache_CodexCacheInit_Patch
+        {
+            public static void Postfix()
+            {
+                ThermalUnitsCodex.Insert();
+            }
+        }
+
         // Heat rates use the power formatter. Vanilla appends the raw float ("1234.5677 kDTU/s"); power rounds to two
         // decimals ("1234.57 kW").
         [HarmonyPatch(typeof(GameUtil), nameof(GameUtil.AppendFormattedHeatEnergyRate))]
