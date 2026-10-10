@@ -18,9 +18,17 @@ namespace RadiationFieldLamp
                 string key = "STRINGS.BUILDINGS.PREFABS." + RadiationFieldLampConfig.ID.ToUpperInvariant();
                 Strings.Add(key + ".NAME", UI.FormatAsLink("Radiation Field Lamp", RadiationFieldLampConfig.ID));
                 Strings.Add(key + ".DESC", "An even glow of radiation, exactly where it's pointed.");
-                Strings.Add(key + ".EFFECT", "Keeps " + config.RadsPerCell.ToString("F0") + " rads of "
-                    + UI.FormatAsLink("Radiation", "RADIATION") + " in each cell of the 3x3 area in front of it."
+                Strings.Add(key + ".EFFECT", "Keeps an adjustable amount of "
+                    + UI.FormatAsLink("Radiation", "RADIATION") + ", up to " + config.MaxRadsPerCell.ToString("F0")
+                    + " rads, in each cell of the 3x3 area in front of it."
+                    + (config.UraniumOreMgPerRad > 0f
+                        ? "\n\nUses " + config.UraniumOreMgPerRad.ToString("0.##") + " mg/s of "
+                            + UI.FormatAsLink("Uranium Ore", "URANIUMORE") + " for each rad."
+                        : "")
                     + (config.AdjustableDirection ? "\n\nIts direction can be changed after it's built." : ""));
+                Strings.Add(RadiationFieldLamp.SliderTitleKeyString, "Radiation per Cell");
+                Strings.Add(RadiationFieldLamp.SliderTooltipKeyString,
+                    "The lamp keeps <b>{0:F0} rads</b> in each cell of its field. Fuel use scales with it.");
                 ModUtil.AddBuildingToPlanScreen("HEP", RadiationFieldLampConfig.ID, "producers", RadiationLightConfig.ID);
                 Db.Get().Techs.TryGet("Agriculture")?.unlockedItemIDs.Add(RadiationFieldLampConfig.ID);
             }
