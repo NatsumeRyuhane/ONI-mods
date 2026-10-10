@@ -44,10 +44,10 @@ namespace JoulesAndWatts
             // Material picker tooltips.
             ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY = Set(
                 "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY",
-                FixConductionRule(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY));
+                FixConductivityValue(FixConductionRule(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY)));
             ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY = Set(
                 "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY",
-                FixConductionRule(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY));
+                FixConductivityValue(FixConductionRule(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_THERMAL_CONDUCTIVITY)));
 
             // Vanilla's DTU tutorial says "1 DTU = 1055.06 J" (a BTU), which the simulation doesn't follow. The game
             // never shows it; ThermalUnitsCodex gives it a page under Tutorials > Tips. Its title is kept and its body
@@ -162,6 +162,14 @@ namespace JoulesAndWatts
             return text
                 .Replace("will be determined by the object with the lowest ", "is usually an average of both objects' ")
                 .Replace("will be determined by the object with the <i>lowest</i> ", "is usually an average of both objects' ");
+        }
+
+        // The material tooltips end with "Thermal Conductivity: {1} W per degree K difference (Oxygen: 0.024 W)". A
+        // label with a value reads better in unit notation. {1} is the raw value, which is always per kelvin.
+        private static string FixConductivityValue(string text)
+        {
+            string unit = Symbol(UI.UNITSUFFIXES.ELECTRICAL.WATT) + "/(m*K)";
+            return text.Replace("{1} W per degree K difference (Oxygen: 0.024 W)", "{1} " + unit + " (Oxygen: 0.024 " + unit + ")");
         }
 
         private static string ReplaceDtu(string text)
