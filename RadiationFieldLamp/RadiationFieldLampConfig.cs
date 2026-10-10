@@ -14,11 +14,27 @@ namespace RadiationFieldLamp
 
         private const float WasteDropKg = 5f;
 
-        private const float WasteFraction = 0.9f;
+        public const float WasteFraction = 0.9f;
 
         private static readonly Tag FuelTag = SimHashes.UraniumOre.CreateTag();
 
         private const SimHashes WasteElement = SimHashes.DepletedUranium;
+
+        public static float MaxRads
+        {
+            get { return SingletonOptions<Config>.Instance.MaxRadsPerCell; }
+        }
+
+        public static float DefaultRads
+        {
+            get { return Mathf.Clamp(SingletonOptions<Config>.Instance.RadsPerCell, 0f, MaxRads); }
+        }
+
+        // Uranium Ore per second for each rad per cell, in kg. The option is in mg.
+        public static float FuelPerRadKg
+        {
+            get { return SingletonOptions<Config>.Instance.UraniumOreMgPerRad / 1000000f; }
+        }
 
         public override string[] GetRequiredDlcIds()
         {
@@ -47,8 +63,7 @@ namespace RadiationFieldLamp
         {
             go.AddOrGet<LoopingSounds>();
             Prioritizable.AddRef(go);
-            float fuelPerSecond = SingletonOptions<Config>.Instance.UraniumOrePerCycle / Constants.SECONDS_PER_CYCLE;
-            if (fuelPerSecond <= 0f)
+            if (FuelPerRadKg <= 0f)
             {
                 return;
             }
@@ -62,6 +77,9 @@ namespace RadiationFieldLamp
             delivery.capacity = FuelStorageKg;
             delivery.refillMass = FuelRefillKg;
             delivery.choreTypeIDHash = Db.Get().ChoreTypes.FetchCritical.IdHash;
+            // The prefab's rates match the default strength, which is what the build menu shows. Each lamp sets its
+            // own rates from its slider.
+            float fuelPerSecond = DefaultRads * FuelPerRadKg;
             ElementConverter converter = go.AddOrGet<ElementConverter>();
             converter.consumedElements = new[]
             {
@@ -89,7 +107,7 @@ namespace RadiationFieldLamp
 
         public override void DoPostConfigureComplete(GameObject go)
         {
-            float rads = SingletonOptions<Config>.Instance.RadsPerCell;
+            float rads = DefaultRads;
             for (int i = 0; i < RadiationFieldLamp.FieldCells; i++)
             {
                 RadiationEmitter emitter = go.AddComponent<RadiationEmitter>();

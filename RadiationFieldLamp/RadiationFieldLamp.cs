@@ -10,10 +10,15 @@ namespace RadiationFieldLamp
     // with radius 1: the sim's falloff (1-|dx|/rX)(1-|dy|/rY) is zero for every neighbour, so a radius-1 emitter only
     // reaches its own cell, at full strength. emitRate 0 makes the sim run exactly one pass per tick, and with the
     // sim's linger rate of 1.1 one pass per tick settles at emitRads. The lamp points the way it was placed. With the
-    // Adjustable Direction option, the Radbolt Reflector's side screen can re-point it, diagonals included.
+    // Adjustable Direction option, the Radbolt Reflector's side screen can re-point it, diagonals included. Each lamp
+    // has its own strength, set with the game's single slider side screen, and burns fuel in proportion to it.
     [SerializationConfig(MemberSerialization.OptIn)]
-    public class RadiationFieldLamp : KMonoBehaviour, IHighEnergyParticleDirection
+    public class RadiationFieldLamp : KMonoBehaviour, IHighEnergyParticleDirection, ISingleSliderControl
     {
+        public const string SliderTitleKeyString = "STRINGS.UI.UISIDESCREENS.RADIATIONFIELDLAMP.TITLE";
+
+        public const string SliderTooltipKeyString = "STRINGS.UI.UISIDESCREENS.RADIATIONFIELDLAMP.TOOLTIP";
+
         public const int FieldCells = 9;
 
         private static readonly EventSystem.IntraObjectHandler<RadiationFieldLamp> OnStateChangedDelegate =
@@ -56,6 +61,10 @@ namespace RadiationFieldLamp
 
         [Serialize]
         private EightDirection customDirection = EightDirection.Right;
+
+        // Rads per cell. Negative until the lamp spawns for the first time, which then uses the default.
+        [Serialize]
+        private float radsPerCell = -1f;
 
         private RadiationEmitter[] emitters;
 
@@ -105,6 +114,64 @@ namespace RadiationFieldLamp
                     ApplyDirection();
                 }
             }
+        }
+
+        public float RadsPerCell
+        {
+            get { return radsPerCell; }
+            set
+            {
+                radsPerCell = Mathf.Clamp(Mathf.Round(value), 0f, RadiationFieldLampConfig.MaxRads);
+                if (isSpawned)
+                {
+                    ApplyStrength();
+                }
+            }
+        }
+
+        public string SliderTitleKey
+        {
+            get { return SliderTitleKeyString; }
+        }
+
+        public string SliderUnits
+        {
+            get { return STRINGS.UI.UNITSUFFIXES.RADIATION.RADS; }
+        }
+
+        public int SliderDecimalPlaces(int index)
+        {
+            return 0;
+        }
+
+        public float GetSliderMin(int index)
+        {
+            return 0f;
+        }
+
+        public float GetSliderMax(int index)
+        {
+            return RadiationFieldLampConfig.MaxRads;
+        }
+
+        public float GetSliderValue(int index)
+        {
+            return radsPerCell;
+        }
+
+        public void SetSliderValue(float value, int index)
+        {
+            RadsPerCell = value;
+        }
+
+        public string GetSliderTooltipKey(int index)
+        {
+            return SliderTooltipKeyString;
+        }
+
+        public string GetSliderTooltip(int index)
+        {
+            return string.Format(Strings.Get(SliderTooltipKeyString), radsPerCell);
         }
 
         // The 9 cell offsets for a direction. A straight direction gives a 3x3 block whose middle row or column starts
@@ -184,6 +251,9 @@ namespace RadiationFieldLamp
             }
             Subscribe((int)GameHashes.OperationalChanged, OnStateChangedDelegate);
             Subscribe((int)GameHashes.OnStorageChange, OnStateChangedDelegate);
+            radsPerCell = Mathf.Clamp(radsPerCell < 0f ? RadiationFieldLampConfig.DefaultRads : radsPerCell, 0f,
+                RadiationFieldLampConfig.MaxRads);
+            SetStrength();
             ApplyDirection();
             SetEmitting(false);
             UpdateEmitting();
@@ -200,7 +270,12 @@ namespace RadiationFieldLamp
         {
             GameObject source = data as GameObject;
             RadiationFieldLamp other = source != null ? source.GetComponent<RadiationFieldLamp>() : null;
-            if (other != null && AdjustableDirection)
+            if (other == null)
+            {
+                return;
+            }
+            RadsPerCell = other.RadsPerCell;
+            if (AdjustableDirection)
             {
                 Direction = other.Direction;
             }
@@ -253,6 +328,33 @@ namespace RadiationFieldLamp
             }
         }
 
+        // Sets the emitters' rads and the fuel rates from the strength.
+        private void SetStrength()
+        {
+            foreach (RadiationEmitter emitter in emitters)
+            {
+                emitter.emitRads = radsPerCell;
+            }
+            if (elementConverter != null)
+            {
+                float fuelPerSecond = radsPerCell * RadiationFieldLampConfig.FuelPerRadKg;
+                elementConverter.consumedElements[0].MassConsumptionRate = fuelPerSecond;
+                elementConverter.outputElements[0].massGenerationRate =
+                    fuelPerSecond * RadiationFieldLampConfig.WasteFraction;
+            }
+        }
+
+        private void ApplyStrength()
+        {
+            SetStrength();
+            // Re-sending the current state makes the sim pick up the new rads on the next tick.
+            foreach (RadiationEmitter emitter in emitters)
+            {
+                emitter.SetEmitting(emitting);
+            }
+            UpdateEmitting();
+        }
+
         private void ApplyCustomRotation()
         {
             // The lamp art faces right. Rotation is counter-clockwise in degrees, and EightDirection counts
@@ -273,7 +375,7 @@ namespace RadiationFieldLamp
                 meter.SetPositionPercent(Mathf.Clamp01(storage.MassStored() / storage.capacityKg));
             }
             bool hasFuel = elementConverter == null || elementConverter.HasEnoughMassToStartConverting();
-            bool on = operational.IsOperational && hasFuel;
+            bool on = operational.IsOperational && hasFuel && radsPerCell > 0f;
             if (on != emitting)
             {
                 SetEmitting(on);
