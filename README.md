@@ -4,7 +4,7 @@ A collection of mods for [Oxygen Not Included](https://www.klei.com/games/oxygen
 
 ## Mods
 
-A mod's `README.md`, where its folder has one, lists the vanilla values it changes, its options and the game methods it patches.
+Each mod's `README.md` lists the vanilla values it changes, its options and the game methods it patches.
 
 | Mod | What it does |
 |---|---|
