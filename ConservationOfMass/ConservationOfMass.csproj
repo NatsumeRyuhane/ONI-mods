@@ -8,8 +8,8 @@
         <ProjectGuid>{426236A3-96A5-4B1E-9BE9-FDB66D5BB75E}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>FullMassDigging</RootNamespace>
-        <AssemblyName>FullMassDigging</AssemblyName>
+        <RootNamespace>ConservationOfMass</RootNamespace>
+        <AssemblyName>ConservationOfMass</AssemblyName>
         <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using HarmonyLib;
 
-namespace FullMassDigging
+namespace ConservationOfMass
 {
-    public class FullMassDigging
+    public class ConservationOfMass
     {
         // Cells whose tile a duplicant's dig order finishes. The sim reports the dug mass a frame later, through
         // WorldDamage.OnDigComplete, so a cell waits here until that report arrives.
