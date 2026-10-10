@@ -20,6 +20,12 @@ namespace RadiationFieldLamp
 
         private const SimHashes WasteElement = SimHashes.DepletedUranium;
 
+        // The vanilla Radiation Lamp burns 1/60 kg/s of Uranium Ore. Its emitter (240 rads, radius 16x4, 90 degrees)
+        // runs 3 sim passes per tick, so its steady field is 720 rads times a falloff that sums to 28.5 over its 86
+        // cells: 20520 rads in all, or 0.812 mg/s per rad in one cell. This lamp keeps its strength in each of its 12
+        // cells, so the same ore per rad delivered is 12 x 0.812 = 9.75 mg/s per rad of strength.
+        public const float VanillaFuelMgPerRad = 9.75f;
+
         public static float MaxRads
         {
             get { return SingletonOptions<Config>.Instance.MaxRadsPerCell; }
