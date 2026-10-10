@@ -32,7 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThermallyConductive", "Ther
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrueInsulation", "TrueInsulation\TrueInsulation.csproj", "{0C41BEBC-16B0-4FC4-A1E3-5F3BF9375D51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoulesAndWatts", "JoulesAndWatts\JoulesAndWatts.csproj", "{B51937C6-4EA4-41B8-9ABE-4A52CF5AEE85}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTUNotIncluded", "DTUNotIncluded\DTUNotIncluded.csproj", "{B51937C6-4EA4-41B8-9ABE-4A52CF5AEE85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,8 +8,8 @@
         <ProjectGuid>{B51937C6-4EA4-41B8-9ABE-4A52CF5AEE85}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>JoulesAndWatts</RootNamespace>
-        <AssemblyName>JoulesAndWatts</AssemblyName>
+        <RootNamespace>DTUNotIncluded</RootNamespace>
+        <AssemblyName>DTUNotIncluded</AssemblyName>
         <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>

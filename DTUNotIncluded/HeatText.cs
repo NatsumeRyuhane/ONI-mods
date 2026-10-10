@@ -1,6 +1,6 @@
 using STRINGS;
 
-namespace JoulesAndWatts
+namespace DTUNotIncluded
 {
     // The game already measures heat in joules. Constants.J2DTU and W2DTU_S are both 1, element specific heat
     // capacities are real J/(g*K) values (water is 4.179), and thermal conductivities are real W/(m*K) values. "DTU"
@@ -107,7 +107,7 @@ namespace JoulesAndWatts
                 HEATCONSUMED = UI.BUILDINGEFFECTS.HEATCONSUMED;
                 TOOLTIP_HEATGENERATED = UI.BUILDINGEFFECTS.TOOLTIPS.HEATGENERATED;
                 TOOLTIP_HEATCONSUMED = UI.BUILDINGEFFECTS.TOOLTIPS.HEATCONSUMED;
-                Debug.Log("[JoulesAndWatts] Heat rate templates have unrecognised wording, so heat rates stay in J/s.");
+                Debug.Log("[DTUNotIncluded] Heat rate templates have unrecognised wording, so heat rates stay in J/s.");
                 return;
             }
 
