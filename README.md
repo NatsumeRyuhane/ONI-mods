@@ -9,7 +9,6 @@ A mod's `README.md`, where its folder has one, lists the vanilla values it chang
 | Mod | What it does |
 |---|---|
 | [Abyssalite to Tungsten](AbyssaliteToTungsten) | Adds an Abyssalite to Tungsten recipe to the Metal Refinery and the Molecular Forge |
-| [Adjustable Coolers+](AdjustbaleCoolersPlus) | Temperature slider for Air Conditioners and Thermo Aquatuners, with power scaled to the setting |
 | [Battery No Power Loss](BatteryNoPowerLoss) | Batteries, Jumbo Batteries and Smart Batteries stop leaking charge |
 | [Better Emptier](BetterEmptier) | Configurable capacity and release speed for Bottle and Canister Emptiers |
 | [BuffedAETN](BuffedAETN) | Configurable AETN cooling, minimum temperature and Hydrogen use; can't be flooded |
@@ -25,8 +24,6 @@ A mod's `README.md`, where its folder has one, lists the vanilla values it chang
 | [Radiation Field Lamp](RadiationFieldLamp) | A new lamp building that keeps an even, adjustable radiation field in a 4x3 area |
 | [Thermally Conductive](ThermallyConductive) | Radiant pipes and Temperature Shift Plates conduct heat 1000 times better |
 | [True Insulation](TrueInsulation) | Insulated pipes, Insulation Tiles and pressure doors fully insulate |
-
-The Adjustable Coolers+ project folder and DLL are spelled `AdjustbaleCoolersPlus`. The name is kept so updated builds replace the old DLL in existing installs.
 
 ## Requirements
 
