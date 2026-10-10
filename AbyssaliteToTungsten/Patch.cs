@@ -94,7 +94,7 @@ namespace AbyssaliteToTungsten
         // own heat on top, so the coolant ends up with three times the vanilla heat.
         public static void TripleCoolantHeat(LiquidCooledRefinery __instance, ComplexRecipe recipe)
         {
-            if (recipe.id != metalRefineryRecipeId || !SingletonOptions<Config>.Instance.TripleCoolantHeat) return;
+            if (recipe.id != metalRefineryRecipeId || !SingletonOptions<Config>.Instance.BalanceHeatProduction) return;
 
             // The heat the vanilla code sends to the coolant: thermalFudge x (high temperature - output temperature) x mass x heat capacity.
             var tungsten = ElementLoader.FindElementByHash(SimHashes.Tungsten);
@@ -122,7 +122,7 @@ namespace AbyssaliteToTungsten
         // Adds the heat line to the Metal Refinery's description, only while the toggle is on.
         public static void AppendHeatLine(BuildingDef __instance, ref string __result)
         {
-            if (__instance.PrefabID != MetalRefineryConfig.ID || !SingletonOptions<Config>.Instance.TripleCoolantHeat) return;
+            if (__instance.PrefabID != MetalRefineryConfig.ID || !SingletonOptions<Config>.Instance.BalanceHeatProduction) return;
             __result += "\n\n" + HEAT_LINE;
         }
     }
