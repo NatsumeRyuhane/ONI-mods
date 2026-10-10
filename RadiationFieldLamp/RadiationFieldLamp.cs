@@ -20,6 +20,8 @@ namespace RadiationFieldLamp
 
         public const string SliderTooltipKeyString = "STRINGS.UI.UISIDESCREENS.RADIATIONFIELDLAMP.TOOLTIP";
 
+        public const string SliderFuelTooltipKeyString = "STRINGS.UI.UISIDESCREENS.RADIATIONFIELDLAMP.TOOLTIP_FUEL";
+
         public const int FieldCells = 12;
 
         private static readonly EventSystem.IntraObjectHandler<RadiationFieldLamp> OnStateChangedDelegate =
@@ -172,7 +174,15 @@ namespace RadiationFieldLamp
 
         public string GetSliderTooltip(int index)
         {
-            return string.Format(Strings.Get(SliderTooltipKeyString), radsPerCell);
+            string tooltip = string.Format(Strings.Get(SliderTooltipKeyString), radsPerCell);
+            float fuelPerRad = RadiationFieldLampConfig.FuelPerRadKg;
+            if (fuelPerRad > 0f)
+            {
+                tooltip += string.Format(Strings.Get(SliderFuelTooltipKeyString),
+                    GameUtil.GetFormattedMass(fuelPerRad, GameUtil.TimeSlice.PerSecond),
+                    GameUtil.GetFormattedMass(fuelPerRad * radsPerCell, GameUtil.TimeSlice.PerCycle));
+            }
+            return tooltip;
         }
 
         // The 12 cell offsets for a direction: a 4x3 block whose middle line starts at the lamp, so it covers the lamp,

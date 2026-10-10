@@ -23,10 +23,10 @@ namespace RadiationFieldLamp
         [JsonProperty]
         public float PowerWatts { get; set; } = 10.0f;
 
-        [Option("Uranium Ore per Rad", "Uranium Ore consumed while emitting, in mg per second for each rad of the lamp's radiation per cell. 0 means the lamp needs no fuel. 90% of the consumed mass comes out as Depleted Uranium.", Format = "F2")]
+        [Option("Uranium Ore per Rad", "Uranium Ore consumed while emitting, in mg per second for each rad of the lamp's radiation per cell. The default matches the vanilla Radiation Lamp's Uranium Ore per rad delivered. 0 means the lamp needs no fuel. 90% of the consumed mass comes out as Depleted Uranium.", Format = "F2")]
         [Limit(0.0, 100.0)]
         [JsonProperty]
-        public float UraniumOreMgPerRad { get; set; } = 1.0f;
+        public float UraniumOreMgPerRad { get; set; } = RadiationFieldLampConfig.VanillaFuelMgPerRad;
 
         [Option("Adjustable Direction", "Lets you change a built lamp's direction, including diagonals, from the Radbolt Reflector direction panel. When off, the lamp keeps the direction it was placed in.")]
         [JsonProperty]

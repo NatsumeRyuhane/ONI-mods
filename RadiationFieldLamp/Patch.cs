@@ -30,7 +30,10 @@ namespace RadiationFieldLamp
                         : ""));
                 Strings.Add(RadiationFieldLamp.SliderTitleKeyString, "Radiation per Cell");
                 Strings.Add(RadiationFieldLamp.SliderTooltipKeyString,
-                    "The lamp keeps <b>{0:F0} rads</b> in each cell of its field. Fuel use scales with it.");
+                    "The lamp keeps <b>{0:F0} rads</b> in each cell of its field.");
+                Strings.Add(RadiationFieldLamp.SliderFuelTooltipKeyString,
+                    "\n\nIt burns {0} of " + UI.FormatAsLink("Uranium Ore", "URANIUMORE")
+                    + " for each rad, <b>{1}</b> at this strength.");
                 ModUtil.AddBuildingToPlanScreen("HEP", RadiationFieldLampConfig.ID, "producers", RadiationLightConfig.ID);
                 Db.Get().Techs.TryGet("Agriculture")?.unlockedItemIDs.Add(RadiationFieldLampConfig.ID);
             }
