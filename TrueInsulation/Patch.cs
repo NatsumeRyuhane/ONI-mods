@@ -1,19 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using HarmonyLib;
-using KMod;
-using UnityEngine;
 
-public class Patch : UserMod2
+namespace TrueInsulation
 {
-    public static void Log(string msg)
+    public static class Patch
     {
-        Debug.Log("[TrueInsulation] " + msg);
-    }
-    
-    public static List<Type> GetBuildingConfigTypes()
-    {
-        var targetBuildingConfigTypes = new List<Type>
+        // Insulating buildings. Vanilla ThermalConductivity: 1/32 for insulated pipes, 0.01 for Insulation Tiles and 1
+        // (the default) for pressure doors.
+        private static readonly Type[] ConfigTypes =
         {
             typeof(InsulatedGasConduitConfig),
             typeof(InsulatedLiquidConduitConfig),
@@ -22,66 +19,37 @@ public class Patch : UserMod2
             typeof(ManualPressureDoorConfig)
         };
 
-        return targetBuildingConfigTypes;
-    }
-
-    public override void OnLoad(Harmony harmony)
-    {
-        Patch.Log("Loaded");
-        harmony.PatchAll();
-        var targetBuildingConfigTypes = GetBuildingConfigTypes();
-
-        // apply patches
-        foreach (var buildingConfigType in targetBuildingConfigTypes)
+        // Doors don't insulate their cells through ThermalConductivity alone, so they also get InsulatorModified.
+        private static readonly HashSet<string> DoorIds = new HashSet<string>
         {
-            try
-            {
-                var method = buildingConfigType.GetMethod("CreateBuildingDef", Type.EmptyTypes);
-                if (method != null)
-                {
-                    Patch.Log("Patching " + buildingConfigType.Name);
-                    var postfix =
-                        new HarmonyMethod(
-                            typeof(Patch).GetMethod("Insulate"));
-                    harmony.Patch(method, null, postfix);
-                }
+            PressureDoorConfig.ID,
+            ManualPressureDoorConfig.ID
+        };
 
-                Patch.Log("Ignored " + buildingConfigType.Name + ": no `CreateBuildingDef` method");
-            }
-            catch (Exception e)
+        [HarmonyPatch]
+        public static class CreateBuildingDef_Patch
+        {
+            public static IEnumerable<MethodBase> TargetMethods()
             {
-                Patch.Log("Failed to patch " + buildingConfigType.Name + ": " + e.Message);
+                return ConfigTypes.Select(type => (MethodBase)AccessTools.Method(type, nameof(IBuildingConfig.CreateBuildingDef), Type.EmptyTypes));
+            }
+
+            public static void Postfix(BuildingDef __result)
+            {
+                __result.ThermalConductivity = 0f;
             }
         }
 
-        Patch.Log("Complete");
-    }
-    
-    public static void Insulate(BuildingDef __result)
-    {
-        __result.ThermalConductivity = 0f;
-    }
-
-    [HarmonyPatch(typeof(BuildingComplete), "OnSpawn")]
-    public class InsulatedDoor_BuildingComplete_OnSpawn
-    {
-        public static void Postfix(ref BuildingComplete __instance)
+        // Adds InsulatorModified to each pressure door as it spawns, and applies it right away. OnSpawn is protected, so
+        // it's named by string.
+        [HarmonyPatch(typeof(BuildingComplete), "OnSpawn")]
+        public static class BuildingComplete_OnSpawn_Patch
         {
+            public static void Postfix(BuildingComplete __instance)
+            {
+                if (!DoorIds.Contains(__instance.Def.PrefabID)) return;
 
-            if (string.Compare(__instance.name, "ManualPressureDoorComplete") == 0)
-            {
-                __instance.gameObject.AddOrGet<InsulatorModified>();
-            }
-            if (string.Compare(__instance.name, "PressureDoorComplete") == 0)
-            {
-                __instance.gameObject.AddOrGet<InsulatorModified>();
-            }
-            
-            InsulatorModified insulator = __instance.gameObject.GetComponent<InsulatorModified>();
-            
-            if (insulator != null)
-            {
-                insulator.SetInsulation(__instance.gameObject, insulator.building.Def.ThermalConductivity);
+                __instance.gameObject.AddOrGet<InsulatorModified>().ApplyInsulation();
             }
         }
     }
