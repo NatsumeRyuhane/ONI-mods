@@ -11,13 +11,20 @@ namespace BatteryNoPowerLoss
         private static string StoresPowerText =>
             "Stores " + UI.FormatAsLink("Power", "POWER") + " from generators, then provides that power to buildings.";
 
+        // BuildingDef.Effect reads the Strings table, which LegacyModMain fills from the STRINGS.BUILDINGS.PREFABS fields
+        // just before buildings are registered. These postfixes run after that, so they write to the table directly.
+        private static void SetEffect(string prefabId, string text)
+        {
+            Strings.Add("STRINGS.BUILDINGS.PREFABS." + prefabId.ToUpperInvariant() + ".EFFECT", text);
+        }
+
         [HarmonyPatch(typeof(BatteryConfig), nameof(BatteryConfig.DoPostConfigureComplete))]
         public static class BatteryConfig_DoPostConfigureComplete_Patch
         {
             public static void Postfix(GameObject go)
             {
                 go.AddOrGet<Battery>().joulesLostPerSecond = 0f;
-                STRINGS.BUILDINGS.PREFABS.BATTERY.EFFECT = StoresPowerText;
+                SetEffect(BatteryConfig.ID, StoresPowerText);
             }
         }
 
@@ -27,7 +34,7 @@ namespace BatteryNoPowerLoss
             public static void Postfix(GameObject go)
             {
                 go.AddOrGet<Battery>().joulesLostPerSecond = 0f;
-                STRINGS.BUILDINGS.PREFABS.BATTERYMEDIUM.EFFECT = StoresPowerText;
+                SetEffect(BatteryMediumConfig.ID, StoresPowerText);
             }
         }
 
@@ -37,10 +44,10 @@ namespace BatteryNoPowerLoss
             public static void Postfix(GameObject go)
             {
                 go.AddOrGet<BatterySmart>().joulesLostPerSecond = 0f;
-                STRINGS.BUILDINGS.PREFABS.BATTERYSMART.EFFECT = StoresPowerText + "\n\nSends a "
+                SetEffect(BatterySmartConfig.ID, StoresPowerText + "\n\nSends a "
                     + UI.FormatAsAutomationState("Green Signal", UI.AutomationState.Active) + " or "
                     + UI.FormatAsAutomationState("Red Signal", UI.AutomationState.Standby)
-                    + " based on the configuration of the Logic Activation Parameters.";
+                    + " based on the configuration of the Logic Activation Parameters.");
             }
         }
     }
