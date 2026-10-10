@@ -19,6 +19,7 @@ A mod's `README.md`, where its folder has one, lists the vanilla values it chang
 | [Electrolyzer No Overpressure](ElectrolyzerNoOverPressure) | Electrolyzers never stop for overpressure |
 | [Fast Temp Shift Plate Build](FastTempShiftPlateBuild) | Temperature Shift Plates build in 6 s, deconstruct in 3 s and cost 500 kg |
 | [Heat Reducer](HeatReducer) | Caps powered buildings' heat at their power draw |
+| [Joules and Watts](JoulesAndWatts) | Shows heat in joules (J) and watts (W) instead of DTU and DTU/s, and simplifies the heat units of materials |
 | [Low Power Filters](LowPowerFilters) | Configurable power draw for gas, liquid and solid filters (default 10 W) |
 | [No Phase Transition Damage](NoPhaseTransitionDamage) | Pipes take no damage when their contents freeze or boil |
 | [Radiation Field Lamp](RadiationFieldLamp) | A new lamp building that keeps an even, adjustable radiation field in a 4x3 area |
