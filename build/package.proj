@@ -1,0 +1,76 @@
+<Project DefaultTargets="Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    Builds every mod in ONI-mods.sln in Release and assembles one folder per mod in build/out/.
+    Each folder holds the mod DLL plus generated mod.yaml and mod_info.yaml, ready to copy into the
+    game's mods folder:
+
+        msbuild build/package.proj
+
+    This file is not part of the solution, so the solution and Rider/Visual Studio are unaffected.
+    The metadata below is the single source for the YAML files.
+  -->
+  <PropertyGroup>
+    <RepoDir>$(MSBuildThisFileDirectory)../</RepoDir>
+    <OutDir>$(MSBuildThisFileDirectory)out/</OutDir>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <Mod>
+      <Version>1.0.0</Version>
+      <MinimumSupportedBuild>0</MinimumSupportedBuild>
+    </Mod>
+  </ItemDefinitionGroup>
+
+  <!--
+    Identity: project folder and AssemblyName.
+    Folder: name of the mod folder in the game's mods directory.
+    StaticId: mod.yaml staticID. Keep it stable, because mods.json keys on it.
+    Description: plain ASCII, without double quotes, semicolons or percent signs.
+  -->
+  <ItemGroup>
+    <Mod Include="AdjustbaleCoolersPlus" Folder="AdjustableCoolersPlus" Title="Adjustable Coolers+" StaticId="AdjustableCoolersPlus"
+         Description="Adds a temperature target slider to Air Conditioners and Thermo Aquatuners. The slider range defaults to -20 to +20 deg C, and cooling power per degree is configurable." />
+    <Mod Include="BatteryNoPowerLoss" Folder="BatteryNoPowerLoss" Title="Battery No Power Loss" StaticId="BatteryNoPowerLoss"
+         Description="Batteries, Medium Batteries and Smart Batteries no longer lose stored power over time." />
+    <Mod Include="BetterEmptier" Folder="BetterEmptier" Title="Better Emptier" StaticId="BetterEmptier"
+         Description="Bottle Emptiers and Gas Bottle Emptiers get a configurable storage capacity (default 200 kg) and release speed multiplier (default 1x)." />
+    <Mod Include="BetterRadiationLamp" Folder="BetterRadiationLamp" Title="Better Radiation Lamp" StaticId="BetterRadiationLamp"
+         Description="Reworks the Radiation Lamp: it can be placed anywhere in any rotation, uses 10 kW, emits 500 rads in a directional field, and converts Uranium Ore into Depleted Uranium." />
+    <Mod Include="BuffedAETN" Folder="BuffedAETN" Title="BuffedAETN" StaticId="BuffedAETN"
+         Description="Massive Heat Sink (AETN) gets configurable cooling power (default 80 kW), a 100 K minimum operating temperature, and hydrogen consumption and storage settings. It can no longer be flooded." />
+    <Mod Include="BuffedWheezewort" Folder="BuffedWheezewort" Title="BuffedWheezewort" StaticId="BuffedWheezewort"
+         Description="Wheezewort emits configurable radiation (default 0 rads), cools its surroundings by a configurable delta (default -5 deg C), and consumes Phosphorite as fertilizer." />
+    <Mod Include="CheapWiresAndPipes" Folder="CheapWiresAndPipes" Title="Cheap Wires And Pipes" StaticId="CheapWiresAndPipes" MinimumSupportedBuild="468097"
+         Description="Wires, wire bridges, gas, liquid and solid conduits, radiant pipes and logic wires cost only 1 kg of construction material." />
+    <Mod Include="ElectrolyzerNoOverPressure" Folder="ElectrolyzerNoOverPressure" Title="Electrolyzer No Overpressure" StaticId="ElectrolyzerNoOverpressure"
+         Description="Electrolyzers never stop because of overpressure." />
+    <Mod Include="FastTempShiftPlateBuild" Folder="FastTempShiftPlateBuild" Title="Fast Temp Shift Plate Build" StaticId="FastTempShiftPlateBuild"
+         Description="Temperature Shift Plates build in 6 seconds, deconstruct in 3 seconds, and use 500 kg of material." />
+    <Mod Include="HeatReducer" Folder="HeatReducer" Title="Heat Reducer" StaticId="HeatReducer"
+         Description="Caps the self-heat of 42 powered buildings at their rated power draw, and removes their exhaust heat." />
+    <Mod Include="LowPowerFilters" Folder="LowPowerFilters" Title="Low Power Filters" StaticId="LowPowerFilters"
+         Description="Gas, liquid and solid filters use a configurable power draw (default 10 W each)." />
+    <Mod Include="NoPhaseTransitionDamage" Folder="NoPhaseTransitionDamage" Title="No Phase Transition Damage" StaticId="NoPhaseTransitionDamage"
+         Description="Pipes no longer take damage when their contents freeze or boil." />
+    <Mod Include="ThermallyConductive" Folder="ThermallyConductive" Title="Thermally Conductive" StaticId="ThermallyConductive"
+         Description="Radiant gas and liquid pipes and Thermal Blocks have 1000 times their normal thermal conductivity." />
+    <Mod Include="TrueInsulation" Folder="TrueInsulation" Title="True Insulation" StaticId="TrueInsulation"
+         Description="Insulated gas and liquid pipes, insulation tiles and pressure doors have zero thermal conductivity, so they fully insulate." />
+  </ItemGroup>
+
+  <Target Name="Package">
+    <RemoveDir Directories="$(OutDir)" />
+
+    <MSBuild Projects="$(RepoDir)ONI-mods.sln" Targets="Build" Properties="Configuration=Release" />
+
+    <MakeDir Directories="$(OutDir)%(Mod.Folder)" />
+
+    <Copy SourceFiles="$(RepoDir)%(Mod.Identity)/bin/Release/%(Mod.Identity).dll" DestinationFolder="$(OutDir)%(Mod.Folder)" />
+
+    <WriteLinesToFile File="$(OutDir)%(Mod.Folder)/mod.yaml" Overwrite="true"
+                      Lines="title: &quot;%(Mod.Title)&quot;;description: &quot;%(Mod.Description)&quot;;staticID: &quot;%(Mod.StaticId)&quot;" />
+
+    <WriteLinesToFile File="$(OutDir)%(Mod.Folder)/mod_info.yaml" Overwrite="true"
+                      Lines="minimumSupportedBuild: %(Mod.MinimumSupportedBuild) # the lowest game version that will load the mod;version: %(Mod.Version) # version of your mod, displayed on the mod list. for your and users' info;APIVersion: 2 # required to specify that the mod is using Harmony 2 and has been upgraded for the mergedown changes" />
+  </Target>
+</Project>

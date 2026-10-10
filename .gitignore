@@ -11,3 +11,5 @@ riderModule.iml
 /_ReSharper.Caches/
 *.suo
 *.user
+# Packaged mod folders (build/package.proj)
+/build/out/
