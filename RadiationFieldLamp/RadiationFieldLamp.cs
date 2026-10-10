@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace RadiationFieldLamp
 {
-    // Keeps an even field of radiation in the 3x3 cells in front of the lamp. Each cell gets its own native emitter
+    // Keeps an even field of radiation in the 4x3 cells made of the lamp's own line and the 3 lines in front of it.
+    // Each cell gets its own native emitter
     // with radius 1: the sim's falloff (1-|dx|/rX)(1-|dy|/rY) is zero for every neighbour, so a radius-1 emitter only
     // reaches its own cell, at full strength. emitRate 0 makes the sim run exactly one pass per tick, and with the
     // sim's linger rate of 1.1 one pass per tick settles at emitRads. The lamp points the way it was placed. With the
@@ -19,7 +20,8 @@ namespace RadiationFieldLamp
 
         public const string SliderTooltipKeyString = "STRINGS.UI.UISIDESCREENS.RADIATIONFIELDLAMP.TOOLTIP";
 
-        public const int FieldCells = 9;
+        // Emitters on the prefab: enough for the 4x3 straight field. A diagonal field uses 9 and leaves the rest off.
+        public const int MaxFieldCells = 12;
 
         private static readonly EventSystem.IntraObjectHandler<RadiationFieldLamp> OnStateChangedDelegate =
             new EventSystem.IntraObjectHandler<RadiationFieldLamp>((component, data) => component.UpdateEmitting());
@@ -71,6 +73,9 @@ namespace RadiationFieldLamp
         private MeterController meter;
 
         private bool emitting;
+
+        // How many emitters the current field uses.
+        private int fieldCells;
 
         private static bool AdjustableDirection
         {
@@ -174,12 +179,13 @@ namespace RadiationFieldLamp
             return string.Format(Strings.Get(SliderTooltipKeyString), radsPerCell);
         }
 
-        // The 9 cell offsets for a direction. A straight direction gives a 3x3 block whose middle row or column starts
-        // next to the lamp; a diagonal gives the 3x3 block that touches the lamp at its corner.
+        // The cell offsets for a direction. A straight direction gives a 4x3 block whose middle line starts at the
+        // lamp, so it covers the lamp, the cells beside it and the 3x3 block in front. A diagonal gives the 3x3 block
+        // that touches the lamp at its corner.
         public static List<CellOffset> GetFieldOffsets(EightDirection direction)
         {
             Vector2I forward = GetForward(direction);
-            List<CellOffset> offsets = new List<CellOffset>(FieldCells);
+            List<CellOffset> offsets = new List<CellOffset>(MaxFieldCells);
             if (forward.x != 0 && forward.y != 0)
             {
                 for (int along = 1; along <= 3; along++)
@@ -193,7 +199,7 @@ namespace RadiationFieldLamp
             else
             {
                 Vector2I side = new Vector2I(-forward.y, forward.x);
-                for (int along = 1; along <= 3; along++)
+                for (int along = 0; along <= 3; along++)
                 {
                     for (int across = -1; across <= 1; across++)
                     {
@@ -294,12 +300,12 @@ namespace RadiationFieldLamp
         private void ApplyDirection()
         {
             List<CellOffset> offsets = GetFieldOffsets(Direction);
-            for (int i = 0; i < emitters.Length && i < offsets.Count; i++)
+            fieldCells = Mathf.Min(offsets.Count, emitters.Length);
+            for (int i = 0; i < fieldCells; i++)
             {
                 emitters[i].emissionOffset = new Vector3(offsets[i].x, offsets[i].y);
-                // Re-sending the current state makes the sim move the emitter to its new cell on the next tick.
-                emitters[i].SetEmitting(emitting);
             }
+            SendEmitters();
             if (!UseCustomDirection)
             {
                 // Rotatable already turned the art and the range overlay with the placement rotation.
@@ -347,11 +353,7 @@ namespace RadiationFieldLamp
         private void ApplyStrength()
         {
             SetStrength();
-            // Re-sending the current state makes the sim pick up the new rads on the next tick.
-            foreach (RadiationEmitter emitter in emitters)
-            {
-                emitter.SetEmitting(emitting);
-            }
+            SendEmitters();
             UpdateEmitting();
         }
 
@@ -386,11 +388,18 @@ namespace RadiationFieldLamp
         {
             emitting = on;
             operational.SetActive(on);
-            foreach (RadiationEmitter emitter in emitters)
-            {
-                emitter.SetEmitting(on);
-            }
+            SendEmitters();
             animController.Play(on ? "on" : "off");
+        }
+
+        // Sends every emitter its state, which also makes the sim pick up a new cell or new rads on the next tick.
+        // Emitters the current field doesn't use stay off.
+        private void SendEmitters()
+        {
+            for (int i = 0; i < emitters.Length; i++)
+            {
+                emitters[i].SetEmitting(emitting && i < fieldCells);
+            }
         }
     }
 }

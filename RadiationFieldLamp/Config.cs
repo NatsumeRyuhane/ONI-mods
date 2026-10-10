@@ -8,7 +8,7 @@ namespace RadiationFieldLamp
     [RestartRequired]
     public class Config
     {
-        [Option("Default Radiation per Cell", "Radiation a newly built lamp keeps in each of the 9 cells in front of it, in rads. Each lamp has a slider to change it.", Format = "F0")]
+        [Option("Default Radiation per Cell", "Radiation a newly built lamp keeps in each cell of its field, in rads. Each lamp has a slider to change it.", Format = "F0")]
         [Limit(0.0, 10000.0)]
         [JsonProperty]
         public float RadsPerCell { get; set; } = 500.0f;
