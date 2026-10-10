@@ -48,6 +48,8 @@
          Description="Electrolyzers never stop because of overpressure." />
     <Mod Include="FastTempShiftPlateBuild" Folder="FastTempShiftPlateBuild" Title="Fast Temp Shift Plate Build" StaticId="FastTempShiftPlateBuild"
          Description="Temperature Shift Plates build in 6 seconds, deconstruct in 3 seconds, and use 500 kg of material." />
+    <Mod Include="FullMassDigging" Folder="FullMassDigging" Title="Full Mass Digging" StaticId="FullMassDigging"
+         Description="Tiles dug out by duplicant dig orders drop all of their mass instead of half. Comets, rockets and Robo-Miners are not changed." />
     <Mod Include="HeatReducer" Folder="HeatReducer" Title="Heat Reducer" StaticId="HeatReducer"
          Description="Caps the total heat of powered buildings at their power draw, keeping each building's own self and exhaust split. Buildings without a power draw, heaters, coolers, refrigerators, steam turbines and heavy industry such as refineries, forges and kilns are not changed." />
     <Mod Include="LowPowerFilters" Folder="LowPowerFilters" Title="Low Power Filters" StaticId="LowPowerFilters"
