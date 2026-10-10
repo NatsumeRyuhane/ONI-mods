@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectrolyzerNoOverPressure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTempShiftPlateBuild", "FastTempShiftPlateBuild\FastTempShiftPlateBuild.csproj", "{FA1A027C-4C28-4CBC-B261-1C51156A3A89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConservationOfMass", "ConservationOfMass\ConservationOfMass.csproj", "{426236A3-96A5-4B1E-9BE9-FDB66D5BB75E}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatReducer", "HeatReducer\HeatReducer.csproj", "{14637CAD-2E17-4FCF-8D7D-8C9BE8C6DE10}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LowPowerFilters", "LowPowerFilters\LowPowerFilters.csproj", "{782DC8EB-73E1-4C45-BCAF-0F2FC69A0EB1}"
@@ -76,6 +78,10 @@ Global
 		{FA1A027C-4C28-4CBC-B261-1C51156A3A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA1A027C-4C28-4CBC-B261-1C51156A3A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA1A027C-4C28-4CBC-B261-1C51156A3A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{426236A3-96A5-4B1E-9BE9-FDB66D5BB75E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{426236A3-96A5-4B1E-9BE9-FDB66D5BB75E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{426236A3-96A5-4B1E-9BE9-FDB66D5BB75E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{426236A3-96A5-4B1E-9BE9-FDB66D5BB75E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{14637CAD-2E17-4FCF-8D7D-8C9BE8C6DE10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{14637CAD-2E17-4FCF-8D7D-8C9BE8C6DE10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14637CAD-2E17-4FCF-8D7D-8C9BE8C6DE10}.Release|Any CPU.ActiveCfg = Release|Any CPU
