@@ -1,21 +1,34 @@
 # Irradiation Sterilization
 
-Radiation kills germs faster. One option multiplies how many germs each rad kills per second, for every germ type that radiation can kill.
+Radiation kills a share of the germs every cycle instead of a fixed number, so it can sterilize large germ populations. It works on germs in tiles, pipes, items and buildings.
 
 Radiation only exists with Spaced Out, so this mod does nothing in the base game.
 
 ## What changes
 
-Radiation kills a fixed number of germs per second, set by the rads in the cell and the germ type's kill rate. The number of germs present doesn't change it. With the default 10x multiplier:
+In vanilla, radiation kills a fixed number of germs per second: the rads times the germ's kill rate. The number of germs present doesn't matter, so a large population barely notices. Germs in pipes aren't affected at all.
 
-| Germ | Vanilla (germs per rad per second) | With this mod (default) | At 100 rads, vanilla | At 100 rads, with this mod |
-|---|---|---|---|---|
-| Food Poisoning | 2.5 | 25 | 250/s | 2,500/s |
-| Slimelung | 2.5 | 25 | 250/s | 2,500/s |
-| Zombie Spores | 1 | 10 | 100/s | 1,000/s |
-| Floral Scent | 0 (immune) | 0 (immune) | none | none |
+With this mod, each Half-Kill Radiation of rads (default 100) halves the germs once per cycle:
 
-This applies to germs in tiles and pipes, and to germs on items and buildings. The germ details panel shows the new rates in its Radiation line.
+| Radiation | Germs killed per cycle | Germ half-life |
+|---|---|---|
+| 50 rads | 29% | 2 cycles |
+| 100 rads | 50% | 1 cycle |
+| 200 rads | 75% | 1/2 cycle |
+| 300 rads | 87.5% | 1/3 cycle |
+| 1000 rads | 99.9% | 1/10 cycle |
+| 10000 rads or more | 100%, at once | none |
+
+The vanilla kill stays as a minimum. When a population is small enough that vanilla would kill it faster, vanilla's rate applies:
+
+| Germ | Vanilla minimum (germs per rad per second) |
+|---|---|
+| Food Poisoning | 2.5 |
+| Slimelung | 2.5 |
+| Zombie Spores | 1 |
+| Floral Scent | 0: immune, unless Affect Floral Scent is on |
+
+The germ details panel shows the new half-life in its Radiation line, and its total rate of change includes the new kill.
 
 ## Options
 
@@ -23,18 +36,28 @@ Set in the game's mod menu (saved to `config.json` in the mod folder). Changes n
 
 | Option | Default | Range | Effect |
 |---|---|---|---|
-| Radiation Sensitivity Multiplier | 10 | 0 to 1000 | Multiplies every germ type's radiation kill rate. 1 is vanilla, and 0 makes all germs immune to radiation |
+| Half-Kill Radiation | 100 | 1 to 100000 | Radiation that kills half the germs per cycle. Twice as much kills three quarters |
+| Instant-Kill Radiation | 10000 | 1 to 100000 | At or above this radiation, all germs die at once |
+| Affect Floral Scent | Off | | Makes Floral Scent die to radiation too. Vanilla makes it immune |
 
 ## How it works
 
-| Patch | Target | Kind |
-|---|---|---|
-| `Diseases_Constructor_Patch` | `Database.Diseases` constructor | Postfix: multiplies `Disease.radiationKillRate` for every germ type |
+The kill model is in `Sterilization.cs`: after `dt` seconds, `2^(-rads * dt / (HalfKillRads * 600))` of the germs survive.
 
-The game reads `radiationKillRate` in three places. `SimMessages.CreateDiseaseTable` sends it to the native sim, which handles germs in tiles and pipes. `DiseaseContainers.CalculateDelta` uses it for germs on items and buildings. The germ details panel uses it for its Radiation line. Changing the rate where the germ types are built covers all three.
+| Patch or component | Target | What it does |
+|---|---|---|
+| `DiseaseContainers_CalculateDelta_Patch` | `DiseaseContainers.CalculateDelta` | Postfix: germs on items and buildings. Replaces vanilla's kill with the larger of vanilla's and the new one |
+| `ConduitDiseaseManager_Sim200ms_Patch` | `ConduitDiseaseManager.Sim200ms` | Postfix: germs in gas and liquid pipes, using the radiation of each pipe's cell. Vanilla kills nothing there |
+| `Game_OnPrefabInit_Patch` and `CellSterilizer` | `Game.OnPrefabInit` (protected) | Adds a component that, once a second, removes germs from irradiated cells with `SimMessages.ModifyDiseaseOnCell` |
+| `AdditionalDetailsPanel_BuildFactorsStrings_Patch` | `AdditionalDetailsPanel.BuildFactorsStrings` (private) | Postfix: rewrites the details panel's Radiation line with the new half-life |
+
+Germs in cells live in the native sim, which applies vanilla's fixed kill itself and can't be patched. `CellSterilizer` removes only the germs the new model kills beyond that, so the two together kill the larger amount. Items on conveyor rails count as items.
+
+Germ counts are whole numbers. The pipe and cell kills are rounded up at random, in proportion to the fraction, so small populations still die off instead of being rounded away.
 
 ## Known issues
 
-- A multiplier can't make Floral Scent sensitive, because its vanilla rate is 0.
-- In vanilla, germs on items and buildings lose the per-second amount every 200 ms tick, so they die 5 times faster than the details panel says. The mod keeps that behavior.
+- `CellSterilizer` assumes the native sim kills `radiationKillRate * rads` germs per second, which is what vanilla's details panel shows. The sim's code can't be read, so in cells the total kill could be slightly above the larger of the two rates.
+- In vanilla, germs on items and buildings lose the per-second amount every 200 ms tick, so the vanilla minimum on them is 5 times what the details panel says. The mod keeps that.
+- `Game.OnPrefabInit`, `AdditionalDetailsPanel.BuildFactorsStrings`, `AdditionalDetailsPanel.GetFormattedHalfLife` and `ConduitFlow.SOAInfo.diseaseHandles` are not public, so they're named by string. A game update that renames them breaks the mod at load time.
 - Patch targets were checked against game build 744825.
