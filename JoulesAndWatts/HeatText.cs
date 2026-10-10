@@ -33,13 +33,13 @@ namespace JoulesAndWatts
             UI.UNITSUFFIXES.HEAT.DTU_S = Set("STRINGS.UI.UNITSUFFIXES.HEAT.DTU_S", UI.UNITSUFFIXES.ELECTRICAL.WATT);
             UI.UNITSUFFIXES.HEAT.KDTU_S = Set("STRINGS.UI.UNITSUFFIXES.HEAT.KDTU_S", UI.UNITSUFFIXES.ELECTRICAL.KILOWATT);
 
-            // "{1} DTU to raise 1g by 1K" in the material tooltips.
+            // Material picker tooltips for Thermally Reactive and Slow Heating materials.
             ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_SPECIFIC_HEAT_CAPACITY = Set(
                 "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_SPECIFIC_HEAT_CAPACITY",
-                ReplaceDtu(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_SPECIFIC_HEAT_CAPACITY));
+                FixShcValue(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.LOW_SPECIFIC_HEAT_CAPACITY));
             ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_SPECIFIC_HEAT_CAPACITY = Set(
                 "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_SPECIFIC_HEAT_CAPACITY",
-                ReplaceDtu(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_SPECIFIC_HEAT_CAPACITY));
+                FixShcValue(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_SPECIFIC_HEAT_CAPACITY));
 
             // Material picker tooltips.
             ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_THERMAL_CONDUCTIVITY = Set(
@@ -172,9 +172,15 @@ namespace JoulesAndWatts
             return text.Replace("{1} W per degree K difference (Oxygen: 0.024 W)", "{1} " + unit + " (Oxygen: 0.024 " + unit + ")");
         }
 
-        private static string ReplaceDtu(string text)
+        // The material tooltips end with "Specific Heat Capacity: {1} DTU to raise 1g by 1K". Like the conductivity value
+        // line, a label with a value reads better in unit notation. {1} is the raw value, which is always per kelvin. A
+        // translation with other wording only has its "{1} DTU" changed to joules.
+        private static string FixShcValue(string text)
         {
-            return text.Replace("{1} DTU", "{1}" + UI.UNITSUFFIXES.ELECTRICAL.JOULE).Replace("1g by 1K", "1 g by 1 K");
+            string unit = Symbol(UI.UNITSUFFIXES.ELECTRICAL.JOULE) + "/(g*K)";
+            return text
+                .Replace("{1} DTU to raise 1g by 1K", "{1} " + unit)
+                .Replace("{1} DTU", "{1}" + UI.UNITSUFFIXES.ELECTRICAL.JOULE);
         }
 
         // Unit suffixes start with a space (" J", " ºC"); inside a compound unit they don't.
