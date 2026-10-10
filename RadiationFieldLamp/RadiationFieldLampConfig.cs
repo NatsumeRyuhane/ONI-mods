@@ -37,7 +37,7 @@ namespace RadiationFieldLamp
             def.ExhaustKilowattsWhenActive = 0f;
             def.ViewMode = OverlayModes.Radiation.ID;
             def.AudioCategory = "Metal";
-            def.PermittedRotations = PermittedRotations.Unrotatable;
+            def.PermittedRotations = PermittedRotations.R360;
             def.DiseaseCellVisName = "RadiationSickness";
             def.UtilityOutputOffset = CellOffset.none;
             return def;
@@ -105,11 +105,13 @@ namespace RadiationFieldLamp
             go.AddOrGet<RadiationFieldLamp>();
         }
 
+        // RangeVisualizerEffect rotates the range with the building's Rotatable, so it is given unrotated (facing
+        // right) and follows the placement rotation on its own.
         private static void AddRangeVisualizer(GameObject go)
         {
             RangeVisualizer visualizer = go.AddOrGet<RangeVisualizer>();
             visualizer.TestLineOfSight = false;
-            RadiationFieldLamp.SetRange(visualizer, EightDirection.Right);
+            RadiationFieldLamp.SetRange(visualizer, RadiationFieldLamp.GetFieldOffsets(EightDirection.Right));
         }
     }
 }

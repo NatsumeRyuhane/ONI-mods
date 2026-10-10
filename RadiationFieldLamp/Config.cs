@@ -22,5 +22,9 @@ namespace RadiationFieldLamp
         [Limit(0.0, 100.0)]
         [JsonProperty]
         public float UraniumOrePerCycle { get; set; } = 0.6f;
+
+        [Option("Adjustable Direction", "Lets you change a built lamp's direction, including diagonals, from the Radbolt Reflector direction panel. When off, the lamp keeps the direction it was placed in.")]
+        [JsonProperty]
+        public bool AdjustableDirection { get; set; } = false;
     }
 }
