@@ -24,7 +24,7 @@ namespace ThermallyConductive
         {
             public static IEnumerable<MethodBase> TargetMethods()
             {
-                return ConfigTypes.Select(type => (MethodBase)AccessTools.Method(type, nameof(IBuildingConfig.CreateBuildingDef)));
+                return ConfigTypes.Select(type => (MethodBase)AccessTools.Method(type, nameof(IBuildingConfig.CreateBuildingDef), Type.EmptyTypes));
             }
 
             public static void Postfix(BuildingDef __result)
