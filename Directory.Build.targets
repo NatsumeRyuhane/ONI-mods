@@ -1,0 +1,7 @@
+<Project>
+  <!-- Fail fast with an actionable message instead of a cascade of CS0246 errors. -->
+  <Target Name="CheckOniManagedDir" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="!Exists('$(OniManagedDir)/Assembly-CSharp.dll')"
+           Text="Game assemblies not found in '$(OniManagedDir)'. Install Oxygen Not Included or set ONI_MANAGED_DIR to the game's Managed folder." />
+  </Target>
+</Project>
