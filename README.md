@@ -2,6 +2,31 @@
 
 A collection of mods for [Oxygen Not Included](https://www.klei.com/games/oxygen-not-included). Each folder is an independent mod, and `ONI-mods.sln` builds all of them.
 
+## Mods
+
+A mod's `README.md`, where its folder has one, lists the vanilla values it changes, its options and the game methods it patches.
+
+| Mod | What it does |
+|---|---|
+| [Abyssalite to Tungsten](AbyssaliteToTungsten) | Adds an Abyssalite to Tungsten recipe to the Metal Refinery and the Molecular Forge |
+| [Adjustable Coolers+](AdjustbaleCoolersPlus) | Temperature slider for Air Conditioners and Thermo Aquatuners, with power scaled to the setting |
+| [Battery No Power Loss](BatteryNoPowerLoss) | Batteries, Jumbo Batteries and Smart Batteries stop leaking charge |
+| [Better Emptier](BetterEmptier) | Configurable capacity and release speed for Bottle and Canister Emptiers |
+| [BuffedAETN](BuffedAETN) | Configurable AETN cooling, minimum temperature and Hydrogen use; can't be flooded |
+| [BuffedWheezewort](BuffedWheezewort) | Configurable Wheezewort radiation, cooling and fertilizer, and a colder temperature range |
+| [Cheap Wires And Pipes](CheapWiresAndPipes) | Wires, pipes, rails and their bridges cost 1 kg and have no decor penalty |
+| [Conservation of Mass](ConservationOfMass) | Dug or destroyed tiles drop all of their mass instead of half |
+| [Electrolyzer No Overpressure](ElectrolyzerNoOverPressure) | Electrolyzers never stop for overpressure |
+| [Fast Temp Shift Plate Build](FastTempShiftPlateBuild) | Temperature Shift Plates build in 6 s, deconstruct in 3 s and cost 500 kg |
+| [Heat Reducer](HeatReducer) | Caps powered buildings' heat at their power draw |
+| [Low Power Filters](LowPowerFilters) | Configurable power draw for gas, liquid and solid filters (default 10 W) |
+| [No Phase Transition Damage](NoPhaseTransitionDamage) | Pipes take no damage when their contents freeze or boil |
+| [Radiation Field Lamp](RadiationFieldLamp) | A new lamp building that keeps an even, adjustable radiation field in a 4x3 area |
+| [Thermally Conductive](ThermallyConductive) | Radiant pipes and Temperature Shift Plates conduct heat 1000 times better |
+| [True Insulation](TrueInsulation) | Insulated pipes, Insulation Tiles and pressure doors fully insulate |
+
+The Adjustable Coolers+ project folder and DLL are spelled `AdjustbaleCoolersPlus`. The name is kept so updated builds replace the old DLL in existing installs.
+
 ## Requirements
 
 - Oxygen Not Included, installed through Steam
@@ -51,6 +76,22 @@ Each mod's output is written to `<Mod>/bin/Release/`, containing `<Mod>.dll` and
 
 - The game's DLLs are read from your installed copy and are never copied into a mod's output or committed to this repo. The mods target the game version you have installed, so they may need updates after a game update.
 - Shared build settings live in `Directory.Build.props` and `Directory.Build.targets`. The Release packaging step is in `build/ILRepack.targets`.
+
+## Code conventions
+
+Formatting is set in `.editorconfig`: UTF-8 without a BOM, LF line endings, 4-space indents and braces on their own lines. Beyond that:
+
+- **Language.** Projects compile as C# 7.3 for .NET Framework 4.7.1, so C# 8+ features (switch expressions, `using var`, `??=`, default interface members) are unavailable.
+- **Layout.** Every type lives in a namespace named after the mod. A typical mod has:
+  - `ModLoad.cs`: `public class ModLoad : UserMod2`. Its `base.OnLoad(harmony)` applies every `[HarmonyPatch]` class in the assembly. Mods with options also register their PLib options here. Mods with no setup still declare an empty `ModLoad`, so the game doesn't log a "no classes inheriting from UserMod" warning.
+  - `Patch.cs`: `public static class Patch`, holding one nested class per patch, named `<TargetType>_<Method>_Patch`. When one postfix applies to several configs, a single patch class lists them in `TargetMethods`.
+  - `Config.cs`: the PLib options class, if the mod has options.
+- **Patch targets.** Name public targets with `nameof`, so a renamed method fails the build. Private members have to be named by string; add a comment saying so, since a game update can break them at load time. Don't patch many configs' `CreateBuildingDef` from `OnLoad` by hand when a registration hook will do (see Heat Reducer's README).
+- **Comments.** Explain why, not what, and record the vanilla values a patch changes, so a reader can tell what the mod does without decompiling the game.
+- **Naming.** PascalCase for types, members, constants and static readonly fields; camelCase for other private fields.
+- **Save data.** Saves store a component by its full type name and its `[Serialize]` fields by name. Don't rename either once a mod is released.
+
+Some newer mods differ in small ways, such as naming the `UserMod2` class after the mod.
 
 ## License
 
