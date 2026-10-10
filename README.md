@@ -16,6 +16,7 @@ A mod's `README.md`, where its folder has one, lists the vanilla values it chang
 | [BuffedWheezewort](BuffedWheezewort) | Configurable Wheezewort radiation, cooling and fertilizer, and a colder temperature range |
 | [Cheap Wires And Pipes](CheapWiresAndPipes) | Wires, pipes, rails and their bridges cost 1 kg and have no decor penalty |
 | [Conservation of Mass](ConservationOfMass) | Dug or destroyed tiles drop all of their mass instead of half |
+| [DTU Not Included](DTUNotIncluded) | Shows heat in joules (J) and watts (W) instead of DTU and DTU/s, and simplifies the heat units of materials |
 | [Electrolyzer No Overpressure](ElectrolyzerNoOverPressure) | Electrolyzers never stop for overpressure |
 | [Fast Temp Shift Plate Build](FastTempShiftPlateBuild) | Temperature Shift Plates build in 6 s, deconstruct in 3 s and cost 500 kg |
 | [Heat Reducer](HeatReducer) | Caps powered buildings' heat at their power draw |
