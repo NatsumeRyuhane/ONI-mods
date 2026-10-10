@@ -18,12 +18,14 @@ The game already measures heat in joules. `Constants.J2DTU` and `Constants.W2DTU
 | Specific heat capacity | `4.179 (DTU/g)/ ºC` | `4.179 J/(g*ºC)` |
 | Thermal conductivity | `0.609 (DTU/(m*s))/ ºC` | `0.609 W/(m*ºC)` |
 | Material tooltip | `{1} DTU to raise 1g by 1K` | `{1} J to raise 1g by 1K` |
-| Tutorial | "Duplicant Thermal Units", "1 DTU = 1055.06 J" | Joules and Watts, "1 W = 1 J/s" |
-| Database > Tutorials > Systems > Heat | | A new Thermal Units section after Thermal Energy |
+| Tutorial: Duplicant Thermal Units | Never shown; says "1 DTU = 1055.06 J" | A page under Database > Tutorials > Tips saying the DTU is deprecated, linking to Heat |
+| Database > Tutorials > Systems > Heat | | A new Thermal Units section after Thermal Energy, linking to the DTU tutorial |
 
 Heat rates now use the power formatter, so they're rounded to two decimals like power.
 
 The Thermal Units section explains that heat and power share units because both are energy. It then notes, in the voice of the tutorial notices, that Gravitas machines somehow give off far more heat than the power they draw (the Electrolyzer draws 120 W and releases 1.25 kW), and why the Duplicants' DTU didn't help.
+
+Vanilla has a "Tutorial: Duplicant Thermal Units" string (`STRINGS.MISC.NOTIFICATIONS.DTU`) that nothing in the game displays. The mod keeps its title, rewrites its body to retire the DTU, and gives it a page in the Tips list, laid out like the other tutorial tips. The two pages link to each other.
 
 ## How it works
 
@@ -37,6 +39,7 @@ If the current language's templates don't have the English per-second wording, t
 |---|---|---|
 | `Localization_Initialize_Patch` | `Localization.Initialize` | Postfix, applies the text |
 | `CodexCache_CodexCacheInit_Patch` | `CodexCache.CodexCacheInit` | Postfix, adds the Thermal Units section |
+| `CodexEntryGenerator_GenerateTutorialNotificationEntries_Patch` | `CodexEntryGenerator.GenerateTutorialNotificationEntries` | Postfix, adds the DTU tutorial page to Tips |
 | `GameUtil_AppendFormattedHeatEnergyRate_Patch` | `GameUtil.AppendFormattedHeatEnergyRate` | Prefix, formats as power |
 | `GameUtil_GetSHCSuffix_Patch`, `GameUtil_GetFormattedSHC_Patch` | `GameUtil.GetSHCSuffix`, `GetFormattedSHC` | Prefix, skips original |
 | `GameUtil_GetThermalConductivitySuffix_Patch`, `GameUtil_GetFormattedThermalConductivity_Patch` | `GameUtil.GetThermalConductivitySuffix`, `GetFormattedThermalConductivity` | Prefix, skips original |
@@ -46,6 +49,7 @@ If the current language's templates don't have the English per-second wording, t
 
 - The status item lambdas are compiler generated, so `HeatRateCallSites_Patch` finds its targets by scanning those classes for calls to `GetFormattedHeatEnergy` instead of naming them. On game build 744825 it patches the 7 methods listed above.
 - `AirConditioner` also calls `GetFormattedHeatEnergy`, but for the energy to cool one batch of gas or liquid, so it keeps the energy formatter: `Heat: +X kJ (Approximate Value)`.
+- The DTU tutorial page is added when the Tutorials categories are built, before the codex fills in each category's list of pages, so it appears in the Tips list. Its ID is `MISCELLANEOUSTIPSDTU`.
 - The Thermal Units section is English only. It's inserted after the Thermal Energy text on the Heat page, or at the end of the page if that text isn't found. Its 120 W and 1.25 kW are the Electrolyzer's vanilla values, written into the text.
 - The compound units use `*` instead of `·` because the game's strings never use a middle dot, so the font may not have one.
 - Vanilla shows the Hydrofan's cooling as `-80 DTU/s` from a field named `coolingKilowatts`. The mod shows the same number as `-80 W` and doesn't try to fix that.

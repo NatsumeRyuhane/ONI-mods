@@ -41,17 +41,20 @@ namespace JoulesAndWatts
                 "STRINGS.ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_SPECIFIC_HEAT_CAPACITY",
                 ReplaceDtu(ELEMENTS.MATERIAL_MODIFIERS.TOOLTIP.HIGH_SPECIFIC_HEAT_CAPACITY));
 
-            // Vanilla's tutorial says "1 DTU = 1055.06 J" (a BTU), which the simulation doesn't follow. Only the
-            // English text is replaced; a translation keeps its own wording.
-            if (((string)MISC.NOTIFICATIONS.DTU.NAME).Contains("Duplicant Thermal Units"))
-            {
-                MISC.NOTIFICATIONS.DTU.NAME = Set("STRINGS.MISC.NOTIFICATIONS.DTU.NAME", "Tutorial: Joules and Watts");
-            }
+            // Vanilla's DTU tutorial says "1 DTU = 1055.06 J" (a BTU), which the simulation doesn't follow. The game
+            // never shows it; ThermalUnitsCodex gives it a page under Tutorials > Tips. Its title is kept and its body
+            // retires the unit. Only the English text is replaced; a translation keeps its own wording.
             if (((string)MISC.NOTIFICATIONS.DTU.MESSAGEBODY).Contains("Duplicant Thermal Units"))
             {
                 MISC.NOTIFICATIONS.DTU.MESSAGEBODY = Set("STRINGS.MISC.NOTIFICATIONS.DTU.MESSAGEBODY",
-                    "My Duplicants measure heat energy in Joules (J), the same unit as stored power.\n\n" +
-                    "Heat that is produced or moved over time is measured in Watts (W).\n\n1 W = 1 J/s");
+                    "My Duplicants used to measure heat energy in Duplicant Thermal Units, or DTU. The DTU is now " +
+                    "deprecated.\n\n" +
+                    "Heat is energy, just like electrical power, so I have gone back to measuring it in Joules (J), " +
+                    "and the rate at which it is produced or moved in Watts (W). No numbers had to change: one DTU was " +
+                    "always exactly one Joule. The old note that put it at 1055.06 J has been filed with the rest of " +
+                    "the Gravitas paperwork.\n\n" +
+                    "See " + UI.FormatAsLink("Heat", ThermalUnitsCodex.HeatEntryId) + " for why the unit was invented " +
+                    "in the first place.");
             }
 
             ApplyRateTemplates();

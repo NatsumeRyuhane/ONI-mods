@@ -27,7 +27,17 @@ namespace JoulesAndWatts
         {
             public static void Postfix()
             {
-                ThermalUnitsCodex.Insert();
+                ThermalUnitsCodex.InsertHeatSection();
+            }
+        }
+
+        // Builds the Tutorials sub-categories (Videos, Systems, Tips) and returns them by ID.
+        [HarmonyPatch(typeof(CodexEntryGenerator), nameof(CodexEntryGenerator.GenerateTutorialNotificationEntries))]
+        public static class CodexEntryGenerator_GenerateTutorialNotificationEntries_Patch
+        {
+            public static void Postfix(Dictionary<string, CodexEntry> __result)
+            {
+                ThermalUnitsCodex.AddDtuTip(__result);
             }
         }
 
