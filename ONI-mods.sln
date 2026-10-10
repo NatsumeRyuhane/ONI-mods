@@ -1,5 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbyssaliteToTungsten", "AbyssaliteToTungsten\AbyssaliteToTungsten.csproj", "{8DC3BFB2-397F-44E4-BF38-D45A4788F738}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdjustbaleCoolersPlus", "AdjustbaleCoolersPlus\AdjustbaleCoolersPlus.csproj", "{4C2FE689-A4E4-4DC5-99B6-06429100773F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BatteryNoPowerLoss", "BatteryNoPowerLoss\BatteryNoPowerLoss.csproj", "{870F6E5D-E817-47AA-9FCF-F1638CADA158}"
@@ -34,6 +36,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8DC3BFB2-397F-44E4-BF38-D45A4788F738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DC3BFB2-397F-44E4-BF38-D45A4788F738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DC3BFB2-397F-44E4-BF38-D45A4788F738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DC3BFB2-397F-44E4-BF38-D45A4788F738}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C2FE689-A4E4-4DC5-99B6-06429100773F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C2FE689-A4E4-4DC5-99B6-06429100773F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C2FE689-A4E4-4DC5-99B6-06429100773F}.Release|Any CPU.ActiveCfg = Release|Any CPU
