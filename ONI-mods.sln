@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrueInsulation", "TrueInsul
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTUNotIncluded", "DTUNotIncluded\DTUNotIncluded.csproj", "{B51937C6-4EA4-41B8-9ABE-4A52CF5AEE85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrradiationSterilization", "IrradiationSterilization\IrradiationSterilization.csproj", "{B7C760E0-34AC-4E1B-8C37-7FB504761DD0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,5 +104,9 @@ Global
 		{B51937C6-4EA4-41B8-9ABE-4A52CF5AEE85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B51937C6-4EA4-41B8-9ABE-4A52CF5AEE85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B51937C6-4EA4-41B8-9ABE-4A52CF5AEE85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7C760E0-34AC-4E1B-8C37-7FB504761DD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7C760E0-34AC-4E1B-8C37-7FB504761DD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7C760E0-34AC-4E1B-8C37-7FB504761DD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7C760E0-34AC-4E1B-8C37-7FB504761DD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
