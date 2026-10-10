@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
@@ -9,11 +9,6 @@ namespace HeatReducer
 {
     public class HeatReducer : UserMod2
     {
-        public static void Log(string msg)
-        {
-            Debug.Log("[HeatReducer] " + msg);
-        }
-        
         // Buildings the mod leaves alone, because their heat is part of what they do.
         private static readonly HashSet<Type> UntouchedConfigTypes = new HashSet<Type>
         {
@@ -49,66 +44,50 @@ namespace HeatReducer
             typeof(DesalinatorConfig)
         };
 
-        public static List<Type> GetBuildingConfigTypes()
-        {
-            // The game registers every non-abstract IBuildingConfig in Assembly-CSharp (GeneratedBuildings.LoadGeneratedBuildings).
-            var targetBuildingConfigTypes = new List<Type>();
-            foreach (var type in typeof(BuildingConfigManager).Assembly.GetTypes())
-            {
-                if (typeof(IBuildingConfig).IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface &&
-                    !UntouchedConfigTypes.Contains(type))
-                {
-                    targetBuildingConfigTypes.Add(type);
-                }
-            }
+        // BuildingConfigManager keeps every registered config's BuildingDef in this private table.
+        private static readonly FieldInfo ConfigTableField = AccessTools.Field(typeof(BuildingConfigManager), "configTable");
 
-            return targetBuildingConfigTypes;
+        public static void Log(string msg)
+        {
+            Debug.Log("[HeatReducer] " + msg);
         }
 
         public override void OnLoad(Harmony harmony)
         {
             HeatReducer.Log("Loaded");
-            var targetBuildingConfigTypes = GetBuildingConfigTypes();
-            var postfix =
-                new HarmonyMethod(
-                    typeof(HeatReducer).GetMethod("MatchBuildingHeatGenerationToPowerConsumption"));
-            var patchedCount = 0;
 
-            // apply patches
-            foreach (var buildingConfigType in targetBuildingConfigTypes)
-            {
-                try
-                {
-                    var method = buildingConfigType.GetMethod("CreateBuildingDef",
-                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly, null, Type.EmptyTypes, null);
-                    if (method == null)
-                    {
-                        HeatReducer.Log("Ignored " + buildingConfigType.Name + ": no `CreateBuildingDef` method");
-                        continue;
-                    }
+            // Patch one method, RegisterBuilding, instead of each config's CreateBuildingDef. Patching a config's
+            // CreateBuildingDef runs that config's static constructor during mod load. Some of those constructors call
+            // Db.Get() before the database is ready, which breaks building registration for the whole game.
+            var registerBuilding = AccessTools.Method(typeof(BuildingConfigManager), nameof(BuildingConfigManager.RegisterBuilding));
+            var postfix = new HarmonyMethod(typeof(HeatReducer).GetMethod(nameof(RegisterBuildingPostfix)));
+            harmony.Patch(registerBuilding, null, postfix);
 
-                    harmony.Patch(method, null, postfix);
-                    patchedCount++;
-                }
-                catch (Exception e)
-                {
-                    HeatReducer.Log("Failed to patch " + buildingConfigType.Name + ": " + e.Message);
-                }
-            }
-
-            HeatReducer.Log("Patched " + patchedCount + " building configs");
             HeatReducer.Log("Complete");
         }
 
-        public static void MatchBuildingHeatGenerationToPowerConsumption(BuildingDef __result)
+        // Runs after the config's CreateBuildingDef has finished, so the BuildingDef holds its final values.
+        public static void RegisterBuildingPostfix(IBuildingConfig config)
+        {
+            if (UntouchedConfigTypes.Contains(config.GetType())) return;
+
+            var configTable = (Dictionary<IBuildingConfig, BuildingDef>)ConfigTableField.GetValue(BuildingConfigManager.Instance);
+            BuildingDef buildingDef;
+            // A config is missing from the table when its DLC is not owned.
+            if (!configTable.TryGetValue(config, out buildingDef)) return;
+
+            CapHeatToPowerDraw(buildingDef);
+        }
+
+        public static void CapHeatToPowerDraw(BuildingDef buildingDef)
         {
             // Buildings with no power draw keep their vanilla heat.
-            var powerKw = __result.EnergyConsumptionWhenActive / 1000f;
+            var powerKw = buildingDef.EnergyConsumptionWhenActive / 1000f;
             if (powerKw <= 0) return;
 
             // Negative values are cooling, not heat to cap.
-            var selfKw = __result.SelfHeatKilowattsWhenActive;
-            var exhaustKw = __result.ExhaustKilowattsWhenActive;
+            var selfKw = buildingDef.SelfHeatKilowattsWhenActive;
+            var exhaustKw = buildingDef.ExhaustKilowattsWhenActive;
             if (selfKw < 0 || exhaustKw < 0) return;
 
             var totalKw = selfKw + exhaustKw;
@@ -116,10 +95,10 @@ namespace HeatReducer
 
             // Cap the total at the power draw and keep the vanilla self and exhaust split.
             var scale = powerKw / totalKw;
-            HeatReducer.Log("Reducing {" + __result.Name + "} heat generation: " + totalKw * 1000 + " W -> " +
+            HeatReducer.Log("Reducing {" + buildingDef.Name + "} heat generation: " + totalKw * 1000 + " W -> " +
                             powerKw * 1000 + " W");
-            __result.SelfHeatKilowattsWhenActive = selfKw * scale;
-            __result.ExhaustKilowattsWhenActive = exhaustKw * scale;
+            buildingDef.SelfHeatKilowattsWhenActive = selfKw * scale;
+            buildingDef.ExhaustKilowattsWhenActive = exhaustKw * scale;
         }
     }
 }
