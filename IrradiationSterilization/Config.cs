@@ -18,17 +18,17 @@ namespace IrradiationSterilization
         [Option("Food Poisoning D50", HalfKillTooltip, Format = "F0")]
         [Limit(0.0, 100000.0)]
         [JsonProperty]
-        public float FoodPoisoningHalfKillRads { get; set; } = 50.0f;
+        public float FoodPoisoningHalfKillRads { get; set; } = 100.0f;
 
         [Option("Slimelung D50", HalfKillTooltip, Format = "F0")]
         [Limit(0.0, 100000.0)]
         [JsonProperty]
-        public float SlimelungHalfKillRads { get; set; } = 50.0f;
+        public float SlimelungHalfKillRads { get; set; } = 100.0f;
 
         [Option("Zombie Spores D50", HalfKillTooltip, Format = "F0")]
         [Limit(0.0, 100000.0)]
         [JsonProperty]
-        public float ZombieSporesHalfKillRads { get; set; } = 125.0f;
+        public float ZombieSporesHalfKillRads { get; set; } = 250.0f;
 
         [Option("Floral Scent D50", HalfKillTooltip + " Floral Scent is immune to radiation in vanilla.", Format = "F0")]
         [Limit(0.0, 100000.0)]
