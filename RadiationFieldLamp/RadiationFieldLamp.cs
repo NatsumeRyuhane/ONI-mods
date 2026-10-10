@@ -20,8 +20,7 @@ namespace RadiationFieldLamp
 
         public const string SliderTooltipKeyString = "STRINGS.UI.UISIDESCREENS.RADIATIONFIELDLAMP.TOOLTIP";
 
-        // Emitters on the prefab: enough for the 4x3 straight field. A diagonal field uses 9 and leaves the rest off.
-        public const int MaxFieldCells = 12;
+        public const int FieldCells = 12;
 
         private static readonly EventSystem.IntraObjectHandler<RadiationFieldLamp> OnStateChangedDelegate =
             new EventSystem.IntraObjectHandler<RadiationFieldLamp>((component, data) => component.UpdateEmitting());
@@ -73,9 +72,6 @@ namespace RadiationFieldLamp
         private MeterController meter;
 
         private bool emitting;
-
-        // How many emitters the current field uses.
-        private int fieldCells;
 
         private static bool AdjustableDirection
         {
@@ -179,33 +175,23 @@ namespace RadiationFieldLamp
             return string.Format(Strings.Get(SliderTooltipKeyString), radsPerCell);
         }
 
-        // The cell offsets for a direction. A straight direction gives a 4x3 block whose middle line starts at the
-        // lamp, so it covers the lamp, the cells beside it and the 3x3 block in front. A diagonal gives the 3x3 block
-        // that touches the lamp at its corner.
+        // The 12 cell offsets for a direction: a 4x3 block whose middle line starts at the lamp, so it covers the lamp,
+        // the cells beside it and the 3x3 block in front. A diagonal takes the block of its up or down part and moves
+        // it one cell toward its left or right part, which puts the lamp in a corner of the block.
         public static List<CellOffset> GetFieldOffsets(EightDirection direction)
         {
             Vector2I forward = GetForward(direction);
-            List<CellOffset> offsets = new List<CellOffset>(MaxFieldCells);
-            if (forward.x != 0 && forward.y != 0)
+            bool diagonal = forward.x != 0 && forward.y != 0;
+            Vector2I ahead = diagonal ? new Vector2I(0, forward.y) : forward;
+            Vector2I side = new Vector2I(-ahead.y, ahead.x);
+            int shift = diagonal ? forward.x : 0;
+            List<CellOffset> offsets = new List<CellOffset>(FieldCells);
+            for (int along = 0; along <= 3; along++)
             {
-                for (int along = 1; along <= 3; along++)
+                for (int across = -1; across <= 1; across++)
                 {
-                    for (int across = 1; across <= 3; across++)
-                    {
-                        offsets.Add(new CellOffset(along * forward.x, across * forward.y));
-                    }
-                }
-            }
-            else
-            {
-                Vector2I side = new Vector2I(-forward.y, forward.x);
-                for (int along = 0; along <= 3; along++)
-                {
-                    for (int across = -1; across <= 1; across++)
-                    {
-                        offsets.Add(new CellOffset(along * forward.x + across * side.x,
-                            along * forward.y + across * side.y));
-                    }
+                    offsets.Add(new CellOffset(along * ahead.x + across * side.x + shift,
+                        along * ahead.y + across * side.y));
                 }
             }
             return offsets;
@@ -300,8 +286,7 @@ namespace RadiationFieldLamp
         private void ApplyDirection()
         {
             List<CellOffset> offsets = GetFieldOffsets(Direction);
-            fieldCells = Mathf.Min(offsets.Count, emitters.Length);
-            for (int i = 0; i < fieldCells; i++)
+            for (int i = 0; i < emitters.Length && i < offsets.Count; i++)
             {
                 emitters[i].emissionOffset = new Vector3(offsets[i].x, offsets[i].y);
             }
@@ -393,12 +378,11 @@ namespace RadiationFieldLamp
         }
 
         // Sends every emitter its state, which also makes the sim pick up a new cell or new rads on the next tick.
-        // Emitters the current field doesn't use stay off.
         private void SendEmitters()
         {
-            for (int i = 0; i < emitters.Length; i++)
+            foreach (RadiationEmitter emitter in emitters)
             {
-                emitters[i].SetEmitting(emitting && i < fieldCells);
+                emitter.SetEmitting(emitting);
             }
         }
     }

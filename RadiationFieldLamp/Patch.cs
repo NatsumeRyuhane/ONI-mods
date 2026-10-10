@@ -26,7 +26,7 @@ namespace RadiationFieldLamp
                             + UI.FormatAsLink("Uranium Ore", "URANIUMORE") + " for each rad."
                         : "")
                     + (config.AdjustableDirection
-                        ? "\n\nIts direction can be changed after it's built. Pointed diagonally, it covers the 3x3 area off its corner."
+                        ? "\n\nIts direction can be changed after it's built. Pointed diagonally, it uses its up or down field moved one cell to the side, with the lamp in a corner."
                         : ""));
                 Strings.Add(RadiationFieldLamp.SliderTitleKeyString, "Radiation per Cell");
                 Strings.Add(RadiationFieldLamp.SliderTooltipKeyString,
