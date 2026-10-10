@@ -36,7 +36,7 @@
          Description="Batteries, Medium Batteries and Smart Batteries no longer lose stored power over time." />
     <Mod Include="BetterEmptier" Folder="BetterEmptier" Title="Better Emptier" StaticId="BetterEmptier"
          Description="Bottle Emptiers and Gas Bottle Emptiers get a configurable storage capacity (default 200 kg) and release speed multiplier (default 1x)." />
-    <Mod Include="BetterRadiationLamp" Folder="BetterRadiationLamp" Title="Radiation Field Lamp" StaticId="BetterRadiationLamp"
+    <Mod Include="RadiationFieldLamp" Folder="RadiationFieldLamp" Title="Radiation Field Lamp" StaticId="BetterRadiationLamp"
          Description="Adds the Radiation Field Lamp, a new building that keeps an even field of radiation in the 3x3 area in front of it. Its direction can be changed after it is built with the Radbolt Reflector direction panel. Radiation, power use and Uranium Ore use are configurable (defaults: 500 rads per cell, 10 W, 0.6 kg per cycle)." />
     <Mod Include="BuffedAETN" Folder="BuffedAETN" Title="BuffedAETN" StaticId="BuffedAETN"
          Description="Massive Heat Sink (AETN) gets configurable cooling power (default 80 kW), a 100 K minimum operating temperature, and hydrogen consumption and storage settings. It can no longer be flooded." />

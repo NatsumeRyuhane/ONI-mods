@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using PeterHan.PLib.Options;
 
-namespace BetterRadiationLamp
+namespace RadiationFieldLamp
 {
     [JsonObject]
     [ConfigFile("config.json", true, false)]

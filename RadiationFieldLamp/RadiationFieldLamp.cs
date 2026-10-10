@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using KSerialization;
 using UnityEngine;
 
-namespace BetterRadiationLamp
+namespace RadiationFieldLamp
 {
     // Keeps an even field of radiation in the 3x3 cells in front of the lamp. Each cell gets its own native emitter
     // with radius 1: the sim's falloff (1-|dx|/rX)(1-|dy|/rY) is zero for every neighbour, so a radius-1 emitter only

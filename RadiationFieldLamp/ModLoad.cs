@@ -3,7 +3,7 @@ using KMod;
 using PeterHan.PLib.Core;
 using PeterHan.PLib.Options;
 
-namespace BetterRadiationLamp
+namespace RadiationFieldLamp
 {
     public class ModLoad : UserMod2
     {
