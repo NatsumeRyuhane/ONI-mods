@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using KMod;
 using PeterHan.PLib.Core;
 using PeterHan.PLib.Options;
@@ -9,9 +9,10 @@ namespace BuffedAETN
     {
         public override void OnLoad(Harmony harmony)
         {
+            // Applies every [HarmonyPatch] class in this assembly.
             base.OnLoad(harmony);
             PUtil.InitLibrary();
-            new POptions().RegisterOptions((UserMod2) this, typeof(Config));
+            new POptions().RegisterOptions(this, typeof(Config));
         }
     }
 }
