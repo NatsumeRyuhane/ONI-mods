@@ -36,8 +36,8 @@
          Description="Batteries, Medium Batteries and Smart Batteries no longer lose stored power over time." />
     <Mod Include="BetterEmptier" Folder="BetterEmptier" Title="Better Emptier" StaticId="BetterEmptier"
          Description="Bottle Emptiers and Gas Bottle Emptiers get a configurable storage capacity (default 200 kg) and release speed multiplier (default 1x)." />
-    <Mod Include="BetterRadiationLamp" Folder="BetterRadiationLamp" Title="Better Radiation Lamp" StaticId="BetterRadiationLamp"
-         Description="Reworks the Radiation Lamp: it can be placed anywhere in any rotation, uses 10 kW, emits 500 rads in a directional field, and converts Uranium Ore into Depleted Uranium." />
+    <Mod Include="RadiationFieldLamp" Folder="RadiationFieldLamp" Title="Radiation Field Lamp" StaticId="BetterRadiationLamp"
+         Description="Adds the Radiation Field Lamp, a new building that keeps an even field of radiation in a 4x3 area, its own cell, the cells beside it and the 3x3 area in front of it, in the direction it was placed. Each lamp has a slider for its radiation per cell, and burns Uranium Ore in proportion to it. The default and maximum radiation, the Uranium Ore per rad and the power use are configurable (defaults: 500 and 1000 rads per cell, 9.75 mg/s per rad, 10 W). The default Uranium Ore per rad matches the vanilla Radiation Lamp for the radiation it delivers.. An optional setting lets built lamps be re-pointed, diagonals included, with the Radbolt Reflector direction panel." />
     <Mod Include="BuffedAETN" Folder="BuffedAETN" Title="BuffedAETN" StaticId="BuffedAETN"
          Description="Massive Heat Sink (AETN) gets configurable cooling power (default 80 kW), a 100 K minimum operating temperature, and hydrogen consumption and storage settings. It can no longer be flooded." />
     <Mod Include="BuffedWheezewort" Folder="BuffedWheezewort" Title="BuffedWheezewort" StaticId="BuffedWheezewort"

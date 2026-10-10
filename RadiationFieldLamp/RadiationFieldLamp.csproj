@@ -8,8 +8,8 @@
         <ProjectGuid>{7AF1D121-8461-4674-A1B0-EB6505C031E1}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>BetterRadiationLamp</RootNamespace>
-        <AssemblyName>BetterRadiationLamp</AssemblyName>
+        <RootNamespace>RadiationFieldLamp</RootNamespace>
+        <AssemblyName>RadiationFieldLamp</AssemblyName>
         <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
@@ -65,7 +65,11 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Config.cs" />
+        <Compile Include="ModLoad.cs" />
         <Compile Include="Patch.cs" />
+        <Compile Include="RadiationFieldLamp.cs" />
+        <Compile Include="RadiationFieldLampConfig.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>

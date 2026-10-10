@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BatteryNoPowerLoss", "Batte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterEmptier", "BetterEmptier\BetterEmptier.csproj", "{D304A6CE-F43D-48A2-9996-A961C507222C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterRadiationLamp", "BetterRadiationLamp\BetterRadiationLamp.csproj", "{7AF1D121-8461-4674-A1B0-EB6505C031E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadiationFieldLamp", "RadiationFieldLamp\RadiationFieldLamp.csproj", "{7AF1D121-8461-4674-A1B0-EB6505C031E1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuffedAETN", "BuffedAETN\BuffedAETN.csproj", "{615B0573-2DCF-4C09-B694-A7AC4E46F757}"
 EndProject
