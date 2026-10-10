@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectrolyzerNoOverPressure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTempShiftPlateBuild", "FastTempShiftPlateBuild\FastTempShiftPlateBuild.csproj", "{FA1A027C-4C28-4CBC-B261-1C51156A3A89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FullMassDigging", "FullMassDigging\FullMassDigging.csproj", "{426236A3-96A5-4B1E-9BE9-FDB66D5BB75E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConservationOfMass", "ConservationOfMass\ConservationOfMass.csproj", "{426236A3-96A5-4B1E-9BE9-FDB66D5BB75E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeatReducer", "HeatReducer\HeatReducer.csproj", "{14637CAD-2E17-4FCF-8D7D-8C9BE8C6DE10}"
 EndProject
