@@ -20,12 +20,14 @@ namespace RadiationFieldLamp
                 Strings.Add(key + ".DESC", "An even glow of radiation, exactly where it's pointed.");
                 Strings.Add(key + ".EFFECT", "Keeps an adjustable amount of "
                     + UI.FormatAsLink("Radiation", "RADIATION") + ", up to " + config.MaxRadsPerCell.ToString("F0")
-                    + " rads, in each cell of the 3x3 area in front of it."
+                    + " rads, in each cell of a 4x3 area: its own cell, the cells beside it and the 3x3 area in front of it."
                     + (config.UraniumOreMgPerRad > 0f
                         ? "\n\nUses " + config.UraniumOreMgPerRad.ToString("0.##") + " mg/s of "
                             + UI.FormatAsLink("Uranium Ore", "URANIUMORE") + " for each rad."
                         : "")
-                    + (config.AdjustableDirection ? "\n\nIts direction can be changed after it's built." : ""));
+                    + (config.AdjustableDirection
+                        ? "\n\nIts direction can be changed after it's built. Pointed diagonally, it covers the 3x3 area off its corner."
+                        : ""));
                 Strings.Add(RadiationFieldLamp.SliderTitleKeyString, "Radiation per Cell");
                 Strings.Add(RadiationFieldLamp.SliderTooltipKeyString,
                     "The lamp keeps <b>{0:F0} rads</b> in each cell of its field. Fuel use scales with it.");
