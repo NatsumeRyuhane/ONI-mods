@@ -44,6 +44,9 @@ namespace CheapWiresAndPipes
 
             // Every listed building takes a single construction material, so one mass entry replaces the vanilla one.
             // Decor is set to 0 as well, which removes the decor penalty many of them have (-5 to -25 in vanilla).
+            // TODO: Deconstructable refunds the current BuildingDef.Mass, not the mass a building was built with. Utilities
+            // built before the mod was installed refund only 1 kg, and removing the mod makes 1 kg utilities refund
+            // their full vanilla cost. Fixing it would mean refunding the building's own PrimaryElement mass instead.
             public static void Postfix(BuildingDef __result)
             {
                 ModLoad.Log("Reducing mass of {" + __result.Name + "} to " + MaterialKg + "kg");
