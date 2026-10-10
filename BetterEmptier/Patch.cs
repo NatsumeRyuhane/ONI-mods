@@ -1,40 +1,35 @@
-﻿using System;
 using HarmonyLib;
 using PeterHan.PLib.Options;
 using UnityEngine;
 
 namespace BetterEmptier
 {
-    public class Patch
+    public static class Patch
     {
-        [HarmonyPatch(typeof(BottleEmptierConfig))]
-        [HarmonyPatch(nameof(BottleEmptierConfig.ConfigureBuildingTemplate))]
+        // Both emptiers create their Storage and BottleEmptier in ConfigureBuildingTemplate. Vanilla stores 200 kg and
+        // releases 10 kg/s (Bottle Emptier) or 0.25 kg/s (Gas Bottle Emptier).
+        private static void Configure(GameObject go)
+        {
+            var config = SingletonOptions<Config>.Instance;
+            go.AddOrGet<Storage>().capacityKg = config.Capacity;
+            go.AddOrGet<BottleEmptier>().emptyRate *= config.EmissionRateMultiplier;
+        }
+
+        [HarmonyPatch(typeof(BottleEmptierConfig), nameof(BottleEmptierConfig.ConfigureBuildingTemplate))]
         public static class BottleEmptierConfig_ConfigureBuildingTemplate_Patch
         {
-            public static void Postfix(ref GameObject go, ref Tag prefab_tag)
+            public static void Postfix(GameObject go)
             {
-                Storage s = go.AddOrGet<Storage>();
-                if (s == null) return;
-                s.capacityKg = SingletonOptions<Config>.Instance.Capacity;
-                BottleEmptier be = go.AddOrGet<BottleEmptier>();
-                if (be == null) return;
-                be.emptyRate *= SingletonOptions<Config>.Instance.EmissionRateMultiplier;
+                Configure(go);
             }
         }
-        
-        [HarmonyPatch(typeof(BottleEmptierGasConfig))]
-        [HarmonyPatch(nameof(BottleEmptierGasConfig.ConfigureBuildingTemplate))]
+
+        [HarmonyPatch(typeof(BottleEmptierGasConfig), nameof(BottleEmptierGasConfig.ConfigureBuildingTemplate))]
         public static class BottleEmptierGasConfig_ConfigureBuildingTemplate_Patch
         {
-            public static void Postfix(ref GameObject go, ref Tag prefab_tag)
+            public static void Postfix(GameObject go)
             {
-                if (go == null) return;
-                Storage s = go.AddOrGet<Storage>();
-                if (s == null) return;
-                s.capacityKg = SingletonOptions<Config>.Instance.Capacity;
-                BottleEmptier be = go.AddOrGet<BottleEmptier>();
-                if (be == null) return;
-                be.emptyRate *= SingletonOptions<Config>.Instance.EmissionRateMultiplier;
+                Configure(go);
             }
         }
     }

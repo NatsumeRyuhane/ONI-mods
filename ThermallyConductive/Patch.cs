@@ -1,37 +1,35 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using HarmonyLib;
-using Klei.AI;
-using KMod;
-
 
 namespace ThermallyConductive
 {
-    public class Patch : UserMod2
+    public static class Patch
     {
-        [HarmonyPatch(typeof(ThermalBlockConfig), nameof(ThermalBlockConfig.CreateBuildingDef))]
-        public class ThermalBlockConfig_Patch
+        // BuildingDef.ThermalConductivity scales how fast a building exchanges heat with its cell.
+        private const float ConductivityMultiplier = 1000f;
+
+        // Buildings whose job is to move heat: radiant pipes (vanilla 2) and Temperature Shift Plates (vanilla 1).
+        private static readonly Type[] ConfigTypes =
         {
-            public static void Postfix(BuildingDef __result)
+            typeof(ThermalBlockConfig),
+            typeof(LiquidConduitRadiantConfig),
+            typeof(GasConduitRadiantConfig)
+        };
+
+        [HarmonyPatch]
+        public static class CreateBuildingDef_Patch
+        {
+            public static IEnumerable<MethodBase> TargetMethods()
             {
-               __result.ThermalConductivity = __result.ThermalConductivity * 1000;
+                return ConfigTypes.Select(type => (MethodBase)AccessTools.Method(type, nameof(IBuildingConfig.CreateBuildingDef), Type.EmptyTypes));
             }
-        }
-        
-        [HarmonyPatch(typeof(LiquidConduitRadiantConfig), nameof(ThermalBlockConfig.CreateBuildingDef))]
-        public class LiquidPipeConfig_Patch
-        {
+
             public static void Postfix(BuildingDef __result)
             {
-                __result.ThermalConductivity = __result.ThermalConductivity * 1000;
-            }
-        }
-        
-        [HarmonyPatch(typeof(GasConduitRadiantConfig), nameof(ThermalBlockConfig.CreateBuildingDef))]
-        public class GasPipeConfig_Patch
-        {
-            public static void Postfix(BuildingDef __result)
-            {
-                __result.ThermalConductivity = __result.ThermalConductivity * 1000;
+                __result.ThermalConductivity *= ConductivityMultiplier;
             }
         }
     }

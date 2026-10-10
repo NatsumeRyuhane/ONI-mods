@@ -1,82 +1,58 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using HarmonyLib;
-using KMod;
-
 
 namespace CheapWiresAndPipes
 {
-    public class CheapWiresAndPipes : UserMod2
+    public static class Patch
     {
-        private static void Log(string msg)
-        {
-            Debug.Log("[CheapWiresAndPipes] " + msg);
-        }
+        private const float MaterialKg = 1f;
 
-        private static List<Type> GetBuildingConfigTypes()
+        // Wires, pipes, rails and their bridges. Configs that inherit one of these methods (such as the Insulated
+        // Conductive Wire Bridge) are changed too, because they call the patched method.
+        private static readonly Type[] ConfigTypes =
         {
-            var targetBuildingConfigTypes = new List<Type>
+            typeof(WireConfig),
+            typeof(WireHighWattageConfig),
+            typeof(WireBridgeConfig),
+            typeof(WireBridgeHighWattageConfig),
+            typeof(WireRefinedConfig),
+            typeof(WireRefinedHighWattageConfig),
+            typeof(WireRefinedBridgeConfig),
+            typeof(WireRefinedBridgeHighWattageConfig),
+            typeof(LiquidConduitConfig),
+            typeof(InsulatedLiquidConduitConfig),
+            typeof(LiquidConduitRadiantConfig),
+            typeof(LiquidConduitBridgeConfig),
+            typeof(GasConduitConfig),
+            typeof(InsulatedGasConduitConfig),
+            typeof(GasConduitRadiantConfig),
+            typeof(GasConduitBridgeConfig),
+            typeof(SolidConduitConfig),
+            typeof(LogicWireConfig)
+        };
+
+        [HarmonyPatch]
+        public static class CreateBuildingDef_Patch
+        {
+            public static IEnumerable<MethodBase> TargetMethods()
             {
-                typeof(WireConfig),
-                typeof(WireHighWattageConfig),
-                typeof(WireBridgeConfig),
-                typeof(WireBridgeHighWattageConfig),
-                typeof(WireRefinedConfig),
-                typeof(WireRefinedHighWattageConfig),
-                typeof(WireRefinedBridgeConfig),
-                typeof(WireRefinedBridgeHighWattageConfig),
-                typeof(LiquidConduitConfig),
-                typeof(InsulatedLiquidConduitConfig),
-                typeof(LiquidConduitRadiantConfig),
-                typeof(LiquidConduitBridgeConfig),
-                typeof(GasConduitConfig),
-                typeof(InsulatedGasConduitConfig),
-                typeof(GasConduitRadiantConfig),
-                typeof(GasConduitBridgeConfig),
-                typeof(SolidConduitConfig),
-                typeof(LogicWireConfig)
-            };
-
-            return targetBuildingConfigTypes;
-        }
-
-        public override void OnLoad(Harmony harmony)
-        {
-            CheapWiresAndPipes.Log("Loaded");
-            var targetBuildingConfigTypes = GetBuildingConfigTypes();
-
-            // apply patches
-            foreach (var buildingConfigType in targetBuildingConfigTypes)
-            {
-                try
-                {
-                    var method = buildingConfigType.GetMethod("CreateBuildingDef", Type.EmptyTypes);
-                    if (method != null)
-                    {
-                        CheapWiresAndPipes.Log("Patching " + buildingConfigType.Name);
-                        var postfix =
-                            new HarmonyMethod(
-                                typeof(CheapWiresAndPipes).GetMethod("BuildingMassReduction"));
-                        harmony.Patch(method, null, postfix);
-                    }
-
-                    CheapWiresAndPipes.Log("Ignored " + buildingConfigType.Name + ": no `CreateBuildingDef` method");
-                }
-                catch (Exception e)
-                {
-                    CheapWiresAndPipes.Log("Failed to patch " + buildingConfigType.Name + ": " + e.Message);
-                }
+                return ConfigTypes.Select(type => (MethodBase)AccessTools.Method(type, nameof(IBuildingConfig.CreateBuildingDef), Type.EmptyTypes));
             }
 
-            CheapWiresAndPipes.Log("Complete");
-        }
-
-        public static void BuildingMassReduction(BuildingDef __result)
-        {
-            const float newConstructionCost = 1f;
-            CheapWiresAndPipes.Log("Reducing mass of {" + __result.Name + "} to " + newConstructionCost + "kg");
-            __result.Mass = new float[1] { newConstructionCost };
-            __result.BaseDecor = 0;
+            // Every listed building takes a single construction material, so one mass entry replaces the vanilla one.
+            // Decor is set to 0 as well, which removes the decor penalty many of them have (-5 to -25 in vanilla).
+            // TODO: Deconstructable refunds the current BuildingDef.Mass, not the mass a building was built with. Utilities
+            // built before the mod was installed refund only 1 kg, and removing the mod makes 1 kg utilities refund
+            // their full vanilla cost. Fixing it would mean refunding the building's own PrimaryElement mass instead.
+            public static void Postfix(BuildingDef __result)
+            {
+                ModLoad.Log("Reducing mass of {" + __result.Name + "} to " + MaterialKg + "kg");
+                __result.Mass = new[] { MaterialKg };
+                __result.BaseDecor = 0;
+            }
         }
     }
 }
