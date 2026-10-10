@@ -15,6 +15,10 @@ namespace AbyssaliteToTungsten
         // With the toggle on, the Metal Refinery sends this many times the vanilla heat into its coolant.
         private const float TRIPLE_COOLANT_HEAT = 3f;
 
+        // Added to the Metal Refinery description while the toggle is on. It uses the game's own wording for Abyssalite,
+        // "resilient, crystalline element" (STRINGS.ELEMENTS.KATAIRITE.DESC), and the Heat link from the building's EFFECT text.
+        private const string HEAT_LINE = "Refining <link=\"KATAIRITE\">Abyssalite</link>, a resilient, crystalline element, releases a great deal of <link=\"HEAT\">Heat</link>.";
+
         // Set when the Metal Refinery recipe is created. The coolant patch matches on it.
         private static string metalRefineryRecipeId;
 
@@ -41,6 +45,10 @@ namespace AbyssaliteToTungsten
             // The Metal Refinery's coolant heat is worked out inside SpawnOrderProduct. The prefix adds the extra heat first.
             var spawnOrderProduct = AccessTools.Method(typeof(LiquidCooledRefinery), "SpawnOrderProduct");
             harmony.Patch(spawnOrderProduct, new HarmonyMethod(AccessTools.Method(typeof(AbyssaliteToTungsten), nameof(TripleCoolantHeat))));
+
+            // BuildingDef.Desc reads the strings on each call, so the heat line is added in a postfix on that getter.
+            var description = AccessTools.PropertyGetter(typeof(BuildingDef), nameof(BuildingDef.Desc));
+            harmony.Patch(description, null, new HarmonyMethod(AccessTools.Method(typeof(AbyssaliteToTungsten), nameof(AppendHeatLine))));
 
             AbyssaliteToTungsten.Log("Complete");
         }
@@ -109,6 +117,13 @@ namespace AbyssaliteToTungsten
                 PrimaryElement element = item.GetComponent<PrimaryElement>();
                 if (element.Mass != 0f) element.Temperature += extraTemperature;
             }
+        }
+
+        // Adds the heat line to the Metal Refinery's description, only while the toggle is on.
+        public static void AppendHeatLine(BuildingDef __instance, ref string __result)
+        {
+            if (__instance.PrefabID != MetalRefineryConfig.ID || !SingletonOptions<Config>.Instance.TripleCoolantHeat) return;
+            __result += "\n\n" + HEAT_LINE;
         }
     }
 }
