@@ -88,27 +88,18 @@ namespace HeatReducer
 
         public static void MatchBuildingHeatGenerationToPowerConsumption(BuildingDef __result)
         {
-            var powerConsumption = __result.GetType().GetField("EnergyConsumptionWhenActive");
-            var selfHeatGeneration = __result.GetType().GetField("SelfHeatKilowattsWhenActive");
-            var exhaustHeatGeneration = __result.GetType().GetField("ExhaustKilowattsWhenActive");
-
-            if (selfHeatGeneration != null)
+            if (__result.SelfHeatKilowattsWhenActive > 0 &&
+                __result.SelfHeatKilowattsWhenActive * 1000 > __result.EnergyConsumptionWhenActive)
             {
-                if (powerConsumption == null)
-                {
-                    HeatReducer.Log("Reducing {" + __result.Name + "} heat generation: " +
-                                    __result.SelfHeatKilowattsWhenActive * 1000 + " W -> 0 W");
-                    __result.SelfHeatKilowattsWhenActive = 0;
-                }
-                else if (__result.SelfHeatKilowattsWhenActive * 1000 > __result.EnergyConsumptionWhenActive)
-                {
-                    HeatReducer.Log("Reducing {" + __result.Name + "} heat generation: " +
-                                    __result.SelfHeatKilowattsWhenActive * 1000 + " W -> " +
-                                    __result.EnergyConsumptionWhenActive + " W");
-                    __result.SelfHeatKilowattsWhenActive = __result.EnergyConsumptionWhenActive / 1000;
-                }
+                HeatReducer.Log("Reducing {" + __result.Name + "} heat generation: " +
+                                __result.SelfHeatKilowattsWhenActive * 1000 + " W -> " +
+                                __result.EnergyConsumptionWhenActive + " W");
+                __result.SelfHeatKilowattsWhenActive = __result.EnergyConsumptionWhenActive / 1000;
+            }
 
-                if (exhaustHeatGeneration == null) return;
+            // Negative exhaust is cooling, so only positive exhaust is removed.
+            if (__result.ExhaustKilowattsWhenActive > 0)
+            {
                 HeatReducer.Log("Reducing {" + __result.Name + "} exhaust heat generation to 0");
                 __result.ExhaustKilowattsWhenActive = 0;
             }
