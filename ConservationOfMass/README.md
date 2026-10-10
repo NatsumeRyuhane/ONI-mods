@@ -21,5 +21,4 @@ Every tile that is dug out or destroyed drops its resource through `WorldDamage.
 ## Notes
 
 - Buildings are not affected: deconstructing one already returns all of its construction materials.
-- The mod has no `UserMod2` class, so the game applies its patches through a default one. In the Dev mods folder the game logs a "no classes inheriting from UserMod" warning for it.
 - Patch targets were checked against game build 744825.
