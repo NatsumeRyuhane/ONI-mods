@@ -35,6 +35,16 @@ Command line:
 msbuild ONI-mods.sln /p:Configuration=Release
 ```
 
+### Packaging for the game
+
+To build every mod and assemble ready-to-copy mod folders, run:
+
+```sh
+msbuild build/package.proj
+```
+
+This builds the solution in `Release` and writes one folder per mod to `build/out/`. Each folder holds the mod DLL, a generated `mod.yaml` and a generated `mod_info.yaml`. Copy the folders into the game's `mods/Dev` folder to test them. The per-mod metadata (titles, descriptions, `staticID`s, minimum build) lives in `build/package.proj`. The solution is not changed, so Visual Studio and Rider load it as before.
+
 Each mod's output is written to `<Mod>/bin/Release/`, containing `<Mod>.dll` and `<Mod>.dll.config`. Release builds merge PLib and Newtonsoft.Json into the mod DLL, so each mod is self-contained.
 
 ## Notes
