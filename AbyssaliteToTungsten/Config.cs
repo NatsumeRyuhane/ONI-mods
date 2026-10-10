@@ -8,8 +8,8 @@ namespace AbyssaliteToTungsten
     [RestartRequired]
     public class Config
     {
-        [Option("Triple Coolant Heat", "Abyssalite refined in the Metal Refinery sends three times the normal heat into its coolant. The Metal Refinery description also gets a line about it.")]
+        [Option("Balance heat production", "Abyssalite refined in the Metal Refinery sends three times the normal heat into its coolant. Abyssalite is common, so this keeps it from making Wolframite obsolete. The Metal Refinery description also gets a line about it.")]
         [JsonProperty]
-        public bool TripleCoolantHeat { get; set; } = false;
+        public bool BalanceHeatProduction { get; set; } = true;
     }
 }
