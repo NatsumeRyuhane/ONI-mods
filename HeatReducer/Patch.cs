@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using HarmonyLib;
 using KMod;
 
@@ -13,81 +14,39 @@ namespace HeatReducer
             Debug.Log("[HeatReducer] " + msg);
         }
         
+        // Buildings whose purpose is to heat, cool or move heat. Their heat output is the point of the building, so it is left alone.
+        // Grouped by the game's tech tree: Temperature Modulation, HVAC and Liquid Temperature. The Anti Entropy Thermo-Nullifier and
+        // Liquid Heatquilizer have no tech.
+        private static readonly HashSet<Type> ThermalRegulationConfigTypes = new HashSet<Type>
+        {
+            // Temperature Modulation
+            typeof(SpaceHeaterConfig),
+            typeof(LiquidCooledFanConfig),
+            typeof(IceCooledFanConfig),
+            typeof(IceMachineConfig),
+            typeof(IceKettleConfig),
+            // HVAC
+            typeof(AirConditionerConfig),
+            // Liquid Temperature
+            typeof(LiquidHeaterConfig),
+            typeof(LiquidConditionerConfig),
+            // No tech
+            typeof(MassiveHeatSinkConfig),
+            typeof(HeatCompressorConfig)
+        };
+
         public static List<Type> GetBuildingConfigTypes()
         {
-            var targetBuildingConfigTypes = new List<Type>
+            // The game registers every non-abstract IBuildingConfig in Assembly-CSharp (GeneratedBuildings.LoadGeneratedBuildings).
+            var targetBuildingConfigTypes = new List<Type>();
+            foreach (var type in typeof(BuildingConfigManager).Assembly.GetTypes())
             {
-                // Base
-                // Oxygen
-                // Production
-                typeof(MineralDeoxidizerConfig),
-                typeof(SublimationStationConfig),
-                typeof(ElectrolyzerConfig),
-                typeof(RustDeoxidizerConfig),
-                // Purification
-                typeof(AlgaeHabitatConfig),
-                // Power
-                // Generators
-                typeof(ManualGeneratorConfig),
-                typeof(HydrogenGeneratorConfig),
-                typeof(PetroleumGeneratorConfig),
-                // Batteries
-                typeof(BatteryConfig),
-                typeof(BatteryMediumConfig),
-                typeof(BatterySmartConfig),
-                // Food
-                // Storage
-                typeof(RefrigeratorConfig),
-                // Cooking
-                typeof(MicrobeMusherConfig),
-                typeof(CookingStationConfig),
-                // Plumbing
-                // Pumps
-                typeof(LiquidPumpConfig),
-                // Valves
-                typeof(LiquidFilterConfig),
-                typeof(LiquidValveConfig),
-                // Ventilation
-                // Pumps
-                typeof(GasPumpConfig),
-                // Valves
-                typeof(GasFilterConfig),
-                typeof(GasValveConfig),
-                // Refinement
-                // Organic
-                typeof(CompostConfig),
-                typeof(AlgaeDistilleryConfig),
-                typeof(EthanolDistilleryConfig),
-                typeof(SludgePressConfig),
-                // Materials
-                typeof(WaterPurifierConfig),
-                typeof(RockCrusherConfig),
-                typeof(MetalRefineryConfig),
-                typeof(PolymerizerConfig),
-                // Medicine
-                // Furniture
-                // Lights
-                typeof(FloorLampConfig),
-                typeof(CeilingLightConfig),
-                // Recreation
-                typeof(ArcadeMachineConfig),
-                // Stations
-                // Farming
-                typeof(FarmStationConfig),
-                // Ranching
-                typeof(RanchStationConfig),
-                typeof(ShearingStationConfig),
-                // Research
-                typeof(ResearchCenterConfig),
-                typeof(AdvancedResearchCenterConfig),
-                typeof(NuclearResearchCenterConfig),
-                typeof(CosmicResearchCenterConfig),
-                // Industrial
-                typeof(PowerControlStationConfig),
-                typeof(ResetSkillsStationConfig),
-                // Manufacturing
-                typeof(CraftingTableConfig)
-            };
+                if (typeof(IBuildingConfig).IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface &&
+                    !ThermalRegulationConfigTypes.Contains(type))
+                {
+                    targetBuildingConfigTypes.Add(type);
+                }
+            }
 
             return targetBuildingConfigTypes;
         }
@@ -96,23 +55,26 @@ namespace HeatReducer
         {
             HeatReducer.Log("Loaded");
             var targetBuildingConfigTypes = GetBuildingConfigTypes();
+            var postfix =
+                new HarmonyMethod(
+                    typeof(HeatReducer).GetMethod("MatchBuildingHeatGenerationToPowerConsumption"));
+            var patchedCount = 0;
 
             // apply patches
             foreach (var buildingConfigType in targetBuildingConfigTypes)
             {
                 try
                 {
-                    var method = buildingConfigType.GetMethod("CreateBuildingDef", Type.EmptyTypes);
-                    if (method != null)
+                    var method = buildingConfigType.GetMethod("CreateBuildingDef",
+                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly, null, Type.EmptyTypes, null);
+                    if (method == null)
                     {
-                        HeatReducer.Log("Patching " + buildingConfigType.Name);
-                        var postfix =
-                            new HarmonyMethod(
-                                typeof(HeatReducer).GetMethod("MatchBuildingHeatGenerationToPowerConsumption"));
-                        harmony.Patch(method, null, postfix);
+                        HeatReducer.Log("Ignored " + buildingConfigType.Name + ": no `CreateBuildingDef` method");
+                        continue;
                     }
 
-                    HeatReducer.Log("Ignored " + buildingConfigType.Name + ": no `CreateBuildingDef` method");
+                    harmony.Patch(method, null, postfix);
+                    patchedCount++;
                 }
                 catch (Exception e)
                 {
@@ -120,6 +82,7 @@ namespace HeatReducer
                 }
             }
 
+            HeatReducer.Log("Patched " + patchedCount + " building configs");
             HeatReducer.Log("Complete");
         }
 
