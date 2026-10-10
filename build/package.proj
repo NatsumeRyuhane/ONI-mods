@@ -47,7 +47,7 @@
     <Mod Include="FastTempShiftPlateBuild" Folder="FastTempShiftPlateBuild" Title="Fast Temp Shift Plate Build" StaticId="FastTempShiftPlateBuild"
          Description="Temperature Shift Plates build in 6 seconds, deconstruct in 3 seconds, and use 500 kg of material." />
     <Mod Include="HeatReducer" Folder="HeatReducer" Title="Heat Reducer" StaticId="HeatReducer"
-         Description="Caps the self-heat of 42 powered buildings at their rated power draw, and removes their exhaust heat." />
+         Description="Caps the total heat of powered buildings at their power draw, keeping each building's own self and exhaust split. Buildings without a power draw, heaters, coolers, refrigerators, steam turbines and heavy industry such as refineries, forges and kilns are not changed." />
     <Mod Include="LowPowerFilters" Folder="LowPowerFilters" Title="Low Power Filters" StaticId="LowPowerFilters"
          Description="Gas, liquid and solid filters use a configurable power draw (default 10 W each)." />
     <Mod Include="NoPhaseTransitionDamage" Folder="NoPhaseTransitionDamage" Title="No Phase Transition Damage" StaticId="NoPhaseTransitionDamage"
