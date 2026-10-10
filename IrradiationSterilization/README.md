@@ -14,20 +14,20 @@ Germs killed per cycle with the default D50s:
 
 | Germ | D50 | 60 rads (Shine Bug) | 100 rads | 240 rads (Radiation Lamp) | 480 rads (Wheezewort) |
 |---|---|---|---|---|---|
-| Food Poisoning | 50 | 57% | 75% | 96% | 99.9% |
-| Slimelung | 50 | 57% | 75% | 96% | 99.9% |
-| Zombie Spores | 125 | 28% | 43% | 74% | 93% |
+| Food Poisoning | 100 | 34% | 50% | 81% | 96% |
+| Slimelung | 100 | 34% | 50% | 81% | 96% |
+| Zombie Spores | 250 | 15% | 24% | 49% | 74% |
 | Floral Scent | none | immune | immune | immune | immune |
 
 The radiation values are the sources' emitter strengths; cells further away get less. The default D50s keep vanilla's ratio between germs: Zombie Spores' vanilla kill rate is 1 against 2.5 for the others, so its D50 is 2.5 times theirs.
 
-The vanilla kill stays as a minimum, so small clusters of germs still die as fast as in vanilla instead of trailing off. The exponential kill only beats it on large populations: with the default D50s, above about 108,000 germs in a cell, at any radiation level and for every germ. Time to clear one cell of Food Poisoning at 100 rads:
+The vanilla kill stays as a minimum, so small clusters of germs still die as fast as in vanilla instead of trailing off. The exponential kill only beats it on large populations: with the default D50s, above about 216,000 germs in a cell, at any radiation level and for every germ. Time to clear one cell of Food Poisoning at 100 rads:
 
 | Germs | Vanilla | With this mod |
 |---|---|---|
-| 100,000 or fewer | Same as with this mod | Up to 0.67 cycles |
-| 1,000,000 | 6.7 cycles | About 2.3 cycles |
-| 10,000,000 | 67 cycles | About 4 cycles |
+| 200,000 or fewer | Same as with this mod | Up to 1.3 cycles |
+| 1,000,000 | 6.7 cycles | About 3.7 cycles |
+| 10,000,000 | 67 cycles | About 7 cycles |
 
 Germs in pipes follow the same rule, though vanilla kills nothing there. The germ details panel shows the new half-life in its Radiation line, and its total rate of change includes the new kill.
 
@@ -37,9 +37,9 @@ Set in the game's mod menu (saved to `config.json` in the mod folder). Changes n
 
 | Option | Default | Range | Effect |
 |---|---|---|---|
-| Food Poisoning D50 | 50 | 0 to 100000 | Radiation that kills half the Food Poisoning germs per cycle. 0 keeps vanilla behavior |
-| Slimelung D50 | 50 | 0 to 100000 | The same for Slimelung |
-| Zombie Spores D50 | 125 | 0 to 100000 | The same for Zombie Spores |
+| Food Poisoning D50 | 100 | 0 to 100000 | Radiation that kills half the Food Poisoning germs per cycle. 0 keeps vanilla behavior |
+| Slimelung D50 | 100 | 0 to 100000 | The same for Slimelung |
+| Zombie Spores D50 | 250 | 0 to 100000 | The same for Zombie Spores |
 | Floral Scent D50 | 0 | 0 to 100000 | The same for Floral Scent. 0 keeps it immune, as in vanilla |
 | Instant-Kill Radiation | 0 | 0 to 100000 | At or above this radiation, all germs with a D50 die at once. 0 turns it off |
 
