@@ -1,4 +1,4 @@
-# Joules and Watts
+# DTU Not Included
 
 Shows heat in joules (J) and heat flow in watts (W) instead of DTU and DTU/s, and simplifies the heat units in material and element info.
 

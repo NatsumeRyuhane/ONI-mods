@@ -8,7 +8,7 @@ using HarmonyLib;
 using STRINGS;
 using UnityEngine;
 
-namespace JoulesAndWatts
+namespace DTUNotIncluded
 {
     public static class Patch
     {

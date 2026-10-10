@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using STRINGS;
 
-namespace JoulesAndWatts
+namespace DTUNotIncluded
 {
     // Adds a "Thermal Units" section to the Heat page (Database > Tutorials > Systems > Heat), right after
     // "Thermal Energy", and gives vanilla's unused "Tutorial: Duplicant Thermal Units" a page under Tutorials > Tips.
@@ -44,7 +44,7 @@ namespace JoulesAndWatts
             if (lessonCategories == null || !lessonCategories.TryGetValue(TipsCategoryId, out CodexEntry tips)
                 || !(tips is CategoryEntry category))
             {
-                Debug.LogWarning("[JoulesAndWatts] No Tips codex category, so the DTU tutorial page wasn't added.");
+                Debug.LogWarning("[DTUNotIncluded] No Tips codex category, so the DTU tutorial page wasn't added.");
                 return;
             }
 
@@ -78,7 +78,7 @@ namespace JoulesAndWatts
         {
             if (CodexCache.entries == null || !CodexCache.entries.TryGetValue(HeatEntryId, out CodexEntry entry))
             {
-                Debug.LogWarning("[JoulesAndWatts] No Heat codex entry, so the Thermal Units section wasn't added.");
+                Debug.LogWarning("[DTUNotIncluded] No Heat codex entry, so the Thermal Units section wasn't added.");
                 return;
             }
 
