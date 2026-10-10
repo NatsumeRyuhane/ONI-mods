@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using HarmonyLib;
 using KSerialization;
+using PeterHan.PLib.Options;
 using UnityEngine;
 
 namespace RadiationFieldLamp
@@ -7,8 +9,8 @@ namespace RadiationFieldLamp
     // Keeps an even field of radiation in the 3x3 cells in front of the lamp. Each cell gets its own native emitter
     // with radius 1: the sim's falloff (1-|dx|/rX)(1-|dy|/rY) is zero for every neighbour, so a radius-1 emitter only
     // reaches its own cell, at full strength. emitRate 0 makes the sim run exactly one pass per tick, and with the
-    // sim's linger rate of 1.1 one pass per tick settles at emitRads. The direction uses the Radbolt Reflector's
-    // side screen.
+    // sim's linger rate of 1.1 one pass per tick settles at emitRads. The lamp points the way it was placed. With the
+    // Adjustable Direction option, the Radbolt Reflector's side screen can re-point it, diagonals included.
     [SerializationConfig(MemberSerialization.OptIn)]
     public class RadiationFieldLamp : KMonoBehaviour, IHighEnergyParticleDirection
     {
@@ -19,6 +21,14 @@ namespace RadiationFieldLamp
 
         private static readonly EventSystem.IntraObjectHandler<RadiationFieldLamp> OnCopySettingsDelegate =
             new EventSystem.IntraObjectHandler<RadiationFieldLamp>((component, data) => component.OnCopySettings(data));
+
+        private static readonly EventSystem.IntraObjectHandler<RadiationFieldLamp> OnRotatedDelegate =
+            new EventSystem.IntraObjectHandler<RadiationFieldLamp>((component, data) => component.OnRotated());
+
+        // The meter's tracker only redraws when the lamp's symbol or position changes, not its rotation. Clearing its
+        // cached matrix makes it pick up a new rotation on the next frame.
+        private static readonly AccessTools.FieldRef<KBatchedAnimTracker, Matrix2x3> TrackerPreviousMatrix =
+            AccessTools.FieldRefAccess<KBatchedAnimTracker, Matrix2x3>("previousMatrix");
 
         // The game assigns [MyCmpGet] fields by reflection, which the compiler can't see.
 #pragma warning disable CS0649
@@ -36,10 +46,16 @@ namespace RadiationFieldLamp
 
         [MyCmpGet]
         private RangeVisualizer rangeVisualizer;
+
+        [MyCmpGet]
+        private Rotatable rotatable;
 #pragma warning restore CS0649
 
         [Serialize]
-        private EightDirection direction = EightDirection.Right;
+        private bool hasCustomDirection;
+
+        [Serialize]
+        private EightDirection customDirection = EightDirection.Right;
 
         private RadiationEmitter[] emitters;
 
@@ -47,12 +63,43 @@ namespace RadiationFieldLamp
 
         private bool emitting;
 
+        private static bool AdjustableDirection
+        {
+            get { return SingletonOptions<Config>.Instance.AdjustableDirection; }
+        }
+
+        private bool UseCustomDirection
+        {
+            get { return hasCustomDirection && AdjustableDirection; }
+        }
+
+        // The direction from the placement rotation. The lamp art faces right when unrotated.
+        private EightDirection PlacedDirection
+        {
+            get
+            {
+                switch (rotatable != null ? rotatable.GetOrientation() : Orientation.Neutral)
+                {
+                    case Orientation.R90: return EightDirection.Down;
+                    case Orientation.R180: return EightDirection.Left;
+                    case Orientation.R270: return EightDirection.Up;
+                    case Orientation.FlipH: return EightDirection.Left;
+                    default: return EightDirection.Right;
+                }
+            }
+        }
+
         public EightDirection Direction
         {
-            get { return direction; }
+            get { return UseCustomDirection ? customDirection : PlacedDirection; }
             set
             {
-                direction = value;
+                if (!AdjustableDirection)
+                {
+                    return;
+                }
+                customDirection = value;
+                hasCustomDirection = true;
                 if (isSpawned)
                 {
                     ApplyDirection();
@@ -91,9 +138,8 @@ namespace RadiationFieldLamp
             return offsets;
         }
 
-        public static void SetRange(RangeVisualizer visualizer, EightDirection direction)
+        public static void SetRange(RangeVisualizer visualizer, IEnumerable<CellOffset> offsets)
         {
-            List<CellOffset> offsets = GetFieldOffsets(direction);
             Vector2I min = new Vector2I(int.MaxValue, int.MaxValue);
             Vector2I max = new Vector2I(int.MinValue, int.MinValue);
             foreach (CellOffset offset in offsets)
@@ -124,6 +170,7 @@ namespace RadiationFieldLamp
         {
             base.OnPrefabInit();
             Subscribe((int)GameHashes.CopySettings, OnCopySettingsDelegate);
+            Subscribe((int)GameHashes.Rotated, OnRotatedDelegate);
         }
 
         protected override void OnSpawn()
@@ -153,28 +200,69 @@ namespace RadiationFieldLamp
         {
             GameObject source = data as GameObject;
             RadiationFieldLamp other = source != null ? source.GetComponent<RadiationFieldLamp>() : null;
-            if (other != null)
+            if (other != null && AdjustableDirection)
             {
                 Direction = other.Direction;
             }
         }
 
+        // Rotatable re-applies the placement rotation to the art when it spawns, which can happen after this
+        // component spawns. Put a custom direction back on top of it.
+        private void OnRotated()
+        {
+            if (isSpawned && UseCustomDirection)
+            {
+                ApplyCustomRotation();
+            }
+        }
+
         private void ApplyDirection()
         {
-            List<CellOffset> offsets = GetFieldOffsets(direction);
+            List<CellOffset> offsets = GetFieldOffsets(Direction);
             for (int i = 0; i < emitters.Length && i < offsets.Count; i++)
             {
                 emitters[i].emissionOffset = new Vector3(offsets[i].x, offsets[i].y);
                 // Re-sending the current state makes the sim move the emitter to its new cell on the next tick.
                 emitters[i].SetEmitting(emitting);
             }
+            if (!UseCustomDirection)
+            {
+                // Rotatable already turned the art and the range overlay with the placement rotation.
+                return;
+            }
+            ApplyCustomRotation();
+            if (rangeVisualizer != null)
+            {
+                // RangeVisualizerEffect rotates the range by the placement rotation, so undo that first.
+                Orientation undo = Orientation.Neutral;
+                if (rotatable != null)
+                {
+                    switch (rotatable.GetOrientation())
+                    {
+                        case Orientation.R90: undo = Orientation.R270; break;
+                        case Orientation.R270: undo = Orientation.R90; break;
+                        default: undo = rotatable.GetOrientation(); break;
+                    }
+                }
+                List<CellOffset> unrotated = new List<CellOffset>(offsets.Count);
+                foreach (CellOffset offset in offsets)
+                {
+                    unrotated.Add(Rotatable.GetRotatedCellOffset(offset, undo));
+                }
+                SetRange(rangeVisualizer, unrotated);
+            }
+        }
+
+        private void ApplyCustomRotation()
+        {
             // The lamp art faces right. Rotation is counter-clockwise in degrees, and EightDirection counts
             // counter-clockwise from up in 45 degree steps, with Right at index 6.
             animController.Pivot = new Vector3(0f, 0.5f, 0f);
-            animController.Rotation = (EightDirectionUtil.GetAngle(direction) + 90f) % 360f;
-            if (rangeVisualizer != null)
+            animController.Rotation = (EightDirectionUtil.GetAngle(customDirection) + 90f) % 360f;
+            KBatchedAnimTracker tracker = meter != null ? meter.gameObject.GetComponent<KBatchedAnimTracker>() : null;
+            if (tracker != null)
             {
-                SetRange(rangeVisualizer, direction);
+                TrackerPreviousMatrix(tracker) = default(Matrix2x3);
             }
         }
 
