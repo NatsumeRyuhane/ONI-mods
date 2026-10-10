@@ -25,7 +25,7 @@ namespace BuffedAETN
         [JsonProperty]
         public int HydrogenConsumptionRate { get; set; } = 10;
 
-        [Option("Hydrogen Storage Capacity (g)", "will be at least 5 second worth of consumption")]
+        [Option("Hydrogen Storage Capacity (g)", "Never less than 3 seconds of consumption")]
         [Limit(10.0, 1000.0)]
         [JsonProperty]
         public float HydrogenStorageCapacity { get; set; } = 10;
