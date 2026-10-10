@@ -1,30 +1,25 @@
-﻿using HarmonyLib;
-using KMod;
+using HarmonyLib;
 
 namespace NoPhaseTransitionDamage
 {
-    public class Patch : UserMod2
+    // The sim reports pipe contents that freeze or boil, and ConduitFlow raises an event on the pipe. Conduit's
+    // handlers for those events deal 1 damage to the pipe and empty its contents. Skipping the handlers removes both.
+    // The handlers are private, so they're named by string.
+    public static class Patch
     {
-        public override void OnLoad(Harmony harmony)
-        {
-            base.OnLoad(harmony);
-        }
-        
-        [HarmonyPatch(typeof(Conduit))]
-        [HarmonyPatch("OnConduitFrozen")]
+        [HarmonyPatch(typeof(Conduit), "OnConduitFrozen")]
         public static class Conduit_OnConduitFrozen_Patch
         {
-            public static bool Prefix(ref Conduit __instance)
+            public static bool Prefix()
             {
                 return false;
             }
         }
-        
-        [HarmonyPatch(typeof(Conduit))]
-        [HarmonyPatch("OnConduitBoiling")]
+
+        [HarmonyPatch(typeof(Conduit), "OnConduitBoiling")]
         public static class Conduit_OnConduitBoiling_Patch
         {
-            public static bool Prefix(ref Conduit __instance)
+            public static bool Prefix()
             {
                 return false;
             }
