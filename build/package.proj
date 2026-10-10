@@ -52,6 +52,8 @@
          Description="Temperature Shift Plates build in 6 seconds, deconstruct in 3 seconds, and use 500 kg of material." />
     <Mod Include="HeatReducer" Folder="HeatReducer" Title="Heat Reducer" StaticId="HeatReducer"
          Description="Caps the total heat of powered buildings at their power draw, keeping each building's own self and exhaust split. Buildings without a power draw, heaters, coolers, refrigerators, steam turbines and heavy industry such as refineries, forges and kilns are not changed." />
+    <Mod Include="DTUNotIncluded" Folder="DTUNotIncluded" Title="DTU Not Included" StaticId="DTUNotIncluded" MinimumSupportedBuild="744825"
+         Description="Shows heat in joules and watts instead of DTU and DTU/s, the units the simulation already uses, so no values change. Heat rates read like power (Heat: +20 kW), specific heat capacity reads J/(g*C) and thermal conductivity reads W/(m*C)." />
     <Mod Include="LowPowerFilters" Folder="LowPowerFilters" Title="Low Power Filters" StaticId="LowPowerFilters"
          Description="Gas, liquid and solid filters use a configurable power draw (default 10 W each)." />
     <Mod Include="NoPhaseTransitionDamage" Folder="NoPhaseTransitionDamage" Title="No Phase Transition Damage" StaticId="NoPhaseTransitionDamage"
