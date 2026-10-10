@@ -65,7 +65,11 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Config.cs" />
+        <Compile Include="ModLoad.cs" />
         <Compile Include="Patch.cs" />
+        <Compile Include="RadiationFieldLamp.cs" />
+        <Compile Include="RadiationFieldLampConfig.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
