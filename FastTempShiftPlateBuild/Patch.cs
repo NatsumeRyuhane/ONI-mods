@@ -1,40 +1,39 @@
-﻿using System;
 using HarmonyLib;
-using Klei.AI;
-using KMod;
 using UnityEngine;
-
 
 namespace FastTempShiftPlateBuild
 {
-    public class FastTempShiftPlateBuild
+    public static class Patch
     {
-        // Build time in seconds. Deconstruction takes half as long, the same rule the game uses for tile pieces.
-        private const float CONSTRUCTION_TIME = 6f;
-        private const float DECONSTRUCT_TIME = CONSTRUCTION_TIME * 0.5f;
+        // Vanilla: 120 s to build, 30 s to deconstruct, 800 kg of material.
+        private const float BuildSeconds = 6f;
 
-        [HarmonyPatch(typeof(ThermalBlockConfig))]
-        [HarmonyPatch("CreateBuildingDef")]
-        public class ThermalBlockConfig_Patch
+        // Half the build time, the same rule the game uses for tile pieces.
+        private const float DeconstructSeconds = BuildSeconds * 0.5f;
+
+        private const float MaterialKg = 500f;
+
+        [HarmonyPatch(typeof(ThermalBlockConfig), nameof(ThermalBlockConfig.CreateBuildingDef))]
+        public static class ThermalBlockConfig_CreateBuildingDef_Patch
         {
             public static void Postfix(BuildingDef __result)
             {
-                __result.Mass = new float[] { 500f };
-                __result.ConstructionTime = CONSTRUCTION_TIME;
+                __result.Mass = new[] { MaterialKg };
+                __result.ConstructionTime = BuildSeconds;
             }
         }
 
         // Thermal Blocks are not tile pieces, so Deconstructable hard-codes their deconstruct time to 30 s
         // and ignores ConstructionTime. customWorkTime overrides that for the prefab.
         [HarmonyPatch(typeof(ThermalBlockConfig), nameof(ThermalBlockConfig.DoPostConfigureComplete))]
-        public class ThermalBlockConfig_DoPostConfigureComplete_Patch
+        public static class ThermalBlockConfig_DoPostConfigureComplete_Patch
         {
             public static void Postfix(GameObject go)
             {
-                Deconstructable deconstructable = go.GetComponent<Deconstructable>();
+                var deconstructable = go.GetComponent<Deconstructable>();
                 if (deconstructable != null)
                 {
-                    deconstructable.customWorkTime = DECONSTRUCT_TIME;
+                    deconstructable.customWorkTime = DeconstructSeconds;
                 }
             }
         }
