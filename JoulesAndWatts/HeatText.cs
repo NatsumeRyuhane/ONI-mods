@@ -149,7 +149,7 @@ namespace JoulesAndWatts
             return "This object conducts " + displayValue + UI.UNITSUFFIXES.ELECTRICAL.WATT
                 + " of heat through each square meter of a 1 m thick layer, for every 1 " + degree
                 + " of temperature difference across it\n\n"
-                + "Every tile is the same size, so in game the meters cancel out, and the number only matters compared "
+                + "Every tile is the same size, so the meters cancel out, and the number only matters compared "
                 + "with other materials' Thermal Conductivity\n\n"
                 + ConductionRules;
         }
