@@ -25,6 +25,10 @@ namespace BuffedWheezewort
 
                 // The vanilla prefab is already fertilizable; this call adds a second Phosphorite delivery and replaces
                 // the fertilizer list the plant consumes from.
+                // TODO: Each plant ends up with two ManualDeliveryKG requests for Phosphorite, and the
+                // FertilizerUsageMod attribute is added twice. Instead, change the existing ManualDeliveryKG (capacity,
+                // refillMass and MinimumMass are 1800, 300 and 300 times the per-second rate) and the
+                // FertilizationMonitor.Def consumedElements. Needs an in-game test of delivery and consumption.
                 EntityTemplates.ExtendPlantToFertilizable(__result, new[]
                 {
                     new PlantElementAbsorber.ConsumeInfo
