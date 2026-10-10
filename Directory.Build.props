@@ -1,0 +1,21 @@
+<Project>
+  <!--
+    Shared settings for every mod in this repo. Microsoft.Common.props imports this file
+    automatically, so the existing .csproj files pick it up without changes.
+  -->
+  <PropertyGroup>
+    <!--
+      Folder holding the game's Managed assemblies (Assembly-CSharp.dll, UnityEngine.dll, 0Harmony.dll, ...).
+      Resolution order: -p:OniManagedDir=... or ONI_MANAGED_DIR, then the default for this OS.
+      Set ONI_MANAGED_DIR when the game is installed outside the default Steam library.
+    -->
+    <OniManagedDir Condition="'$(OniManagedDir)' == ''">$(ONI_MANAGED_DIR)</OniManagedDir>
+    <OniManagedDir Condition="'$(OniManagedDir)' == '' And '$(OS)' == 'Windows_NT'">$(ProgramFiles(x86))/Steam/steamapps/common/OxygenNotIncluded/OxygenNotIncluded_Data/Managed</OniManagedDir>
+    <OniManagedDir Condition="'$(OniManagedDir)' == '' And $([MSBuild]::IsOSPlatform('OSX'))">$(HOME)/Library/Application Support/Steam/steamapps/common/OxygenNotIncluded/OxygenNotIncluded.app/Contents/Resources/Data/Managed</OniManagedDir>
+    <OniManagedDir Condition="'$(OniManagedDir)' == '' And $([MSBuild]::IsOSPlatform('Linux'))">$(HOME)/.local/share/Steam/steamapps/common/OxygenNotIncluded/OxygenNotIncluded_Data/Managed</OniManagedDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Use the repo's ILRepack target (build/ILRepack.targets) instead of the package's copy. -->
+    <ILRepackTargetsFile Condition="'$(ILRepackTargetsFile)' == ''">$(MSBuildThisFileDirectory)build/ILRepack.targets</ILRepackTargetsFile>
+  </PropertyGroup>
+</Project>

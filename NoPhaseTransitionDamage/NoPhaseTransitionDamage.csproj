@@ -34,13 +34,16 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="0Harmony">
-          <HintPath>..\..\libs\0Harmony.dll</HintPath>
+          <HintPath>$(OniManagedDir)/0Harmony.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="Assembly-CSharp">
-          <HintPath>..\..\libs\Assembly-CSharp.dll</HintPath>
+          <HintPath>$(OniManagedDir)/Assembly-CSharp.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="Assembly-CSharp-firstpass">
-          <HintPath>..\..\libs\Assembly-CSharp-firstpass.dll</HintPath>
+          <HintPath>$(OniManagedDir)/Assembly-CSharp-firstpass.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
           <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -53,10 +56,12 @@
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
         <Reference Include="UnityEngine">
-          <HintPath>..\..\libs\UnityEngine.dll</HintPath>
+          <HintPath>$(OniManagedDir)/UnityEngine.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-          <HintPath>..\..\libs\UnityEngine.CoreModule.dll</HintPath>
+          <HintPath>$(OniManagedDir)/UnityEngine.CoreModule.dll</HintPath>
+          <Private>False</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup>

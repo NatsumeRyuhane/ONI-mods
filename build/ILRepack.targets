@@ -1,0 +1,40 @@
+<Project>
+  <!--
+    Replaces the ILRepack target shipped by the ILRepack.Lib.MSBuild.Task NuGet package. Selected
+    through ILRepackTargetsFile in Directory.Build.props. Packaging behaviour is unchanged, except
+    LibraryPath is set so the game's own assemblies (0Harmony, Newtonsoft.Json) resolve from the
+    Managed folder. Those are provided at runtime by the game and must not be merged into the mod.
+  -->
+  <Target Name="OniILRepack" AfterTargets="Build" Condition="$(Configuration.Contains('Release'))">
+    <ItemGroup>
+      <InputAssemblies Include="$(OutputPath)$(TargetName)$(TargetExt)"/>
+      <InputAssemblies Include="$(OutputPath)*.dll" Exclude="$(OutputPath)$(TargetName)$(TargetExt)"/>
+      <ILRepackLibraryPath Include="$(OniManagedDir)"/>
+    </ItemGroup>
+
+    <ILRepack
+            Parallel="true"
+            DebugInfo="true"
+            AllowDuplicateResources="false"
+            InputAssemblies="@(InputAssemblies)"
+            LibraryPath="@(ILRepackLibraryPath)"
+            TargetKind="SameAsPrimaryAssembly"
+            KeyFile="$(KeyFile)"
+            OutputFile="$(OutputPath)$(TargetName)$(TargetExt)"
+    />
+  </Target>
+
+  <Target
+          AfterTargets="OniILRepack"
+          Name="OniCleanReferenceCopyLocalPaths"
+          Condition="$(Configuration.Contains('Release')) and '$(ClearOutputDirectory)' != 'False'">
+    <Delete Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')"/>
+    <ItemGroup>
+      <Directories Include="$([System.IO.Directory]::GetDirectories('$(OutDir)%(DestinationSubDirectory)', '*', System.IO.SearchOption.AllDirectories))"/>
+      <Directories>
+        <Files>$([System.IO.Directory]::GetFiles("%(Directories.Identity)", "*", System.IO.SearchOption.AllDirectories).get_Length())</Files>
+      </Directories>
+    </ItemGroup>
+    <RemoveDir Directories="@(Directories)" Condition="%(Files)=='0'"/>
+  </Target>
+</Project>
