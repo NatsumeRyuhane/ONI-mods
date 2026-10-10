@@ -52,6 +52,8 @@
          Description="Caps the total heat of powered buildings at their power draw, keeping each building's own self and exhaust split. Buildings without a power draw, heaters, coolers, refrigerators, steam turbines and heavy industry such as refineries, forges and kilns are not changed." />
     <Mod Include="DTUNotIncluded" Folder="DTUNotIncluded" Title="DTU Not Included" StaticId="DTUNotIncluded" MinimumSupportedBuild="744825"
          Description="Shows heat in joules and watts instead of DTU and DTU/s, the units the simulation already uses, so no values change. Heat rates read like power (Heat: +20 kW), specific heat capacity reads J/(g*C) and thermal conductivity reads W/(m*C)." />
+    <Mod Include="IrradiationSterilization" Folder="IrradiationSterilization" Title="Irradiation Sterilization" StaticId="IrradiationSterilization"
+         Description="Radiation kills a share of the germs every cycle instead of a fixed number, in tiles, pipes, items and buildings. Each germ has a configurable D50, the radiation that kills half of it per cycle: 100 rads for Food Poisoning and Slimelung and 250 for Zombie Spores, while Floral Scent stays immune. The vanilla kill rate stays as a minimum, so small clusters still die quickly. An optional instant-kill radiation level is off by default. Needs Spaced Out, the only mode with radiation." />
     <Mod Include="LowPowerFilters" Folder="LowPowerFilters" Title="Low Power Filters" StaticId="LowPowerFilters"
          Description="Gas, liquid and solid filters use a configurable power draw (default 10 W each)." />
     <Mod Include="NoPhaseTransitionDamage" Folder="NoPhaseTransitionDamage" Title="No Phase Transition Damage" StaticId="NoPhaseTransitionDamage"
