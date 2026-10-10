@@ -161,18 +161,16 @@ namespace JoulesAndWatts
         private const string ConductionRules =
             "Between two objects, the rate of heat transfer is usually an average of both objects' Thermal Conductivity";
 
+        // Changes only the wrong parts of vanilla's text, keeping its wording and keyword styling: "Between two
+        // objects, the rate of Heat transfer will be determined by the object with the <i>lowest</i> Thermal
+        // Conductivity" and "{1} W per degree K difference (Oxygen: 0.024 W)".
         private static string FixConductivityModifier(string text)
         {
-            const string lowestRule = "Between two objects, the rate of ";
-            int rule = text.IndexOf(lowestRule, System.StringComparison.Ordinal);
-            int value = text.IndexOf("Thermal Conductivity: {1} W per degree K difference", System.StringComparison.Ordinal);
-            if (rule < 0 || value < rule)
-            {
-                return text;
-            }
             string watts = Symbol(UI.UNITSUFFIXES.ELECTRICAL.WATT);
-            return text.Substring(0, rule) + ConductionRules + "\n\n"
-                + "Thermal Conductivity: {1} " + watts + "/(m*K) (Oxygen: 0.024 " + watts + "/(m*K))";
+            return text
+                .Replace("will be determined by the object with the <i>lowest</i> ", "is usually an average of both objects' ")
+                .Replace("{1} W per degree K difference (Oxygen: 0.024 W)",
+                    "{1} " + watts + "/(m*K) (Oxygen: 0.024 " + watts + "/(m*K))");
         }
 
         private static string ReplaceDtu(string text)
