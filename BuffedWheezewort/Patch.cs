@@ -1,49 +1,61 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using PeterHan.PLib.Options;
 using UnityEngine;
 
 namespace BuffedWheezewort
 {
-    public class Patches
+    // Patches the Wheezewort (ColdBreatherConfig). Vanilla emits 480 rads in Spaced Out, cools the gas it breathes by
+    // 5 degrees, takes 4 kg of Phosphorite per cycle, and grows between 213.15 K and 368.15 K (dies below 183.15 K or
+    // above 463.15 K).
+    public static class Patch
     {
         [HarmonyPatch(typeof(ColdBreatherConfig), nameof(ColdBreatherConfig.CreatePrefab))]
-        public static class Patch_CreatePrefab
+        public static class ColdBreatherConfig_CreatePrefab_Patch
         {
             public static void Postfix(GameObject __result)
             {
-                __result.GetComponent<RadiationEmitter>().emitRads = SingletonOptions<Config>.Instance.Radiation;
-                EntityTemplates.ExtendPlantToFertilizable(__result, new PlantElementAbsorber.ConsumeInfo[1]
+                var config = SingletonOptions<Config>.Instance;
+
+                // The emitter only exists when radiation is enabled (Spaced Out).
+                var emitter = __result.GetComponent<RadiationEmitter>();
+                if (emitter != null)
                 {
-                    new PlantElementAbsorber.ConsumeInfo()
+                    emitter.emitRads = config.Radiation;
+                }
+
+                // The vanilla prefab is already fertilizable; this call adds a second Phosphorite delivery and replaces
+                // the fertilizer list the plant consumes from.
+                // TODO: Each plant ends up with two ManualDeliveryKG requests for Phosphorite, and the
+                // FertilizerUsageMod attribute is added twice. Instead, change the existing ManualDeliveryKG (capacity,
+                // refillMass and MinimumMass are 1800, 300 and 300 times the per-second rate) and the
+                // FertilizationMonitor.Def consumedElements. Needs an in-game test of delivery and consumption.
+                EntityTemplates.ExtendPlantToFertilizable(__result, new[]
+                {
+                    new PlantElementAbsorber.ConsumeInfo
                     {
                         tag = SimHashes.Phosphorite.CreateTag(),
-                        massConsumptionRate = SingletonOptions<Config>.Instance.PhosphorusConsumptionRate
+                        massConsumptionRate = config.PhosphorusConsumptionRate
                     }
                 });
+
+                // Grows between -100 C and 100 C, and dies below -150 C or above 150 C.
                 __result.AddOrGet<TemperatureVulnerable>().Configure(173.15f, 123.15f, 373.15f, 423.15f);
-            }
-        }
-        
-        [HarmonyPatch(typeof(ColdBreatherConfig), nameof(ColdBreatherConfig.CreatePrefab))]
-        public static class Patch_ColdBreatherConfig_CreatePrefab
-        {
-            public static void Postfix(GameObject __result)
-            {
-                __result.AddOrGet<ColdBreather>().deltaEmitTemperature = SingletonOptions<Config>.Instance.EmissionTemperatureDelta;
+                __result.AddOrGet<ColdBreather>().deltaEmitTemperature = config.EmissionTemperatureDelta;
             }
         }
 
-        [HarmonyPatch(typeof (ColdBreather))]
-        [HarmonyPatch("OnReplanted")]
-        public static class Patch_OnReplanted
+        // ColdBreather.OnReplanted runs when the plant is planted or replanted, and resets the emitter to the vanilla
+        // 480 rads. Set it again afterwards. OnReplanted is private, so it's named by string.
+        [HarmonyPatch(typeof(ColdBreather), "OnReplanted")]
+        public static class ColdBreather_OnReplanted_Patch
         {
-            internal static void Postfix(ColdBreather __instance)
+            public static void Postfix(ColdBreather __instance)
             {
-                RadiationEmitter component = __instance.GetComponent<RadiationEmitter>();
-                if (!((Object) component != (Object) null))
-                    return;
-                component.emitRads = SingletonOptions<Config>.Instance.Radiation;
-                component.Refresh();
+                var emitter = __instance.GetComponent<RadiationEmitter>();
+                if (emitter == null) return;
+
+                emitter.emitRads = SingletonOptions<Config>.Instance.Radiation;
+                emitter.Refresh();
             }
         }
     }
