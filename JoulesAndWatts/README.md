@@ -18,15 +18,15 @@ The game already measures heat in joules. `Constants.J2DTU` and `Constants.W2DTU
 | Specific heat capacity | `4.179 (DTU/g)/ ºC` | `4.179 J/(g*ºC)` |
 | Thermal conductivity | `0.609 (DTU/(m*s))/ ºC` | `0.609 W/(m*ºC)` |
 | Material tooltip, heat capacity | `{1} DTU to raise 1g by 1K` | `{1} J to raise 1 g by 1 K` |
-| Material tooltip, conductivity | `the object with the lowest Thermal Conductivity`, `{1} W per degree K difference` | How conductivities combine (below), `{1} W/(m*K)` |
+| Material tooltip, conductivity | `the object with the lowest Thermal Conductivity`, `{1} W per degree K difference` | `usually an average of both objects' Thermal Conductivity`, `{1} W/(m*K)` |
 | Details panel, heat capacity tooltip | `Specific Heat Capacity: 0.790(DTU/g)/ K is required to heat 1 g ... by 1  K` | `0.790 J is required to heat 1 g ... by 1 K` |
-| Details panel, conductivity tooltip | `... at a rate of Thermal Conductivity: 3.390(DTU/(m*s))/ K W for each degree  K difference`, plus the lowest-conductivity rule | What W/(m*K) means, why the meters don't matter on the grid, how conductivities combine |
+| Details panel, conductivity tooltip | `... at a rate of Thermal Conductivity: 3.390(DTU/(m*s))/ K W for each degree  K difference`, plus the lowest-conductivity rule | What W/(m*K) means, why the meters don't matter on the grid, and the "usually an average" rule |
 | Tutorial: Duplicant Thermal Units | Never shown; says "1 DTU = 1055.06 J" | A page under Database > Tutorials > Tips saying the DTU is deprecated, linking to Heat |
 | Database > Tutorials > Systems > Heat | | A new Thermal Units section after Thermal Energy, linking to the DTU tutorial |
 
 Heat rates now use the power formatter, so they're rounded to two decimals like power.
 
-Vanilla says heat transfer between two objects is set by the lower Thermal Conductivity. That's only true for some pairs. The new conductivity tooltips say:
+Vanilla says heat transfer between two objects is set by the lower Thermal Conductivity. That's only true for some pairs. The new conductivity tooltips say it's "usually an average of both objects' Thermal Conductivity", and are deliberately vague about which average and when. What the sim does:
 
 - Tile to tile: the geometric mean, sqrt(k1 * k2), with extra factors for solid-gas and liquid-liquid pairs.
 - Debris, critters and Duplicants with a tile: the lower of the two. For creatures this is `SimUtil.CalculateEnergyFlow` (`Math.Min`).

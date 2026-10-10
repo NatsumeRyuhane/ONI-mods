@@ -154,13 +154,12 @@ namespace JoulesAndWatts
                 + ConductionRules;
         }
 
-        // How the sim combines two conductivities. Tile to tile uses the geometric mean (sqrt(k1 * k2)), with extra
-        // factors for solid-gas and liquid-liquid pairs. Creatures use the lower one (SimUtil.CalculateEnergyFlow), as
-        // does debris on a tile. Buildings use the product with the tile they occupy. See README for sources.
+        // Replaces vanilla's "determined by the object with the lowest Thermal Conductivity", which is only true for
+        // some pairs. Deliberately vague: tile to tile uses the geometric mean (sqrt(k1 * k2)) with extra factors for
+        // solid-gas and liquid-liquid pairs, creatures and debris use the lower value (SimUtil.CalculateEnergyFlow),
+        // and buildings use the product with the tile they occupy. See README for sources.
         private const string ConductionRules =
-            "Between two tiles, the rate of heat transfer depends on the geometric mean of both Thermal Conductivities. " +
-            "Debris, critters and Duplicants use the lower of their own and the tile's, and buildings use their own " +
-            "multiplied by the tile's";
+            "Between two objects, the rate of heat transfer is usually an average of both objects' Thermal Conductivity";
 
         private static string FixConductivityModifier(string text)
         {
