@@ -62,6 +62,8 @@
          Description="Changing the item a Storage Tile holds takes effect right away, with no Duplicant errand. Items that no longer match drop in the first open cell next to the tile." />
     <Mod Include="ThermallyConductive" Folder="ThermallyConductive" Title="Thermally Conductive" StaticId="ThermallyConductive"
          Description="Radiant gas and liquid pipes and Thermal Blocks have 1000 times their normal thermal conductivity." />
+    <Mod Include="ThermoHeatProduction" Folder="ThermoHeatProduction" Title="Thermo Heat Production" StaticId="ThermoHeatProduction"
+         Description="Thermo Regulators and Thermo Aquatuners show a Heat Production status while running, like the Steam Turbine. It shows the heat they move out of the gas or liquid they cool, which the game already tracks but never displays." />
     <Mod Include="TrueInsulation" Folder="TrueInsulation" Title="True Insulation" StaticId="TrueInsulation"
          Description="Insulated gas and liquid pipes, insulation tiles and pressure doors have zero thermal conductivity, so they fully insulate." />
   </ItemGroup>
