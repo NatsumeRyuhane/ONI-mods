@@ -25,6 +25,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Radiation Field Lamp](RadiationFieldLamp) | A new lamp building that keeps an even, adjustable radiation field in a 4x3 area |
 | [Storage Tile Instant Switch](StorageTileInstantSwitch) | Changing a Storage Tile's item takes effect right away, with no Duplicant errand |
 | [Thermally Conductive](ThermallyConductive) | Radiant pipes and Temperature Shift Plates conduct heat 1000 times better |
+| [Thermo Heat Production](ThermoHeatProduction) | Thermo Regulators and Thermo Aquatuners show a Heat Production status, like the Steam Turbine |
 | [True Insulation](TrueInsulation) | Insulated pipes, Insulation Tiles and pressure doors fully insulate |
 
 ## Requirements
