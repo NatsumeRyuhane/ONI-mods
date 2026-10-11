@@ -58,6 +58,8 @@
          Description="Gas, liquid and solid filters use a configurable power draw (default 10 W each)." />
     <Mod Include="NoPhaseTransitionDamage" Folder="NoPhaseTransitionDamage" Title="No Phase Transition Damage" StaticId="NoPhaseTransitionDamage"
          Description="Pipes no longer take damage when their contents freeze or boil." />
+    <Mod Include="StorageTileInstantSwitch" Folder="StorageTileInstantSwitch" Title="Storage Tile Instant Switch" StaticId="StorageTileInstantSwitch"
+         Description="Changing the item a Storage Tile holds takes effect right away, with no Duplicant errand. Items that no longer match drop in the first open cell next to the tile." />
     <Mod Include="ThermallyConductive" Folder="ThermallyConductive" Title="Thermally Conductive" StaticId="ThermallyConductive"
          Description="Radiant gas and liquid pipes and Thermal Blocks have 1000 times their normal thermal conductivity." />
     <Mod Include="TrueInsulation" Folder="TrueInsulation" Title="True Insulation" StaticId="TrueInsulation"
