@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTUNotIncluded", "DTUNotInc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrradiationSterilization", "IrradiationSterilization\IrradiationSterilization.csproj", "{B7C760E0-34AC-4E1B-8C37-7FB504761DD0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageTileInstantSwitch", "StorageTileInstantSwitch\StorageTileInstantSwitch.csproj", "{0C4D30A0-8159-42BB-BA20-F78A478DFEAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,5 +110,9 @@ Global
 		{B7C760E0-34AC-4E1B-8C37-7FB504761DD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7C760E0-34AC-4E1B-8C37-7FB504761DD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7C760E0-34AC-4E1B-8C37-7FB504761DD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C4D30A0-8159-42BB-BA20-F78A478DFEAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C4D30A0-8159-42BB-BA20-F78A478DFEAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C4D30A0-8159-42BB-BA20-F78A478DFEAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C4D30A0-8159-42BB-BA20-F78A478DFEAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
