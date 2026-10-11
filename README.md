@@ -23,6 +23,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Low Power Filters](LowPowerFilters) | Configurable power draw for gas, liquid and solid filters (default 10 W) |
 | [No Phase Transition Damage](NoPhaseTransitionDamage) | Pipes take no damage when their contents freeze or boil |
 | [Radiation Field Lamp](RadiationFieldLamp) | A new lamp building that keeps an even, adjustable radiation field in a 4x3 area |
+| [Storage Tile Instant Switch](StorageTileInstantSwitch) | Changing a Storage Tile's item takes effect right away, with no Duplicant errand |
 | [Thermally Conductive](ThermallyConductive) | Radiant pipes and Temperature Shift Plates conduct heat 1000 times better |
 | [True Insulation](TrueInsulation) | Insulated pipes, Insulation Tiles and pressure doors fully insulate |
 
