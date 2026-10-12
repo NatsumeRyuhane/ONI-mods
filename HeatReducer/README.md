@@ -16,7 +16,7 @@ Not changed:
 - Buildings without a power draw (toilets, generators, the Kiln and others).
 - Buildings with negative heat values, which are cooling.
 - Buildings whose heat is part of their job:
-  - Temperature control: Space Heater, Liquid Tepidizer, Hydrofan, Ice-E Fan, Air Conditioner, Thermo Aquatuner, Anti Entropy Thermo-Nullifier, Liquid Heatquilizer, Ice Maker, Ice Liquefier, Refrigerator, Mini Fridge, Incubator.
+  - Temperature control: Space Heater, Liquid Tepidizer, Hydrofan, Ice-E Fan, Air Conditioner, Thermo Aquatuner, Anti Entropy Thermo-Nullifier, Liquid Heatquilizer, Ice Maker, Ice Liquefier, Refrigerator, Mini Fridge.
   - Heat to power: Steam Turbine, and the deprecated Steam Turbine.
   - Heavy industry with 8 kW or more of total heat: Metal Refinery, Glass Forge, Kiln, Molecular Forge, Vulcanizer, Diamond Press, Polymer Press, Oil Refinery, Oxylite Refinery, Rock Crusher, Blastshot Maker, Desalinator.
 

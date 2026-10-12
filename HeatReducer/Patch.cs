@@ -27,7 +27,6 @@ namespace HeatReducer
             typeof(IceKettleConfig),
             typeof(RefrigeratorConfig),
             typeof(MiniFridgeConfig),
-            typeof(EggIncubatorConfig),
             // Heat to power
             typeof(SteamTurbineConfig),
             typeof(SteamTurbineConfig2),
