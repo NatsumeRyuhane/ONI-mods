@@ -77,6 +77,7 @@ Each mod's output is written to `<Mod>/bin/Release/`, containing `<Mod>.dll` and
 - The game's DLLs are read from your installed copy and are never copied into a mod's output or committed to this repo. The mods target the game version you have installed, so they may need updates after a game update.
 - Shared build settings live in `Directory.Build.props` and `Directory.Build.targets`. The Release packaging step is in `build/ILRepack.targets`.
 - [docs/vanilla-buildings.md](docs/vanilla-buildings.md) maps vanilla building names to their prefab IDs.
+- [docs/building-lifecycle.md](docs/building-lifecycle.md) explains how buildings are registered, built, loaded and deconstructed, and which methods to patch for each.
 
 ## Code conventions
 
