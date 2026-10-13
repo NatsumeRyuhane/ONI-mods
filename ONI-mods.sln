@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrradiationSterilization", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageTileInstantSwitch", "StorageTileInstantSwitch\StorageTileInstantSwitch.csproj", "{0C4D30A0-8159-42BB-BA20-F78A478DFEAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThermoHeatProduction", "ThermoHeatProduction\ThermoHeatProduction.csproj", "{A494F679-9EB1-416C-B6F4-EC1286C341A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,5 +116,9 @@ Global
 		{0C4D30A0-8159-42BB-BA20-F78A478DFEAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C4D30A0-8159-42BB-BA20-F78A478DFEAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C4D30A0-8159-42BB-BA20-F78A478DFEAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A494F679-9EB1-416C-B6F4-EC1286C341A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A494F679-9EB1-416C-B6F4-EC1286C341A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A494F679-9EB1-416C-B6F4-EC1286C341A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A494F679-9EB1-416C-B6F4-EC1286C341A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
