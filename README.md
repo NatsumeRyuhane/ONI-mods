@@ -9,7 +9,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | Mod | What it does |
 |---|---|
 | [Abyssalite to Tungsten](AbyssaliteToTungsten) | Adds an Abyssalite to Tungsten recipe to the Metal Refinery and the Molecular Forge |
-| [Battery No Power Loss](BatteryNoPowerLoss) | Batteries, Jumbo Batteries, Smart Batteries and Battery Modules stop leaking charge |
+| [Battery No Power Loss](BatteryNoPowerLoss) | Batteries, Jumbo Batteries, Smart Batteries and Battery Modules stop leaking charge and giving off heat |
 | [Better Emptier](BetterEmptier) | Configurable capacity and release speed for Bottle and Canister Emptiers |
 | [BuffedAETN](BuffedAETN) | Configurable AETN cooling, minimum temperature and Hydrogen use; can't be flooded |
 | [BuffedWheezewort](BuffedWheezewort) | Configurable Wheezewort radiation, cooling and fertilizer, and a colder temperature range |
