@@ -1,6 +1,6 @@
 # Battery No Power Loss
 
-Batteries no longer lose stored power over time or give off heat.
+Batteries no longer lose stored power over time as heat.
 
 ## What changes
 
