@@ -60,6 +60,8 @@
          Description="Pipes no longer take damage when their contents freeze or boil." />
     <Mod Include="StorageTileInstantSwitch" Folder="StorageTileInstantSwitch" Title="Storage Tile Instant Switch" StaticId="StorageTileInstantSwitch"
          Description="Changing the item a Storage Tile holds takes effect right away, with no Duplicant errand. Items that no longer match drop in the first open cell next to the tile." />
+    <Mod Include="SuperMop" Folder="SuperMop" Title="Super Mop" StaticId="SuperMop"
+         Description="Removes the 150 kg liquid limit on the Mop tool, so Duplicants can mop any amount of liquid that sits on a floor. Mopping is also faster and wider, with a configurable speed multiplier (default 10x, 1000 kg/s per cell) and reach (default 3 cells to each side instead of 1). Walls stop the reach." />
     <Mod Include="ThermallyConductive" Folder="ThermallyConductive" Title="Thermally Conductive" StaticId="ThermallyConductive"
          Description="Radiant gas and liquid pipes and Thermal Blocks have 1000 times their normal thermal conductivity." />
     <Mod Include="ThermoHeatProduction" Folder="ThermoHeatProduction" Title="Thermo Heat Production" StaticId="ThermoHeatProduction"
