@@ -31,7 +31,7 @@
     <Mod Include="AbyssaliteToTungsten" Folder="AbyssaliteToTungsten" Title="Abyssalite to Tungsten" StaticId="AbyssaliteToTungsten"
          Description="Adds an Abyssalite to Tungsten recipe to the Metal Refinery and the Molecular Forge. Each takes 100 kg of Abyssalite and makes 100 kg of Tungsten. The Metal Refinery takes 40 s but needs coolant to absorb the heat. The Molecular Forge takes 80 s and needs no coolant. A Balance heat production option, on by default, triples the heat sent to the coolant." />
     <Mod Include="BatteryNoPowerLoss" Folder="BatteryNoPowerLoss" Title="Battery No Power Loss" StaticId="BatteryNoPowerLoss"
-         Description="Batteries, Medium Batteries and Smart Batteries no longer lose stored power over time." />
+         Description="Batteries, Jumbo Batteries, Smart Batteries and Battery Modules no longer lose stored power over time or give off heat." />
     <Mod Include="BetterEmptier" Folder="BetterEmptier" Title="Better Emptier" StaticId="BetterEmptier"
          Description="Bottle Emptiers and Gas Bottle Emptiers get a configurable storage capacity (default 200 kg) and release speed multiplier (default 1x)." />
     <Mod Include="RadiationFieldLamp" Folder="RadiationFieldLamp" Title="Radiation Field Lamp" StaticId="BetterRadiationLamp"

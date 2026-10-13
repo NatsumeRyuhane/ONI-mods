@@ -1,29 +1,32 @@
 # Battery No Power Loss
 
-Batteries, Jumbo Batteries and Smart Batteries no longer lose stored power over time.
+Batteries no longer lose stored power over time or give off heat.
 
 ## What changes
 
-| Building | Vanilla leak | With this mod |
-|---|---|---|
-| Battery | 1.67 J/s | 0 |
-| Jumbo Battery | 3.33 J/s | 0 |
-| Smart Battery | 0.67 J/s | 0 |
+| Building | Vanilla leak | Vanilla heat | With this mod |
+|---|---|---|---|
+| Battery | 1.67 J/s | 1.25 kDTU/s | 0 / 0 |
+| Jumbo Battery | 3.33 J/s | 1.25 kDTU/s | 0 / 0 |
+| Smart Battery | 0.67 J/s | 0.5 kDTU/s | 0 / 0 |
+| Battery Module (Spaced Out) | 0.67 J/s | none | 0 / none |
 
-The build menu description of each battery also loses its "loses charge over time" sentence, so the text matches the behavior.
+Vanilla batteries count as active, and give off their heat, whenever they hold any charge.
+
+The same applies to any other building with a `Battery` component, including batteries added by other mods.
+
+In each build menu description, the "loses charge over time" sentence becomes "My Duplicants have improved the schematics of this model, so it no longer leaks power as heat."
 
 ## How it works
 
-Each battery config adds its `Battery` (or `BatterySmart`) component in `DoPostConfigureComplete` and sets `joulesLostPerSecond`. A postfix on each sets it to 0 and replaces the building's `EFFECT` string with the vanilla text minus the leak sentence.
+`Assets.AddBuildingDef` is the last step of registering a building, after the config's `DoPostConfigureComplete`. A postfix on it sets `joulesLostPerSecond` to 0 on every `Battery` component of the building's complete prefab, and spawned buildings copy that value. It also zeroes the def's `ExhaustKilowattsWhenActive` and `SelfHeatKilowattsWhenActive`, which buildings read when they spawn, so existing saves change too. If a battery leaked before, the postfix also swaps the leak sentence in the building's `EFFECT` string.
 
 | Patch | Target | Kind |
 |---|---|---|
-| `BatteryConfig_DoPostConfigureComplete_Patch` | `BatteryConfig.DoPostConfigureComplete` | Postfix |
-| `BatteryMediumConfig_DoPostConfigureComplete_Patch` | `BatteryMediumConfig.DoPostConfigureComplete` | Postfix |
-| `BatterySmartConfig_DoPostConfigureComplete_Patch` | `BatterySmartConfig.DoPostConfigureComplete` | Postfix |
+| `Assets_AddBuildingDef_Patch` | `Assets.AddBuildingDef` | Postfix |
 
 ## Notes
 
-- The Spaced Out Battery Module (rocket battery, 0.67 J/s) still leaks.
-- The replacement descriptions are English only. With a translation installed, these three descriptions switch back to English.
+- Power transformers are skipped. They use a `Battery` component internally but set their own leak every tick.
+- The description swap matches the English vanilla sentences. With a translation installed, the leak stops but the description keeps its translated leak sentence.
 - Patch targets were checked against game build 744825.

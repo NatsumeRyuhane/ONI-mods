@@ -1,53 +1,82 @@
 using HarmonyLib;
-using STRINGS;
 using UnityEngine;
 
 namespace BatteryNoPowerLoss
 {
-    // Sets each battery's joulesLostPerSecond to 0 (vanilla: 1.67 J/s Battery, 3.33 J/s Jumbo Battery, 0.67 J/s Smart
-    // Battery), and drops the "loses charge over time" sentence from its build menu description.
+    // Sets joulesLostPerSecond to 0 on every building with a Battery component (vanilla: 1.67 J/s Battery, 3.33 J/s
+    // Jumbo Battery, 0.67 J/s Smart Battery and Battery Module), removes its heat output, and swaps the "loses charge
+    // over time" sentence in its build menu description for one saying it no longer leaks.
     public static class Patch
     {
-        private static string StoresPowerText =>
-            "Stores " + UI.FormatAsLink("Power", "POWER") + " from generators, then provides that power to buildings.";
+        // Longest first, so "Slightly loses..." doesn't match inside "Very slightly loses...".
+        private static readonly string[] LeakSentences =
+        {
+            "Very slightly loses charge over time.",
+            "Slightly loses charge over time.",
+            "Loses charge over time.",
+        };
+
+        private const string NoLeakSentence =
+            "My Duplicants have improved the schematics of this model, so it no longer leaks power as heat.";
+
+        // Assets.AddBuildingDef is the last step of BuildingConfigManager.RegisterBuilding, after the config's
+        // DoPostConfigureComplete, so this sees each battery's final leak rate, modded batteries included. Instances
+        // copy the field from the prefab when they spawn.
+        [HarmonyPatch(typeof(Assets), nameof(Assets.AddBuildingDef))]
+        public static class Assets_AddBuildingDef_Patch
+        {
+            public static void Postfix(BuildingDef def)
+            {
+                GameObject go = def.BuildingComplete;
+                // Power transformers are batteries internally, but set their own leak every tick.
+                if (go == null || go.GetComponent<PowerTransformer>() != null)
+                {
+                    return;
+                }
+
+                Battery[] batteries = go.GetComponents<Battery>();
+                if (batteries.Length == 0)
+                {
+                    return;
+                }
+
+                bool leaked = false;
+                foreach (Battery battery in batteries)
+                {
+                    leaked |= battery.joulesLostPerSecond != 0f;
+                    battery.joulesLostPerSecond = 0f;
+                }
+
+                // A battery is "active" whenever it holds charge, so vanilla heats it nonstop (1.25 kDTU/s Battery and
+                // Jumbo Battery, 0.5 kDTU/s Smart Battery). Spawned buildings read these from the def, not the prefab.
+                def.ExhaustKilowattsWhenActive = 0f;
+                def.SelfHeatKilowattsWhenActive = 0f;
+
+                if (leaked)
+                {
+                    ReplaceLeakSentence(def.PrefabID);
+                }
+            }
+        }
 
         // BuildingDef.Effect reads the Strings table, which LegacyModMain fills from the STRINGS.BUILDINGS.PREFABS fields
-        // just before buildings are registered. These postfixes run after that, so they write to the table directly.
-        private static void SetEffect(string prefabId, string text)
+        // before buildings are registered, so the table is edited directly. A translated description has no English
+        // sentence to match and is left as it is.
+        private static void ReplaceLeakSentence(string prefabId)
         {
-            Strings.Add("STRINGS.BUILDINGS.PREFABS." + prefabId.ToUpperInvariant() + ".EFFECT", text);
-        }
-
-        [HarmonyPatch(typeof(BatteryConfig), nameof(BatteryConfig.DoPostConfigureComplete))]
-        public static class BatteryConfig_DoPostConfigureComplete_Patch
-        {
-            public static void Postfix(GameObject go)
+            string key = "STRINGS.BUILDINGS.PREFABS." + prefabId.ToUpper() + ".EFFECT";
+            if (!Strings.TryGet(key, out StringEntry entry))
             {
-                go.AddOrGet<Battery>().joulesLostPerSecond = 0f;
-                SetEffect(BatteryConfig.ID, StoresPowerText);
+                return;
             }
-        }
 
-        [HarmonyPatch(typeof(BatteryMediumConfig), nameof(BatteryMediumConfig.DoPostConfigureComplete))]
-        public static class BatteryMediumConfig_DoPostConfigureComplete_Patch
-        {
-            public static void Postfix(GameObject go)
+            foreach (string sentence in LeakSentences)
             {
-                go.AddOrGet<Battery>().joulesLostPerSecond = 0f;
-                SetEffect(BatteryMediumConfig.ID, StoresPowerText);
-            }
-        }
-
-        [HarmonyPatch(typeof(BatterySmartConfig), nameof(BatterySmartConfig.DoPostConfigureComplete))]
-        public static class BatterySmartConfig_DoPostConfigureComplete_Patch
-        {
-            public static void Postfix(GameObject go)
-            {
-                go.AddOrGet<BatterySmart>().joulesLostPerSecond = 0f;
-                SetEffect(BatterySmartConfig.ID, StoresPowerText + "\n\nSends a "
-                    + UI.FormatAsAutomationState("Green Signal", UI.AutomationState.Active) + " or "
-                    + UI.FormatAsAutomationState("Red Signal", UI.AutomationState.Standby)
-                    + " based on the configuration of the Logic Activation Parameters.");
+                if (entry.String.Contains(sentence))
+                {
+                    Strings.Add(key, entry.String.Replace(sentence, NoLeakSentence));
+                    return;
+                }
             }
         }
     }
