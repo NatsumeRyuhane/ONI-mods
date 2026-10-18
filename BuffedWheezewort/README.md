@@ -11,8 +11,8 @@ Makes the Wheezewort a configurable cooler. You can set how much gas it breathes
 | Cooling of the gas it breathes | 5 degrees | Option, default 5 degrees |
 | Coldest output gas | 5 degrees above the gas's condensation point | Option, default the same. When on, no floor (above absolute zero) |
 | Phosphorite use | 4 kg/cycle | Option, default 6 kg/cycle (0.01 kg/s) |
-| Grows between | -60 C and 95 C | Option, default -100 C and 100 C |
-| Dies below / above | -90 C / 190 C | 30 C below / 95 C above the growth range: -130 C / 195 C by default |
+| Grows between | 213.15 K and 368.15 K (-60 C and 95 C) | Option, default 173.15 K and 373.15 K (-100 C and 100 C) |
+| Dies below / above | 183.15 K / 463.15 K (-90 C / 190 C) | 30 K below / 95 K above the growth range: 143.15 K / 468.15 K by default |
 | Radiation (Spaced Out only) | 480 rads | Option, default 0 |
 
 The heat a Wheezewort removes is its gas throughput × the cooling delta × the gas's specific heat capacity. For example, 1 kg/s of Hydrogen cooled by 5 degrees removes about 12 kDTU/s.
@@ -29,8 +29,8 @@ Set in the game's mod menu (saved to `config.json` in the mod folder). Changes n
 | Cool Below Condensation | Off | | Lets the plant cool gas past its condensation point, so it comes out as liquid |
 | Gas Throughput (kg/s) | 1 | 0.1 to 100 | Gas a planted Wheezewort breathes |
 | Wild Throughput Multiplier | 0.25 | 0 to 1 | Share of the throughput a wild Wheezewort breathes |
-| Minimum Growth Temperature (C) | -100 | -240 to 100 | The plant dies 30 C below this |
-| Maximum Growth Temperature (C) | 100 | -200 to 1000 | The plant dies 95 C above this. Raised to 1 degree above the minimum if set lower |
+| Minimum Growth Temperature (K) | 173.15 | 35 to 373.15 | The plant dies 30 K below this |
+| Maximum Growth Temperature (K) | 373.15 | 73.15 to 1273.15 | The plant dies 95 K above this. Raised to 1 K above the minimum if set lower |
 
 ## How it works
 

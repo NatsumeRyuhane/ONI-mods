@@ -34,8 +34,8 @@ namespace BuffedWheezewort
 
                 SetPhosphoriteRate(__result, config.PhosphorusConsumptionRate);
 
-                float minGrowth = config.MinGrowthTemperature + Constants.CELSIUS2KELVIN;
-                float maxGrowth = Mathf.Max(config.MaxGrowthTemperature + Constants.CELSIUS2KELVIN, minGrowth + 1f);
+                float minGrowth = config.MinGrowthTemperature;
+                float maxGrowth = Mathf.Max(config.MaxGrowthTemperature, minGrowth + 1f);
                 __result.AddOrGet<TemperatureVulnerable>().Configure(minGrowth, minGrowth - LethalLowMargin, maxGrowth,
                     maxGrowth + LethalHighMargin);
 

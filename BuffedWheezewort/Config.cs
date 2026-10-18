@@ -38,14 +38,14 @@ namespace BuffedWheezewort
         [JsonProperty]
         public float WildThroughputMultiplier { get; set; } = 0.25f;
 
-        [Option("Minimum Growth Temperature", "In degrees C. Vanilla is -60. The plant dies 30 degrees below this.", Format = "F0")]
-        [Limit(-240.0, 100.0)]
+        [Option("Minimum Growth Temperature", "In K. Vanilla is 213.15 K (-60 C). The plant dies 30 K below this.", Format = "F2")]
+        [Limit(35.0, 373.15)]
         [JsonProperty]
-        public float MinGrowthTemperature { get; set; } = -100.0f;
+        public float MinGrowthTemperature { get; set; } = 173.15f;
 
-        [Option("Maximum Growth Temperature", "In degrees C. Vanilla is 95. The plant dies 95 degrees above this.", Format = "F0")]
-        [Limit(-200.0, 1000.0)]
+        [Option("Maximum Growth Temperature", "In K. Vanilla is 368.15 K (95 C). The plant dies 95 K above this.", Format = "F2")]
+        [Limit(73.15, 1273.15)]
         [JsonProperty]
-        public float MaxGrowthTemperature { get; set; } = 100.0f;
+        public float MaxGrowthTemperature { get; set; } = 373.15f;
     }
 }
