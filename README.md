@@ -11,7 +11,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Abyssalite to Tungsten](AbyssaliteToTungsten) | Adds an Abyssalite to Tungsten recipe to the Metal Refinery and the Molecular Forge |
 | [Battery No Power Loss](BatteryNoPowerLoss) | Batteries, Jumbo Batteries, Smart Batteries and Battery Modules stop leaking charge and giving off heat |
 | [Better Emptier](BetterEmptier) | Configurable capacity and release speed for Bottle and Canister Emptiers |
-| [BuffedAETN](BuffedAETN) | Configurable AETN cooling, minimum temperature and Hydrogen use; can't be flooded |
+| [BuffedAETN](BuffedAETN) | Per-building AETN sliders for cooling power and minimum temperature, Hydrogen use follows the power; can't be flooded |
 | [BuffedWheezewort](BuffedWheezewort) | Configurable Wheezewort radiation, cooling and fertilizer, and a colder temperature range |
 | [Cheap Wires And Pipes](CheapWiresAndPipes) | Wires, pipes, rails and their bridges cost 1 kg and have no decor penalty |
 | [Conservation of Mass](ConservationOfMass) | Dug or destroyed tiles drop all of their mass instead of half |
