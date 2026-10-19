@@ -32,7 +32,14 @@ namespace BuffedWheezewort
                     emitter.emitRads = config.Radiation;
                 }
 
-                SetPhosphoriteRate(__result, config.PhosphorusConsumptionRate);
+                if (config.PhosphoriteGramsPerCycle > 0f)
+                {
+                    SetPhosphoriteRate(__result, config.PhosphoriteGramsPerCycle / 1000f / 600f);
+                }
+                else
+                {
+                    RemoveFertilizer(__result);
+                }
 
                 float minGrowth = config.MinGrowthTemperature;
                 float maxGrowth = Mathf.Max(config.MaxGrowthTemperature, minGrowth + 1f);
@@ -71,6 +78,21 @@ namespace BuffedWheezewort
                         massConsumptionRate = rate
                     }
                 };
+            }
+
+            // A rate of 0 still starves the plant: FertilizationMonitor only counts it as fertilized when it finds
+            // Phosphorite in storage, and a delivery capacity of 0 never brings any. Removes the Phosphorite delivery
+            // and the FertilizationMonitor instead, so the plant needs no fertilizer, like plants that never had one.
+            private static void RemoveFertilizer(GameObject prefab)
+            {
+                var phosphorite = SimHashes.Phosphorite.CreateTag();
+                foreach (var delivery in prefab.GetComponents<ManualDeliveryKG>())
+                {
+                    if (delivery.RequestedItemTag == phosphorite) Object.DestroyImmediate(delivery);
+                }
+
+                var def = prefab.GetDef<FertilizationMonitor.Def>();
+                if (def != null) prefab.GetComponent<StateMachineController>().cmpdef.defs.Remove(def);
             }
         }
 
