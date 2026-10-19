@@ -17,9 +17,11 @@ namespace Laser
 
         public const string SliderPowerTooltipKeyString = "STRINGS.UI.UISIDESCREENS.LASERLIGHT.TOOLTIP_POWER";
 
-        // The slider moves in steps this size, so it lands on round numbers, and starts at one step. At 0 lux the
-        // LASER would still look lit and draw its def's power.
-        public const int LuxStep = 1000;
+        public const string KluxUnitsKeyString = "STRINGS.UI.UISIDESCREENS.LASERLIGHT.KLUX";
+
+        // The slider is in whole klux and starts at 1. At 0 lux the LASER would still look lit and draw its def's
+        // power.
+        public const int LuxPerKlux = 1000;
 
         // Light2D also sizes its glow by its range, which would draw a cone across the whole world. Patch.cs draws
         // the glow of every light in this set at this range instead.
@@ -56,7 +58,7 @@ namespace Laser
             get { return lux; }
             set
             {
-                lux = Mathf.Clamp(value, LuxStep, LaserConfig.MaxLux);
+                lux = Mathf.Clamp(value, LuxPerKlux, LaserConfig.MaxLux);
                 if (isSpawned)
                 {
                     ApplyLux();
@@ -76,7 +78,7 @@ namespace Laser
 
         public string SliderUnits
         {
-            get { return UI.UNITSUFFIXES.LIGHT.LUX; }
+            get { return Strings.Get(KluxUnitsKeyString); }
         }
 
         public int SliderDecimalPlaces(int index)
@@ -86,22 +88,22 @@ namespace Laser
 
         public float GetSliderMin(int index)
         {
-            return LuxStep;
+            return 1f;
         }
 
         public float GetSliderMax(int index)
         {
-            return LaserConfig.MaxLux;
+            return LaserConfig.MaxLux / LuxPerKlux;
         }
 
         public float GetSliderValue(int index)
         {
-            return lux;
+            return lux / LuxPerKlux;
         }
 
         public void SetSliderValue(float value, int index)
         {
-            Lux = Mathf.RoundToInt(value / LuxStep) * LuxStep;
+            Lux = Mathf.RoundToInt(value) * LuxPerKlux;
         }
 
         public string GetSliderTooltipKey(int index)
@@ -111,7 +113,8 @@ namespace Laser
 
         public string GetSliderTooltip(int index)
         {
-            string tooltip = string.Format(Strings.Get(SliderTooltipKeyString), GameUtil.GetFormattedLux(lux));
+            string tooltip = string.Format(Strings.Get(SliderTooltipKeyString),
+                (lux / LuxPerKlux).ToString("N0") + Strings.Get(KluxUnitsKeyString));
             if (LaserConfig.WattsPerLux > 0f)
             {
                 tooltip += string.Format(Strings.Get(SliderPowerTooltipKeyString),
@@ -170,7 +173,7 @@ namespace Laser
         {
             base.OnSpawn();
             structureTemperature = GameComps.StructureTemperatures.GetHandle(gameObject);
-            lux = Mathf.Clamp(lux < 0 ? LaserConfig.DefaultLux : lux, LuxStep, LaserConfig.MaxLux);
+            lux = Mathf.Clamp(lux < 0 ? LaserConfig.DefaultLux : lux, LuxPerKlux, LaserConfig.MaxLux);
             DiscreteShadowCaster.Direction direction =
                 GetDirection(rotatable != null ? rotatable.GetOrientation() : Orientation.Neutral);
             light.LightDirection = direction;

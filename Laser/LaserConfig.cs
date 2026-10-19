@@ -19,12 +19,12 @@ namespace Laser
 
         public static int MaxLux
         {
-            get { return Mathf.Max(SingletonOptions<Config>.Instance.MaxLux, Laser.LuxStep); }
+            get { return Mathf.Max(SingletonOptions<Config>.Instance.MaxLux, Laser.LuxPerKlux); }
         }
 
         public static int DefaultLux
         {
-            get { return Mathf.Clamp(SingletonOptions<Config>.Instance.DefaultLux, Laser.LuxStep, MaxLux); }
+            get { return Mathf.Clamp(SingletonOptions<Config>.Instance.DefaultLux, Laser.LuxPerKlux, MaxLux); }
         }
 
         public static float WattsPerLux

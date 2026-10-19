@@ -32,6 +32,7 @@ namespace Laser
                         : "")
                     + "\n\nCan be built anywhere, facing up, down, left or right.");
                 Strings.Add(Laser.SliderTitleKeyString, "Brightness");
+                Strings.Add(Laser.KluxUnitsKeyString, " klux");
                 Strings.Add(Laser.SliderTooltipKeyString, "The beam lights each of its cells at <b>{0}</b>.");
                 Strings.Add(RangeDescriptorKey, UI.FormatAsLink("Light Range", "LIGHT")
                     + ": up to the first solid tile");
