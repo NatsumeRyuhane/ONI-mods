@@ -23,6 +23,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Low Power Filters](LowPowerFilters) | Configurable power draw for gas, liquid and solid filters (default 10 W) |
 | [No Phase Transition Damage](NoPhaseTransitionDamage) | Pipes take no damage when their contents freeze or boil |
 | [Radiation Field Lamp](RadiationFieldLamp) | A new lamp building that keeps an even, adjustable radiation field in a 4x3 area |
+| [Solar Lux Scaling](SolarLuxScaling) | Solar Panel output scales with any modded power cap, so the panel still reaches its cap at 717,000 lux |
 | [Storage Tile Instant Switch](StorageTileInstantSwitch) | Changing a Storage Tile's item takes effect right away, with no Duplicant errand |
 | [Super Mop](SuperMop) | No 150 kg liquid limit on the Mop tool, and configurable mop speed and reach (default 10x and 3 cells to each side) |
 | [Thermally Conductive](ThermallyConductive) | Radiant pipes and Temperature Shift Plates conduct heat 1000 times better |
