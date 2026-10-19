@@ -62,6 +62,8 @@
          Description="Gas, liquid and solid filters use a configurable power draw (default 10 W each)." />
     <Mod Include="NoPhaseTransitionDamage" Folder="NoPhaseTransitionDamage" Title="No Phase Transition Damage" StaticId="NoPhaseTransitionDamage"
          Description="Pipes no longer take damage when their contents freeze or boil." />
+    <Mod Include="RoboMinerNoFoundation" Folder="RoboMinerNoFoundation" Title="Robo-Miner No Foundation" StaticId="RoboMinerNoFoundation"
+         Description="The Robo-Miner can be built anywhere, with no floor, wall or ceiling under it, in any rotation. It keeps running after the tiles around it are dug out." />
     <Mod Include="SolarLuxScaling" Folder="SolarLuxScaling" Title="Solar Lux Scaling" StaticId="SolarLuxScaling"
          Description="When another mod raises the Solar Panel power cap above 380 W, Solar Panel output scales up with it, so the panel reaches its new cap with the same light that gave 380 W in vanilla (717,000 lux summed over its 14 light cells). Works with any mod that changes the cap. Without one, nothing changes." />
     <Mod Include="SublimationSconce" Folder="SublimationSconce" Title="Sublimation Sconce" StaticId="SublimationSconce"

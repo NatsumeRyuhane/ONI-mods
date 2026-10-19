@@ -25,6 +25,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Low Power Filters](LowPowerFilters) | Configurable power draw for gas, liquid and solid filters (default 10 W) |
 | [No Phase Transition Damage](NoPhaseTransitionDamage) | Pipes take no damage when their contents freeze or boil |
 | [Radiation Field Lamp](RadiationFieldLamp) | A new lamp building that keeps an even, adjustable radiation field in a 4x3 area |
+| [Robo-Miner No Foundation](RoboMinerNoFoundation) | The Robo-Miner can be built anywhere, with no floor under it, and keeps running when its floor is dug out |
 | [Solar Lux Scaling](SolarLuxScaling) | Solar Panel output scales with any modded power cap, so the panel still reaches its cap at 717,000 lux |
 | [Storage Tile Instant Switch](StorageTileInstantSwitch) | Changing a Storage Tile's item takes effect right away, with no Duplicant errand |
 | [Sublimation Sconce](SublimationSconce) | A sconce that holds any sublimating solid, such as Slime or Bleach Stone, and makes it sublimate as fast as Oxylite |
