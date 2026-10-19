@@ -23,7 +23,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Food Generator](FoodGenerator) | A Coal Generator that burns food to order, one unit per order from a fabricator queue, turning its calories into power and heat at 4,184 J per kcal |
 | [Heat Reducer](HeatReducer) | Caps powered buildings' heat at their power draw and removes output temperature floors |
 | [Irradiation Sterilization](IrradiationSterilization) | Radiation kills a share of the germs every cycle, in tiles, pipes, items and buildings |
-| [LASER](Laser) | A new light, buildable anywhere in four directions, that lights a line of cells at full brightness, with a lux slider and power that follows it |
+| [LASER](Laser) | A new light, buildable anywhere in four directions, that lights a line of cells at full brightness up to the first solid tile, with a lux slider and power that follows it |
 | [Linked Storage](LinkedStorage) | Storage bin, refrigerator and liquid and gas reservoirs that share unlimited contents with every building of the same kind |
 | [Low Power Filters](LowPowerFilters) | Configurable power draw for gas, liquid and solid filters (default 10 W) |
 | [No Phase Transition Damage](NoPhaseTransitionDamage) | Pipes take no damage when their contents freeze or boil |
