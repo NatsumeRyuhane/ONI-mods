@@ -64,6 +64,8 @@
          Description="Pipes no longer take damage when their contents freeze or boil." />
     <Mod Include="SolarLuxScaling" Folder="SolarLuxScaling" Title="Solar Lux Scaling" StaticId="SolarLuxScaling"
          Description="When another mod raises the Solar Panel power cap above 380 W, Solar Panel output scales up with it, so the panel reaches its new cap with the same light that gave 380 W in vanilla (717,000 lux summed over its 14 light cells). Works with any mod that changes the cap. Without one, nothing changes." />
+    <Mod Include="SublimationSconce" Folder="SublimationSconce" Title="Sublimation Sconce" StaticId="SublimationSconce"
+         Description="Adds the Sublimation Sconce, a sconce like the Oxylite Sconce that holds any solid that sublimates, such as Slime, Bleach Stone, Polluted Dirt or Oxylite. Each sconce picks its materials from a list and has a capacity slider. Materials in it sublimate as fast as Oxylite would, unless their own rate is faster, and stop while the gas around the sconce is too dense, like vanilla. The storage capacity (default 240 kg) and the Oxylite rate are configurable. Needs The Frosty Planet Pack, which has the sconce art." />
     <Mod Include="StorageTileInstantSwitch" Folder="StorageTileInstantSwitch" Title="Storage Tile Instant Switch" StaticId="StorageTileInstantSwitch"
          Description="Changing the item a Storage Tile holds takes effect right away, with no Duplicant errand. Items that no longer match drop in the first open cell next to the tile." />
     <Mod Include="SuperMop" Folder="SuperMop" Title="Super Mop" StaticId="SuperMop"
