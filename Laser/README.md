@@ -19,7 +19,7 @@ The LASER appears in the Furniture build menu after the Ceiling Light and is unl
 
 ### Using it
 
-- Select a built LASER to set its brightness with a slider, from 1,000 lux to the maximum option, in steps of 1,000 lux. The tooltip shows the power it draws at that brightness.
+- Select a built LASER to set its brightness with a slider, in klux (1 klux is 1,000 lux), from 1 klux to the maximum option, in whole klux. The tooltip shows the power it draws at that brightness.
 - Copy Settings copies the brightness.
 - The LASER is lit only while it's powered and enabled. While placing it, the Light overlay shows the beam it will make at the default brightness.
 
