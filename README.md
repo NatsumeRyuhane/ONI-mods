@@ -12,7 +12,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Battery No Power Loss](BatteryNoPowerLoss) | Batteries, Jumbo Batteries, Smart Batteries and Battery Modules stop leaking charge and giving off heat |
 | [Better Emptier](BetterEmptier) | Configurable capacity and release speed for Bottle and Canister Emptiers |
 | [BuffedAETN](BuffedAETN) | Per-building AETN sliders for cooling power and minimum temperature, Hydrogen use follows the power; can't be flooded |
-| [BuffedWheezewort](BuffedWheezewort) | Configurable Wheezewort radiation, cooling and fertilizer, and a colder temperature range |
+| [BuffedWheezewort](BuffedWheezewort) | Configurable Wheezewort gas throughput, cooling, fertilizer, temperature range and radiation |
 | [Cheap Wires And Pipes](CheapWiresAndPipes) | Wires, pipes, rails and their bridges cost 1 kg and have no decor penalty |
 | [Conservation of Mass](ConservationOfMass) | Dug or destroyed tiles drop all of their mass instead of half |
 | [DTU Not Included](DTUNotIncluded) | Shows heat in joules (J) and watts (W) instead of DTU and DTU/s, and simplifies the heat units of materials |
