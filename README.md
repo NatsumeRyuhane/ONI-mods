@@ -21,6 +21,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Fast Temp Shift Plate Build](FastTempShiftPlateBuild) | Temperature Shift Plates build in 6 s, deconstruct in 3 s and cost 500 kg |
 | [Heat Reducer](HeatReducer) | Caps powered buildings' heat at their power draw and removes output temperature floors |
 | [Irradiation Sterilization](IrradiationSterilization) | Radiation kills a share of the germs every cycle, in tiles, pipes, items and buildings |
+| [Linked Storage](LinkedStorage) | Storage bin, refrigerator and liquid and gas reservoirs that share unlimited contents with every building of the same kind |
 | [Low Power Filters](LowPowerFilters) | Configurable power draw for gas, liquid and solid filters (default 10 W) |
 | [No Phase Transition Damage](NoPhaseTransitionDamage) | Pipes take no damage when their contents freeze or boil |
 | [Radiation Field Lamp](RadiationFieldLamp) | A new lamp building that keeps an even, adjustable radiation field in a 4x3 area |
