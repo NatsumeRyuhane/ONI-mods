@@ -27,6 +27,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Radiation Field Lamp](RadiationFieldLamp) | A new lamp building that keeps an even, adjustable radiation field in a 4x3 area |
 | [Solar Lux Scaling](SolarLuxScaling) | Solar Panel output scales with any modded power cap, so the panel still reaches its cap at 717,000 lux |
 | [Storage Tile Instant Switch](StorageTileInstantSwitch) | Changing a Storage Tile's item takes effect right away, with no Duplicant errand |
+| [Sublimation Sconce](SublimationSconce) | A sconce that holds any sublimating solid, such as Slime or Bleach Stone, and makes it sublimate as fast as Oxylite |
 | [Super Mop](SuperMop) | No 150 kg liquid limit on the Mop tool, and configurable mop speed and reach (default 10x and 3 cells to each side) |
 | [Thermally Conductive](ThermallyConductive) | Radiant pipes and Temperature Shift Plates conduct heat 1000 times better |
 | [Thermo Heat Production](ThermoHeatProduction) | Thermo Regulators and Thermo Aquatuners show a Heat Production status, like the Steam Turbine |
