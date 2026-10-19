@@ -15,6 +15,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [BuffedWheezewort](BuffedWheezewort) | Configurable Wheezewort gas throughput, cooling, fertilizer, temperature range and radiation |
 | [Cheap Wires And Pipes](CheapWiresAndPipes) | Wires, pipes, rails and their bridges cost 1 kg and have no decor penalty |
 | [Conservation of Mass](ConservationOfMass) | Dug or destroyed tiles drop all of their mass instead of half |
+| [Crushing Ice](CrushingIce) | The Rock Crusher can crush Ice, Polluted Ice and Brine Ice into Snow, with Dirt and Salt as byproducts |
 | [DTU Not Included](DTUNotIncluded) | Shows heat in joules (J) and watts (W) instead of DTU and DTU/s, and simplifies the heat units of materials |
 | [Electrolyzer No Overpressure](ElectrolyzerNoOverPressure) | Electrolyzers never stop for overpressure |
 | [Fast Temp Shift Plate Build](FastTempShiftPlateBuild) | Temperature Shift Plates build in 6 s, deconstruct in 3 s and cost 500 kg |
