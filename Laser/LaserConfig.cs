@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Laser
 {
     // A Ceiling Light that can be built anywhere, points up, down, left or right, and lights a straight line of cells
-    // with no falloff. It uses the game's Quad light shape with width 1. Each LASER sets its own brightness with a
+    // with no falloff, up to the first solid tile or the edge of the world. It uses the game's Quad light shape with width 1. Each LASER sets its own brightness with a
     // slider and draws power in proportion to it.
     public class LaserConfig : IBuildingConfig
     {
@@ -25,11 +25,6 @@ namespace Laser
         public static int DefaultLux
         {
             get { return Mathf.Clamp(SingletonOptions<Config>.Instance.DefaultLux, Laser.LuxStep, MaxLux); }
-        }
-
-        public static int BeamLength
-        {
-            get { return Mathf.Max(SingletonOptions<Config>.Instance.BeamLength, 1); }
         }
 
         public static float WattsPerLux
@@ -71,7 +66,8 @@ namespace Laser
             Light2D light = go.AddOrGet<Light2D>();
             light.overlayColour = LIGHT2D.CEILINGLIGHT_OVERLAYCOLOR;
             light.Color = LightColor;
-            light.Range = BeamLength;
+            // Each LASER sets its range from where it is built.
+            light.Range = 1f;
             light.Angle = LIGHT2D.CEILINGLIGHT_ANGLE;
             light.Direction = LIGHT2D.DEFAULT_DIRECTION;
             light.Offset = LightOffset;

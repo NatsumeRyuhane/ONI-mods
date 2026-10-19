@@ -30,8 +30,9 @@ namespace Laser
                 return;
             }
             int lux = LaserConfig.DefaultLux;
+            DiscreteShadowCaster.Direction direction = Laser.GetDirection(orientation);
             ListPool<int, LaserPreview>.PooledList cells = ListPool<int, LaserPreview>.Allocate();
-            DiscreteShadowCaster.GetVisibleCells(cell, cells, LaserConfig.BeamLength, 1, Laser.GetDirection(orientation),
+            DiscreteShadowCaster.GetVisibleCells(cell, cells, Laser.GetBeamLength(cell, direction), 1, direction,
                 LightShape.Quad);
             foreach (int litCell in cells)
             {

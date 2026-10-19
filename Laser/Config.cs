@@ -22,10 +22,5 @@ namespace Laser
         [Limit(0.0, 1000.0)]
         [JsonProperty]
         public float WattsPer100kLux { get; set; } = 5.0f;
-
-        [Option("Beam Length", "Cells lit by the beam, counting the LASER's own cell. Solid tiles stop it, windows don't.", Format = "F0")]
-        [Limit(1.0, 64.0)]
-        [JsonProperty]
-        public int BeamLength { get; set; } = 16;
     }
 }
