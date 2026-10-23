@@ -44,6 +44,8 @@
          Description="Wires, wire bridges, gas, liquid and solid conduits, radiant pipes and logic wires cost only 1 kg of construction material." />
     <Mod Include="ConservationOfMass" Folder="ConservationOfMass" Title="Conservation of Mass" StaticId="ConservationOfMass"
          Description="Every tile that is dug out or destroyed drops all of its mass instead of half, so no mass is lost when tiles break." />
+    <Mod Include="EfficientTuneUp" Folder="EfficientTuneUp" Title="Efficient Tune-Up" StaticId="EfficientTuneUp"
+         Description="Engie's Tune-Up makes a generator waste less instead of making energy from nothing. A tune-up still raises the power by half for the same fuel, and the generator now gives off that much less heat: a tuned Coal Generator makes 900 W and gives off 8.7 kW instead of 9 kW. The cut is the tuned share of the power the generator actually makes, so it also works for the Steam Turbine and Tidal Turbine, split between exhaust and self heat as the building splits them, and never more than the heat itself. It shows as its own line under Heat Production. Works with every generator that takes a tune-up, modded ones included." />
     <Mod Include="ElectrolyzerNoOverPressure" Folder="ElectrolyzerNoOverPressure" Title="Electrolyzer No Overpressure" StaticId="ElectrolyzerNoOverpressure"
          Description="Electrolyzers never stop because of overpressure." />
     <Mod Include="FastTempShiftPlateBuild" Folder="FastTempShiftPlateBuild" Title="Fast Temp Shift Plate Build" StaticId="FastTempShiftPlateBuild"
