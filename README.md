@@ -20,6 +20,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Efficient Tune-Up](EfficientTuneUp) | Engie's Tune-Up takes a generator's extra power out of its heat, so tuned generators give off less heat for the same fuel |
 | [Electrolyzer No Overpressure](ElectrolyzerNoOverPressure) | Electrolyzers never stop for overpressure |
 | [Fast Temp Shift Plate Build](FastTempShiftPlateBuild) | Temperature Shift Plates build in 6 s, deconstruct in 3 s and cost 500 kg |
+| [Food Generator](FoodGenerator) | A Coal Generator that burns food to order, one unit per order from a fabricator queue, turning its calories into power and heat at 4,184 J per kcal |
 | [Heat Reducer](HeatReducer) | Caps powered buildings' heat at their power draw and removes output temperature floors |
 | [Irradiation Sterilization](IrradiationSterilization) | Radiation kills a share of the germs every cycle, in tiles, pipes, items and buildings |
 | [Linked Storage](LinkedStorage) | Storage bin, refrigerator and liquid and gas reservoirs that share unlimited contents with every building of the same kind |
