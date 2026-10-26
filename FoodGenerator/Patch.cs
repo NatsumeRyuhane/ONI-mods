@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using HarmonyLib;
 using STRINGS;
 
@@ -74,6 +75,27 @@ namespace FoodGenerator
                 if (burner != null && burner.FetchPaused)
                 {
                     __result = 0;
+                }
+            }
+        }
+
+        // Starting an order asserts that the recipe has an open order and counts one down. While FetchPaused the
+        // fabricator has no open orders, yet an order whose food is already in still starts, so count it as open.
+        [HarmonyPatch(typeof(ComplexFabricator), "StartWorkingOrder")]
+        public static class ComplexFabricator_StartWorkingOrder_Patch
+        {
+            private static readonly AccessTools.FieldRef<ComplexFabricator, List<int>> OpenOrderCounts =
+                AccessTools.FieldRefAccess<ComplexFabricator, List<int>>("openOrderCounts");
+
+            public static void Prefix(ComplexFabricator __instance, int index)
+            {
+                if (__instance is FoodBurner)
+                {
+                    List<int> counts = OpenOrderCounts(__instance);
+                    if (counts[index] < 1)
+                    {
+                        counts[index] = 1;
+                    }
                 }
             }
         }
