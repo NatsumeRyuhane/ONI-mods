@@ -25,6 +25,7 @@
     Identity: project folder and AssemblyName.
     Folder: name of the mod folder in the game's mods directory.
     StaticId: mod.yaml staticID. Keep it stable, because mods.json keys on it.
+    Version: mod_info.yaml version, 1.0.0 unless set. Bump it with each release (see Versioning in the README).
     Description: plain ASCII, without double quotes, semicolons or percent signs.
   -->
   <ItemGroup>

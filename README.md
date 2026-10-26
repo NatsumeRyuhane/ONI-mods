@@ -78,9 +78,21 @@ To build every mod and assemble ready-to-copy mod folders, run:
 msbuild build/package.proj
 ```
 
-This builds the solution in `Release` and writes one folder per mod to `build/out/`. Each folder holds the mod DLL, a generated `mod.yaml` and a generated `mod_info.yaml`. Copy the folders into the game's `mods/Dev` folder to test them. The per-mod metadata (titles, descriptions, `staticID`s, minimum build) lives in `build/package.proj`. The solution is not changed, so Visual Studio and Rider load it as before.
+This builds the solution in `Release` and writes one folder per mod to `build/out/`. Each folder holds the mod DLL, a generated `mod.yaml` and a generated `mod_info.yaml`. Copy the folders into the game's `mods/Dev` folder to test them. The per-mod metadata (titles, descriptions, `staticID`s, versions, minimum build) lives in `build/package.proj`. The solution is not changed, so Visual Studio and Rider load it as before.
 
 Each mod's output is written to `<Mod>/bin/Release/`, containing `<Mod>.dll` and `<Mod>.dll.config`. Release builds merge PLib and Newtonsoft.Json into the mod DLL, so each mod is self-contained.
+
+### Versioning
+
+Each mod has its own version, set by the `Version` metadata on its `Mod` item in `build/package.proj`. Mods without one use the default, `1.0.0`. The version is written to `mod_info.yaml` and shown in the game's mod list. Every mod was at `1.0.0` when versioning started.
+
+Bump a mod's version in the same branch as the change, following [Semantic Versioning](https://semver.org/):
+
+- **Major** (`2.0.0`): breaks existing saves or settings, or removes a feature.
+- **Minor** (`1.1.0`): adds a feature or changes gameplay or balance.
+- **Patch** (`1.0.1`): fixes a bug without an intended gameplay change, or fixes in-game text.
+
+Changes that only touch docs or the build don't bump a version. `AssemblyVersion` in each `AssemblyInfo.cs` stays at `1.0.0.0`, because the game only reads `mod_info.yaml`.
 
 ## Notes
 
