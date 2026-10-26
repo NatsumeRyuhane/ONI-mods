@@ -33,7 +33,7 @@ Each mod's `README.md` lists the vanilla values it changes, its options and the 
 | [Storage Tile Instant Switch](StorageTileInstantSwitch) | Changing a Storage Tile's item takes effect right away, with no Duplicant errand |
 | [Sublimation Sconce](SublimationSconce) | A sconce that holds any sublimating solid, such as Slime or Bleach Stone, and makes it sublimate as fast as Oxylite |
 | [Super Mop](SuperMop) | No 150 kg liquid limit on the Mop tool, and configurable mop speed and reach (default 10x and 3 cells to each side) |
-| [Thermally Conductive](ThermallyConductive) | Radiant pipes and Temperature Shift Plates conduct heat 1000 times better |
+| [Thermally Conductive](ThermallyConductive) | Radiant pipes, Temperature Shift Plates and Conduction Panels exchange heat 1000 times faster, shown as a Heat Exchange Efficiency attribute |
 | [Thermo Heat Production](ThermoHeatProduction) | Thermo Regulators and Thermo Aquatuners show a Heat Production status, like the Steam Turbine |
 | [True Insulation](TrueInsulation) | Insulated pipes, Insulation Tiles and pressure doors fully insulate |
 
