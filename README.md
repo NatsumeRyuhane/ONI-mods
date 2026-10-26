@@ -84,7 +84,7 @@ Each mod's output is written to `<Mod>/bin/Release/`, containing `<Mod>.dll` and
 
 ### Versioning
 
-Each mod has its own version, set by the `Version` metadata on its `Mod` item in `build/package.proj`. Mods without one use the default, `1.0.0`. The version is written to `mod_info.yaml` and shown in the game's mod list. Every mod was at `1.0.0` when versioning started.
+Each mod has its own version, set by the `Version` metadata on its `Mod` item in `build/package.proj`. Mods without one use the default, `1.0.0`. The version is written to `mod_info.yaml` and shown in the game's mod list. Versions up to 2026-10-26 were assigned afterwards from the git history: a mod's first merge into `main` is `1.0.0` (the November 2025 import for the older mods), and each later merge that changed it bumps the version by its largest change.
 
 Bump a mod's version in the same branch as the change, following [Semantic Versioning](https://semver.org/):
 
