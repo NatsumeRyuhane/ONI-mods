@@ -78,7 +78,7 @@
          Description="Changing the item a Storage Tile holds takes effect right away, with no Duplicant errand. Items that no longer match drop in the first open cell next to the tile." />
     <Mod Include="SuperMop" Folder="SuperMop" Title="Super Mop" StaticId="SuperMop"
          Description="Removes the 150 kg liquid limit on the Mop tool, so Duplicants can mop any amount of liquid that sits on a floor. Mopping is also faster and wider, with a configurable speed multiplier (default 10x, 1000 kg/s per cell) and reach (default 3 cells to each side instead of 1). Walls stop the reach." />
-    <Mod Include="ThermallyConductive" Folder="ThermallyConductive" Title="Thermally Conductive" StaticId="ThermallyConductive"
+    <Mod Include="ThermallyConductive" Folder="ThermallyConductive" Title="Thermally Conductive" StaticId="ThermallyConductive" Version="1.1.0"
          Description="Radiant gas and liquid pipes, Temperature Shift Plates and Conduction Panels exchange heat 1000 times faster. The bonus shows as a Heat Exchange Efficiency attribute in each building's Properties tab." />
     <Mod Include="ThermoHeatProduction" Folder="ThermoHeatProduction" Title="Thermo Heat Production" StaticId="ThermoHeatProduction"
          Description="Thermo Regulators and Thermo Aquatuners show a Heat Production status while running, like the Steam Turbine. It shows the heat they move out of the gas or liquid they cool, which the game already tracks but never displays." />
